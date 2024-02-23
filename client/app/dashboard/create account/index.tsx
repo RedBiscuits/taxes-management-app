@@ -1,106 +1,115 @@
 import React from "react";
-import { Text, TextInput, View, Pressable, ScrollView } from "react-native";
-import {
-  useFonts,
-  ElMessiri_400Regular,
-  ElMessiri_500Medium,
-  ElMessiri_600SemiBold,
-  ElMessiri_700Bold,
-} from "@expo-google-fonts/dev";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Text, TextInput, View, ScrollView } from "react-native";
 import { fonts } from "@/lib/styles/fonts";
+import Button from "@/lib/components/Button";
+import { options } from "@/lib/shared/ScreenOptions";
+import { Stack } from "expo-router";
 
 const CreateAccountScreen = () => {
-  let [fontsLoaded] = useFonts({
-    ElMessiri_400Regular,
-    ElMessiri_500Medium,
-    ElMessiri_600SemiBold,
-    ElMessiri_700Bold,
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
-
   return (
-    <SafeAreaView className="flex-1">
-      <Text
-        style={fonts.fontBold}
-        className="text-center text-3xl text-slate-800"
-      >
-        انشاء حساب
-      </Text>
-      <ScrollView className="overflow-y-scroll">
-        <View className="pt-6 px-4 space-y-5">
-          <TextInput
-            placeholderTextColor={"#64748b"}
-            style={fonts.fontRegular}
-            className="bg-slate-200 text-sky-900  rounded-2xl p-5 placeholder:text-xl"
-            placeholder="الاسم"
-          />
-          <TextInput
-            placeholderTextColor={"#64748b"}
-            style={fonts.fontRegular}
-            className="bg-slate-200 text-sky-900  rounded-2xl p-5 placeholder:text-xl"
-            placeholder="البريد الإلكتروني"
-          />
-          <TextInput
-            placeholderTextColor={"#64748b"}
-            style={fonts.fontRegular}
-            className="bg-slate-200 text-sky-900 rounded-2xl p-5 placeholder:text-xl"
-            placeholder="كلمة المرور"
-          />
-          <TextInput
-            placeholderTextColor={"#64748b"}
-            style={fonts.fontRegular}
-            className="bg-slate-200 text-sky-900 rounded-2xl p-5 placeholder:text-xl"
-            placeholder="تأكيد كلمة المرور"
-          />
-          <TextInput
-            placeholderTextColor={"#64748b"}
-            style={fonts.fontRegular}
-            className="bg-slate-200 text-sky-900 rounded-2xl p-5 placeholder:text-xl"
-            placeholder="المأمورية"
-          />
-          <TextInput
-            placeholderTextColor={"#64748b"}
-            style={fonts.fontRegular}
-            className="bg-slate-200 text-sky-900 rounded-2xl p-5 placeholder:text-xl"
-            placeholder="المسمى الوظيفي"
-          />
-          <TextInput
-            placeholderTextColor={"#64748b"}
-            style={fonts.fontRegular}
-            className="bg-slate-200 text-sky-900 rounded-2xl p-5 placeholder:text-xl"
-            placeholder="رقم الهاتف"
-          />
-        </View>
-        <Pressable className="bg-sky-600 rounded-2xl p-5 mx-4 mt-10 flex items-center">
-          <Text
-            style={fonts.fontBold}
-            className="text-center text-white text-xl"
-          >
-            انشاء حساب
-          </Text>
-        </Pressable>
-        <Pressable className="bg-sky-600 rounded-2xl p-5 mx-4 mt-10 flex items-center">
-          <Text
-            style={fonts.fontBold}
-            className="text-center text-white text-xl"
-          >
-            انشاء حساب
-          </Text>
-        </Pressable>
-        <Pressable className="bg-sky-600 rounded-2xl p-5 mx-4 mt-10 flex items-center">
-          <Text
-            style={fonts.fontBold}
-            className="text-center text-white text-xl"
-          >
-            انشاء حساب
-          </Text>
-        </Pressable>
-      </ScrollView>
-    </SafeAreaView>
+    <>
+      <Stack.Screen
+        options={{
+          title: "انشاء حساب",
+          ...options,
+        }}
+      />
+      <View className="flex-1 pt-8">
+        <Text
+          style={fonts.fontBold}
+          className="text-center text-3xl text-slate-800"
+        >
+          انشاء حساب
+        </Text>
+        <ScrollView
+          style={{
+            paddingBottom: 40,
+          }}
+          className="overflow-y-scroll flex-1 pb-40"
+        >
+          <View className="pt-6 px-4 space-y-5">
+            <View>
+              <Text style={fonts.fontSemi} className="text-lg mr-3 mb-2">
+                الاسم
+              </Text>
+              <TextInput
+                placeholderTextColor={"#64748b"}
+                style={fonts.fontRegular}
+                className="bg-slate-200 text-sky-900  rounded-2xl p-5 placeholder:text-xl"
+                placeholder="الاسم"
+              />
+            </View>
+            <View>
+              <Text style={fonts.fontSemi} className="text-lg mr-3 mb-2">
+                البريد الإلكتروني
+              </Text>
+              <TextInput
+                placeholderTextColor={"#64748b"}
+                style={fonts.fontRegular}
+                className="bg-slate-200 text-sky-900  rounded-2xl p-5 placeholder:text-xl"
+                placeholder="البريد الإلكتروني"
+              />
+            </View>
+            <View>
+              <Text style={fonts.fontSemi} className="text-lg mr-3 mb-2">
+                كلمة المرور
+              </Text>
+              <TextInput
+                placeholderTextColor={"#64748b"}
+                style={fonts.fontRegular}
+                className="bg-slate-200 text-sky-900  rounded-2xl p-5 placeholder:text-xl"
+                placeholder="كلمة المرور"
+              />
+            </View>
+            <View>
+              <Text style={fonts.fontSemi} className="text-lg mr-3 mb-2">
+                تأكيد كلمة المرور
+              </Text>
+              <TextInput
+                placeholderTextColor={"#64748b"}
+                style={fonts.fontRegular}
+                className="bg-slate-200 text-sky-900  rounded-2xl p-5 placeholder:text-xl"
+                placeholder="تأكيد كلمة المرور"
+              />
+            </View>
+            <View>
+              <Text style={fonts.fontSemi} className="text-lg mr-3 mb-2">
+                المأمورية
+              </Text>
+              <TextInput
+                placeholderTextColor={"#64748b"}
+                style={fonts.fontRegular}
+                className="bg-slate-200 text-sky-900  rounded-2xl p-5 placeholder:text-xl"
+                placeholder="المأمورية"
+              />
+            </View>
+            <View>
+              <Text style={fonts.fontSemi} className="text-lg mr-3 mb-2">
+                المسمى الوظيفي
+              </Text>
+              <TextInput
+                placeholderTextColor={"#64748b"}
+                style={fonts.fontRegular}
+                className="bg-slate-200 text-sky-900  rounded-2xl p-5 placeholder:text-xl"
+                placeholder="المسمى الوظيفي"
+              />
+            </View>
+            <View>
+              <Text style={fonts.fontSemi} className="text-lg mr-3 mb-2">
+                رقم الهاتف
+              </Text>
+              <TextInput
+                placeholderTextColor={"#64748b"}
+                style={fonts.fontRegular}
+                className="bg-slate-200 text-sky-900  rounded-2xl p-5 placeholder:text-xl"
+                placeholder="رقم الهاتف"
+              />
+            </View>
+          </View>
+          <Button text="انشاء حساب" className="my-10" />
+        </ScrollView>
+      </View>
+    </>
   );
 };
 

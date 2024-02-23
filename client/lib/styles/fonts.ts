@@ -7,4 +7,7 @@ export const fonts = StyleSheet.create({
   fontRegular: {
     fontFamily: "ElMessiri_400Regular",
   },
+  fontSemi: {
+    fontFamily: "ElMessiri_600SemiBold",
+  },
 });
