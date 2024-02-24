@@ -16,7 +16,7 @@ const CreateAccountScreen = () => {
       />
       <View className="flex-1 pt-8">
         <Text
-          style={fonts.fontBold}
+          style={fonts.fontArabicBold}
           className="text-center text-3xl text-slate-800"
         >
           انشاء حساب
@@ -29,78 +29,78 @@ const CreateAccountScreen = () => {
         >
           <View className="pt-6 px-4 space-y-5">
             <View>
-              <Text style={fonts.fontSemi} className="text-lg mr-3 mb-2">
+              <Text style={fonts.fontArabicSemi} className="text-lg mr-3 mb-2">
                 الاسم
               </Text>
               <TextInput
                 placeholderTextColor={"#64748b"}
-                style={fonts.fontRegular}
+                style={fonts.fontArabicRegular}
                 className="bg-slate-200 text-sky-900  rounded-2xl p-5 placeholder:text-xl"
                 placeholder="الاسم"
               />
             </View>
             <View>
-              <Text style={fonts.fontSemi} className="text-lg mr-3 mb-2">
+              <Text style={fonts.fontArabicSemi} className="text-lg mr-3 mb-2">
                 البريد الإلكتروني
               </Text>
               <TextInput
                 placeholderTextColor={"#64748b"}
-                style={fonts.fontRegular}
+                style={fonts.fontArabicRegular}
                 className="bg-slate-200 text-sky-900  rounded-2xl p-5 placeholder:text-xl"
                 placeholder="البريد الإلكتروني"
               />
             </View>
             <View>
-              <Text style={fonts.fontSemi} className="text-lg mr-3 mb-2">
+              <Text style={fonts.fontArabicSemi} className="text-lg mr-3 mb-2">
                 كلمة المرور
               </Text>
               <TextInput
                 placeholderTextColor={"#64748b"}
-                style={fonts.fontRegular}
+                style={fonts.fontArabicRegular}
                 className="bg-slate-200 text-sky-900  rounded-2xl p-5 placeholder:text-xl"
                 placeholder="كلمة المرور"
               />
             </View>
             <View>
-              <Text style={fonts.fontSemi} className="text-lg mr-3 mb-2">
+              <Text style={fonts.fontArabicSemi} className="text-lg mr-3 mb-2">
                 تأكيد كلمة المرور
               </Text>
               <TextInput
                 placeholderTextColor={"#64748b"}
-                style={fonts.fontRegular}
+                style={fonts.fontArabicRegular}
                 className="bg-slate-200 text-sky-900  rounded-2xl p-5 placeholder:text-xl"
                 placeholder="تأكيد كلمة المرور"
               />
             </View>
             <View>
-              <Text style={fonts.fontSemi} className="text-lg mr-3 mb-2">
+              <Text style={fonts.fontArabicSemi} className="text-lg mr-3 mb-2">
                 المأمورية
               </Text>
               <TextInput
                 placeholderTextColor={"#64748b"}
-                style={fonts.fontRegular}
+                style={fonts.fontArabicRegular}
                 className="bg-slate-200 text-sky-900  rounded-2xl p-5 placeholder:text-xl"
                 placeholder="المأمورية"
               />
             </View>
             <View>
-              <Text style={fonts.fontSemi} className="text-lg mr-3 mb-2">
+              <Text style={fonts.fontArabicSemi} className="text-lg mr-3 mb-2">
                 المسمى الوظيفي
               </Text>
               <TextInput
                 placeholderTextColor={"#64748b"}
-                style={fonts.fontRegular}
+                style={fonts.fontArabicRegular}
                 className="bg-slate-200 text-sky-900  rounded-2xl p-5 placeholder:text-xl"
                 placeholder="المسمى الوظيفي"
               />
             </View>
             <View>
-              <Text style={fonts.fontSemi} className="text-lg mr-3 mb-2">
+              <Text style={fonts.fontArabicSemi} className="text-lg mr-3 mb-2">
                 رقم الهاتف
               </Text>
               <TextInput
                 placeholderTextColor={"#64748b"}
-                style={fonts.fontRegular}
+                style={fonts.fontArabicRegular}
                 className="bg-slate-200 text-sky-900  rounded-2xl p-5 placeholder:text-xl"
                 placeholder="رقم الهاتف"
               />

@@ -5,18 +5,25 @@ export type Receipt = {
   entries: ReceiptEntry[];
 };
 
-const entryTypeSchema = z
-  .object({ value: z.literal("sell"), label: z.literal("بيع") })
-  .or(z.object({ value: z.literal("buy"), label: z.literal("شراء") }))
-  .or(z.object({ value: z.literal("transfer"), label: z.literal("تحويل") }))
-  .or(z.object({ value: z.literal("expense"), label: z.literal("مصروف") }));
+export type ReceiptEntryType =
+  | {
+      value: "sell";
+      label: "بيع";
+    }
+  | {
+      value: "buy";
+      label: "شراء";
+    }
+  | {
+      value: "transfer";
+      label: "تحويل";
+    }
+  | {
+      value: "expense";
+      label: "مصروف";
+    };
 
-export type ReceiptEntryType = z.infer<typeof entryTypeSchema>;
-
-export const entrySchema = z
-  .object({
-    amount: z.number().min(1, "المبلغ لا يمكن ان يكون اقل من 1"),
-  })
-  .extend({ type: entryTypeSchema });
-
-export type ReceiptEntry = z.infer<typeof entrySchema>;
+export type ReceiptEntry = {
+  amount: number;
+  type: ReceiptEntryType;
+};

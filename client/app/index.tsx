@@ -4,8 +4,7 @@ import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import Button from "@/lib/components/Button";
 import { options } from "@/lib/shared/ScreenOptions";
-
-const userType = "";
+import { Image, View } from "react-native";
 
 export default function App() {
   return (
@@ -17,12 +16,21 @@ export default function App() {
           headerLeft: () => null,
         }}
       />
-      <Button text="مستخدم" onPress={() => router.navigate("/(user)/home/")} />
-      <Button
-        text="ادمن"
-        onPress={() => router.navigate("/dashboard/create account/")}
-      />
-      <StatusBar style="light" />
+      <View className="flex-1 bg-white">
+        <View className="w-72 h-72 mx-auto mt-32 mb-10">
+          <Image
+            source={require("@/assets/logo.png")}
+            className="w-full h-full"
+          />
+        </View>
+
+        <Button
+          text="تسجيل الدخول"
+          onPress={() => router.navigate("/login/")}
+        />
+
+        <StatusBar style="light" />
+      </View>
     </>
   );
 }

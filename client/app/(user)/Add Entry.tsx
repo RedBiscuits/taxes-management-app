@@ -1,28 +1,26 @@
-import React, { useState } from "react";
-import { Text, TextInput, View } from "react-native";
+import React from "react";
+import { Text, View } from "react-native";
 import { fonts } from "@/lib/styles/fonts";
-import DropDownPicker from "react-native-dropdown-picker";
 import Button from "@/lib/components/Button";
 import { Stack } from "expo-router";
 import { options } from "@/lib/shared/ScreenOptions";
-import { ReceiptEntry, ReceiptEntryType } from "@/lib/models/receipt";
+import { ReceiptEntryType } from "@/lib/models/receipt";
 import { useReceiptStore } from "./receipt.zustand";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { entrySchema } from "@/lib/models/receipt";
+import { Entry, entrySchema } from "./receipt.schema";
+import { router } from "expo-router";
+import DropDown from "@/lib/components/DropDown";
+import Input from "@/lib/components/Input";
 
 const AddEntryScreen = () => {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const [amount, setAmount] = useState<string>();
-
-  const addEntry = useReceiptStore((state) => state.addReceipt);
+  const addEntry = useReceiptStore((state) => state.addEntry);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<ReceiptEntry>({
+  } = useForm<Entry>({
     resolver: zodResolver(entrySchema),
   });
 
@@ -36,58 +34,40 @@ const AddEntryScreen = () => {
       />
       <View>
         <Text
-          style={fonts.fontBold}
+          style={fonts.fontArabicBold}
           className="text-center text-3xl text-slate-800 mt-8"
         >
           اضف معاملة
         </Text>
         <View className="pt-6 px-4 space-y-5">
           <View>
-            <Text style={fonts.fontSemi} className="text-lg mr-3 mb-2">
+            <Text style={fonts.fontArabicSemi} className="text-lg mr-3 mb-2">
               النوع
             </Text>
-            <DropDownPicker
-              style={[
-                {
-                  borderWidth: 0,
-                  backgroundColor: "#e2e8f0",
-                  paddingVertical: 20,
-                },
-              ]}
-              textStyle={[
-                fonts.fontRegular,
-                { fontSize: 18, color: "#0c4a6e" },
-              ]}
-              dropDownContainerStyle={{
-                borderWidth: 0,
-                backgroundColor: "#e2e8f0",
-                paddingVertical: 20,
-                elevation: 4,
+            <Controller
+              name="type"
+              control={control}
+              render={({ field: { onChange } }) => {
+                return <DropDown items={baseTypes} onChange={onChange} />;
               }}
-              placeholder="اختر النوع"
-              placeholderStyle={{
-                color: "#64748b",
-              }}
-              open={open}
-              value={value}
-              items={baseTypes}
-              setOpen={setOpen}
-              setValue={setValue}
             />
+            {errors.type && (
+              <Text
+                style={fonts.fontArabicRegular}
+                className="text-red-600 text-center mt-2 text-lg"
+              >
+                {errors.type.message}
+              </Text>
+            )}
           </View>
           <View>
-            <Text style={fonts.fontSemi} className="text-lg mr-3 mb-2">
-              المبلغ
-            </Text>
             <Controller
               name="amount"
               control={control}
               render={({ field: { onChange, value, onBlur } }) => (
-                <TextInput
+                <Input
+                  label="المبلغ"
                   inputMode="decimal"
-                  placeholderTextColor={"#64748b"}
-                  style={fonts.fontRegular}
-                  className="bg-slate-200 text-sky-900  rounded-2xl p-5 placeholder:text-xl"
                   placeholder="المبلغ"
                   value={value ? String(value) : ""}
                   onChangeText={onChange}
@@ -95,36 +75,28 @@ const AddEntryScreen = () => {
                 />
               )}
             />
+            {errors.amount && (
+              <Text
+                style={fonts.fontArabicRegular}
+                className="text-red-600 text-center mt-2 text-lg"
+              >
+                {errors.amount.message}
+              </Text>
+            )}
           </View>
         </View>
-        <View>
-          {errors.amount && (
-            <Text
-              style={fonts.fontRegular}
-              className="text-red-600 text-center"
-            >
-              {errors.amount.message}
-            </Text>
-          )}
-          {errors.type && (
-            <Text
-              style={fonts.fontRegular}
-              className="text-red-600 text-center"
-            >
-              {errors.type.message}
-            </Text>
-          )}
-        </View>
         <Button
-          onPress={handleSubmit(() =>
+          onPress={handleSubmit((data) => {
             addEntry({
               type: {
-                value: value!,
-                label: baseTypes.find((type) => type.value === value)!.label,
-              },
-              amount: Number(amount),
-            })
-          )}
+                value: data.type,
+                label: baseTypes.find((item) => item.value === data.type)!
+                  .label,
+              } as ReceiptEntryType,
+              amount: Number(data.amount),
+            });
+            router.back();
+          })}
           className="mt-10"
           text="حفظ"
         />
@@ -133,7 +105,7 @@ const AddEntryScreen = () => {
   );
 };
 
-const baseTypes: ReceiptEntryType[] = [
+const baseTypes = [
   {
     value: "sell",
     label: "بيع",

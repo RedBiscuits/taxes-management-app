@@ -1,13 +1,17 @@
 import { StyleSheet } from "react-native";
 
 export const fonts = StyleSheet.create({
-  fontBold: {
+  fontArabicBold: {
     fontFamily: "ElMessiri_700Bold",
   },
-  fontRegular: {
+  fontArabicRegular: {
     fontFamily: "ElMessiri_400Regular",
   },
-  fontSemi: {
+  fontArabicSemi: {
     fontFamily: "ElMessiri_600SemiBold",
+  },
+
+  fontSansRegular: {
+    fontFamily: "sans-serif",
   },
 });

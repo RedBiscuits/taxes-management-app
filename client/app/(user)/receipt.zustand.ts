@@ -7,12 +7,11 @@ type State = {
 
 type Actions = {
   resetReceipts: () => void;
-  addReceipt: (entry: ReceiptEntry) => void;
+  addEntry: (entry: ReceiptEntry) => void;
 };
 
 export const useReceiptStore = create<State & Actions>((set) => ({
   entries: [],
   resetReceipts: () => set({ entries: [] }),
-  addReceipt: (entry) =>
-    set((state) => ({ entries: [...state.entries, entry] })),
+  addEntry: (entry) => set((state) => ({ entries: [...state.entries, entry] })),
 }));
