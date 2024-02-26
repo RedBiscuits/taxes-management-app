@@ -1,40 +1,28 @@
-import { Link } from "expo-router";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { Stack } from "expo-router/stack";
+import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import Button from "@/lib/components/Button";
+import { options } from "@/lib/shared/ScreenOptions";
+
+const userType = "";
 
 export default function App() {
   return (
-    <SafeAreaProvider>
-      <View style={styles.container}>
-        <Link href="/login/" style={styles.link}>
-          login
-        </Link>
-        <Link href="/dashboard/create account/" style={styles.link}>
-          create account
-        </Link>
-        <Link href="/home" style={styles.link}>
-          home
-        </Link>
-      </View>
-    </SafeAreaProvider>
+    <>
+      <Stack.Screen
+        options={{
+          title: "الرئيسة",
+          ...options,
+          headerLeft: () => null,
+        }}
+      />
+      <Button text="مستخدم" onPress={() => router.navigate("/(user)/home/")} />
+      <Button
+        text="ادمن"
+        onPress={() => router.navigate("/dashboard/create account/")}
+      />
+      <StatusBar style="light" />
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    fontSize: 20,
-    flex: 1,
-    backgroundColor: "#eeeeee",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 10,
-  },
-  link: {
-    fontSize: 20,
-    color: "#fff",
-    padding: 10,
-
-    backgroundColor: "deepskyblue",
-  },
-});
