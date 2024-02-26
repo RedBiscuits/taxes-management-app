@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('receipts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('location_id')->constrained()->onDelete('cascade');
+            $table->foreignId('day_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
