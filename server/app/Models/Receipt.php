@@ -11,7 +11,7 @@ class Receipt extends Model
 
     protected $fillable = [
         'day_id',
-        'amount',
+        'location_id',
         'total',
     ];
 

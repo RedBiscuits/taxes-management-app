@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('location_id')->constrained()->onDelete('cascade');
             $table->foreignId('day_id')->constrained()->onDelete('cascade');
-            $table->double('total');
+            $table->double('total')->default(0.0);
             $table->timestamps();
             $table->index('day_id');
 
