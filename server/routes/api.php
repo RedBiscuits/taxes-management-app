@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\DaysController;
 use App\Http\Controllers\LocationsController;
+use App\Http\Controllers\EntriesController;
+use App\Http\Controllers\ReceiptsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,4 +33,7 @@ Route::controller(AuthController::class)
     });
 
 Route::apiResource('locations', LocationsController::class);
+Route::apiResource('days', DaysController::class);
+Route::apiResource('receipts', ReceiptsController::class);
+Route::apiResource('entries', EntriesController::class);
 
