@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\LocationsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,4 +28,6 @@ Route::controller(AuthController::class)
         Route::post('/logout', 'logout')->name('logout');
         Route::post('/register', 'register')->name('register');
     });
+
+Route::apiResource('locations', LocationsController::class);
 

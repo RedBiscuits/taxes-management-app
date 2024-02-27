@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->string('name');
+            $table->boolean('status')->nullable()->default(null);
             $table->foreignId('location_id')->constrained()->onDelete('cascade');
             $table->timestamps();
 
