@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->double('yearly_target');
             $table->foreignId('employee_id')->constrained()->onDelete('cascade');
-            $table->boolean('status');
+            $table->boolean('status')->nullable()->default(null);
             $table->timestamps();
         });
     }
