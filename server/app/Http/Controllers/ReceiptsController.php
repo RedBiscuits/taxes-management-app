@@ -4,11 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Receipt\CreateReceiptRequest;
 use App\Http\Requests\Receipt\UpdateReceiptRequest;
+use App\Http\Services\Receipt\ReceiptService;
 use App\Models\Receipt;
 use Illuminate\Http\Request;
 
 class ReceiptsController extends Controller
 {
+
+    private ReceiptService $service;
+
+    public function __construct(ReceiptService $ReceiptService)
+    {
+        $this->service = $ReceiptService;
+    }
+
     public function index()
     {
         $Receipts = Receipt::query()

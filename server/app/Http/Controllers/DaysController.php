@@ -11,7 +11,7 @@ class DaysController extends Controller
 {
     public function index()
     {
-        $Days = Day::query()
+        $days = Day::query()
             ->when(request('time'), function ($query, $search) {
                 $query->where('time', 'like', "$search%");
             })
@@ -29,12 +29,12 @@ class DaysController extends Controller
             })
             ->paginate();
 
-        return $this->respondOk($Days);
+        return $this->respondOk($days);
     }
 
-    public function show(Day $Day)
+    public function show(Day $day)
     {
-        return $this->respondOk($Day);
+        return $this->respondOk($day);
     }
 
     public function store(CreateDayRequest $request)
@@ -42,15 +42,29 @@ class DaysController extends Controller
         return $this->respondCreated(Day::create($request->validated()));
     }
 
-    public function update(UpdateDayRequest $request, Day $Day)
+    public function update(UpdateDayRequest $request, Day $day)
     {
-        $Day->update($request->validated());
-        return $this->respondOk($Day);
+        $day->update($request->validated());
+        return $this->respondOk($day);
     }
 
-    public function destroy(Day $Day)
+    public function destroy(Day $day)
     {
-        $Day->delete();
+        $day->delete();
         return $this->respondNoContent();
+    }
+
+    public function open(Day $day)
+    {
+        $day->status = 1;
+        $day->save();
+        return $this->respondOk($day);
+    }
+
+    public function close(Day $day)
+    {
+        $day->status = 0;
+        $day->save();
+        return $this->respondOk($day);
     }
 }

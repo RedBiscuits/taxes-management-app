@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Location extends Model
 {
@@ -15,6 +16,7 @@ class Location extends Model
         'name',
         'status',
     ];
+    protected $appends = ['yearly_receipts'];
 
     public function getMonthlyTargetAttribute()
     {
@@ -27,24 +29,22 @@ class Location extends Model
 
     public function getYearlyReceiptsAttribute()
     {
-        $yearlyReceipts = Day::with('receipts') // Eager load the 'receipts' relationship
-            ->selectRaw('YEAR(time) as year, MONTH(time) as month, SUM(total) as monthly_total')
-            ->where('location_id', $this->location_id)
-            ->groupBy('year', 'month')
-            ->orderBy('year')
-            ->orderBy('month')
-            ->get()
-            ->groupBy('year')
-            ->map(function ($yearlyReceipts) {
-                return [
-                    'months' => $yearlyReceipts->mapWithKeys(function ($monthlyReceipt) {
-                        return [$monthlyReceipt['month'] => $monthlyReceipt['monthly_total']];
-                    })->all(),
-                    'total' => $yearlyReceipts->sum('monthly_total')
-                ];
-            });
+        // Ensure days and receipts relationships are defined
+        if (!$this->relationLoaded('days')) {
+            $this->load('days');
+        }
+        if (!$this->relationLoaded('days.receipts')) {
+            $this->load('days.receipts');
+        }
 
-        return $yearlyReceipts->toArray();
+        $days = $this->days->mapWithKeys(function ($day) {
+            $date = Carbon::parse($day->date);
+            return [$date->year . '-' . $date->month => $day->receipts->sum('total')];
+        });
+
+        return $days->groupBy('year')->map(function ($months) {
+            return $months->merge(['year_total' => $months->sum()]);
+        })->toArray();
     }
 
     public function employee()

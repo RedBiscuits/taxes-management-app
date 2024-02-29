@@ -4,11 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Entry\CreateEntryRequest;
 use App\Http\Requests\Entry\UpdateEntryRequest;
+use App\Http\Services\Entry\EntryService;
 use App\Models\Entry;
 use Illuminate\Http\Request;
 
 class EntriesController extends Controller
 {
+
+    private EntryService $entryService;
+
+    public function __construct(EntryService $entryService)
+    {
+        $this->entryService = $entryService;
+    }
+
     public function index()
     {
         $Entrys = Entry::query()
@@ -39,7 +48,11 @@ class EntriesController extends Controller
 
     public function store(CreateEntryRequest $request)
     {
-        return $this->respondCreated(Entry::create($request->validated()));
+        $entry = Entry::create($request->validated());
+
+        $this->entryService->add_value_to_receipt($entry);
+
+        return $this->respondCreated($entry);
     }
 
     public function update(UpdateEntryRequest $request, Entry $Entry)

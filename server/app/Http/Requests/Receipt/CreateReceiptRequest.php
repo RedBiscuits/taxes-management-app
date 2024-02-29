@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Receipt;
 
+use App\Models\Day;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateReceiptRequest extends FormRequest
@@ -22,7 +23,16 @@ class CreateReceiptRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'day_id' => ['required', 'integer', 'min:1', 'exists:days,id'],
+            'day_id' => [
+                'required', 'integer', 'min:1', 'exists:days,id',
+                function ($attribute, $value, $fail) {
+                    $day = Day::find($value);
+
+                    if ($day->status !== 1) {
+                        $fail('day is not open');
+                    }
+                },
+            ],
             'location_id' => ['required', 'integer', 'min:1', 'exists:locations,id'],
         ];
     }

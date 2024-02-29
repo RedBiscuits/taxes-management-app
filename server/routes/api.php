@@ -34,6 +34,13 @@ Route::controller(AuthController::class)
 
 Route::apiResource('locations', LocationsController::class);
 Route::apiResource('days', DaysController::class);
+Route::controller(DaysController::class)
+    ->prefix('days')
+    ->name('days.')
+    ->group(function () {
+        Route::post('/{day}/open', 'open')->name('open');
+        Route::post('/{day}/close', 'close')->name('close');
+    });
+
 Route::apiResource('receipts', ReceiptsController::class);
 Route::apiResource('entries', EntriesController::class);
-
