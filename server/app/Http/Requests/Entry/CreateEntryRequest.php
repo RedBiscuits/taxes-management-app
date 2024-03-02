@@ -22,9 +22,10 @@ class CreateEntryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'value' => ['required', 'numeric', 'min:0'],
-            'type' => ['required', 'string'],
-            'location_id' => ['required', 'integer', 'min:1', 'exists:locations,id'],
+            'entries' => ['required', 'array', 'min:1'],
+            'entries.*.value' => ['required', 'numeric', 'min:0'],
+            'entries.*.type' => ['required', 'string'],
+            'entries.*.location_id' => ['required', 'integer', 'min:1', 'exists:locations,id'],
         ];
     }
 }
