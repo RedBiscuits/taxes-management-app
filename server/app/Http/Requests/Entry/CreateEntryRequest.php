@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Entry;
 
+use App\Models\Receipt;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateEntryRequest extends FormRequest
@@ -25,7 +26,15 @@ class CreateEntryRequest extends FormRequest
             'entries' => ['required', 'array', 'min:1'],
             'entries.*.value' => ['required', 'numeric', 'min:0'],
             'entries.*.type' => ['required', 'string'],
-            'entries.*.location_id' => ['required', 'integer', 'min:1', 'exists:locations,id'],
+            'entries.*.receipt_id' => [
+                'required', 'integer', 'min:1',
+                function ($attribute, $value, $fail) {
+                    $receipt = Receipt::findOrFail($value);
+                    if (!$receipt->day->status) {
+                        $fail('The day associated with the receipt is not open.');
+                    }
+                },
+            ],
         ];
     }
 }
