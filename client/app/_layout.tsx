@@ -6,9 +6,27 @@ import {
   ElMessiri_700Bold,
   ElMessiri_600SemiBold,
 } from "@expo-google-fonts/dev";
+import {
+  QueryClient,
+  QueryClientProvider,
+  focusManager,
+} from "@tanstack/react-query";
+import { useOnlineManager } from "@/lib/hooks/useOnlineManager";
+import { AppStateStatus, Platform } from "react-native";
+import { useAppState } from "@/lib/hooks/useAppStateChange";
+
+function onAppStateChange(status: AppStateStatus) {
+  if (Platform.OS !== "web") {
+    focusManager.setFocused(status === "active");
+  }
+}
 
 const RootLayout = () => {
-  let [fontsLoaded] = useFonts({
+  const queryClient = new QueryClient();
+  useOnlineManager();
+  useAppState(onAppStateChange);
+
+  const [fontsLoaded] = useFonts({
     ElMessiri_400Regular,
     ElMessiri_700Bold,
     ElMessiri_600SemiBold,
@@ -18,7 +36,11 @@ const RootLayout = () => {
     return null;
   }
 
-  return <Stack />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Stack />
+    </QueryClientProvider>
+  );
 };
 
 export default RootLayout;

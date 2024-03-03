@@ -11,7 +11,7 @@ const Input = ({ label, ...props }: { label: string } & TextInputProps) => {
       <TextInput
         placeholderTextColor={"#64748b"}
         style={fonts.fontArabicRegular}
-        className="bg-slate-200 text-sky-900  rounded-2xl p-5 placeholder:text-xl"
+        className="bg-slate-200 text-sky-900  rounded-2xl p-5 placeholder:text-xl placeholder:text-right"
         {...props}
       />
     </View>

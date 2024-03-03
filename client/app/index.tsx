@@ -4,8 +4,7 @@ import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import Button from "@/lib/components/Button";
 import { options } from "@/lib/shared/ScreenOptions";
-import { Image, View } from "react-native";
-
+import { View, Image } from "react-native";
 export default function App() {
   return (
     <>

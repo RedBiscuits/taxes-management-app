@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Admin;
+use App\Models\Employee;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
@@ -32,6 +33,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'test location',
             'yearly_target' => 10000,
         ]);
+<<<<<<< Updated upstream
 
         $empd = \App\Models\User::create([
             'name' => 'Test employee',
@@ -43,6 +45,21 @@ class DatabaseSeeder extends Seeder
 
         ]);
         $empd->assignRole($emp);
+=======
+        
+        // $emp = \App\Models\User::create([
+        //     'name' => 'eyad',
+        //     'phone' => '01551937083',
+        //     'job' => 'employee',
+        //     'password' => bcrypt('eyad1234')
+        // ]);
+        
+        
+        //Employee::create([
+        //    'user_id' => $user->id
+        //]);
+
+>>>>>>> Stashed changes
 
     }
 }

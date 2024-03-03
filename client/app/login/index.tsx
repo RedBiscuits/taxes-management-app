@@ -1,11 +1,19 @@
 import React from "react";
-import { Text, TextInput, View } from "react-native";
+import { Text, View } from "react-native";
 import { fonts } from "@/lib/styles/fonts";
 import Button from "@/lib/components/Button";
 import { Stack, router } from "expo-router";
 import { options } from "@/lib/shared/ScreenOptions";
+import { Controller } from "react-hook-form";
+import Input from "@/lib/components/Input";
+import { ErrorText } from "@/lib/components/ErrorText";
+import { useLogin } from "./login.hooks";
 
 export default function LoginScreen() {
+  const { isPending, login, formState, control } = useLogin();
+
+  router.push("/home");
+
   return (
     <>
       <Stack.Screen
@@ -23,19 +31,44 @@ export default function LoginScreen() {
         </Text>
 
         <View className="pt-6 px-4 space-y-5">
-          <TextInput
-            placeholderTextColor={"#64748b"}
-            style={fonts.fontArabicRegular}
-            className="bg-slate-200 text-sky-900  rounded-2xl p-5 placeholder:text-xl"
-            placeholder="البريد الإلكتروني"
+          <Controller
+            name="phone"
+            control={control}
+            render={({ field: { onChange, value, onBlur } }) => (
+              <Input
+                label="رقم الهاتف"
+                placeholder="رقم الهاتف"
+                inputMode="tel"
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+              />
+            )}
           />
-          <TextInput
-            placeholderTextColor={"#64748b"}
-            style={fonts.fontArabicRegular}
-            className="bg-slate-200 text-sky-900 rounded-2xl p-5 placeholder:text-xl"
-            placeholder="كلمة المرور"
+          <ErrorText>
+            {formState.errors.phone && formState.errors.phone.message}
+          </ErrorText>
+          <Controller
+            name="password"
+            control={control}
+            render={({ field: { onChange, value, onBlur } }) => (
+              <Input
+                label="كلمة المرور"
+                placeholder="كلمة المرور"
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                secureTextEntry={true}
+              />
+            )}
           />
+          <ErrorText>
+            {formState.errors.password && formState.errors.password.message}
+          </ErrorText>
         </View>
+        <ErrorText>
+          {formState.errors.root && formState.errors.root.message}
+        </ErrorText>
         <Text
           style={fonts.fontArabicRegular}
           className=" px-6 text-sky-950 text-lg mt-6 underline"
@@ -43,7 +76,7 @@ export default function LoginScreen() {
           نسيت كلمة المرور؟
         </Text>
 
-        <Button text="تسجيل الدخول" />
+        <Button loading={isPending} onPress={login} text="تسجيل الدخول" />
         <Text
           style={fonts.fontArabicRegular}
           className="text-center mt-10 text-lg"
@@ -51,15 +84,6 @@ export default function LoginScreen() {
           ليس لديك حساب ؟{" "}
           <Text className="underline text-sky-950">انشاء حساب</Text>
         </Text>
-
-        <Button
-          text="مستخدم"
-          onPress={() => router.navigate("/(user)/home/")}
-        />
-        <Button
-          text="ادمن"
-          onPress={() => router.navigate("/dashboard/create account/")}
-        />
       </View>
     </>
   );
