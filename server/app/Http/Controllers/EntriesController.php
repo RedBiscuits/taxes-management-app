@@ -56,6 +56,7 @@ class EntriesController extends Controller
             $entry = Entry::create([
                 'value' => $entryData['value'],
                 'type' => $entryData['type'],
+                'receipt_id' => $entryData['receipt_id'],
             ]);
 
             $entries[] = $entry;
