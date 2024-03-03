@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Day\CreateDayRequest;
-use App\Http\Requests\Day\UpdateDayRequest;
+use App\Http\Requests\Days\CreateDayRequest;
+use App\Http\Requests\Days\UpdateDayRequest;
 use App\Models\Day;
 use Illuminate\Http\Request;
 

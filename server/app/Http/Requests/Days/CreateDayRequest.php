@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Day;
+namespace App\Http\Requests\Days;
 
 use Illuminate\Foundation\Http\FormRequest;
 
