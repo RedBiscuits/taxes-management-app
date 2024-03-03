@@ -48,8 +48,18 @@ class EntriesController extends Controller
 
     public function store(CreateEntryRequest $request)
     {
-        $entry = Entry::createMany($request->validated());
+        $entriesData = $request->validated()['entries'];
 
+        $entries = [];
+
+        foreach ($entriesData as $entryData) {
+            $entry = Entry::create([
+                'value' => $entryData['value'],
+                'type' => $entryData['type'],
+            ]);
+
+            $entries[] = $entry;
+        }
         return $this->respondCreated($entry);
     }
 
