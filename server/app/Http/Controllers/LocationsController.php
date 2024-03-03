@@ -21,8 +21,8 @@ class LocationsController extends Controller
             ->when(request('status'), function ($query, $search) {
                 $query->where('status', 'like', $search);
             })
-            ->when(request('employee_id'), function ($query, $search) {
-                $query->where('employee_id', 'like', $search);
+            ->when(request('user_id'), function ($query, $search) {
+                $query->where('user_id', 'like', $search);
             })
             ->paginate();
 

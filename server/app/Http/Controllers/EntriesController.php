@@ -48,9 +48,7 @@ class EntriesController extends Controller
 
     public function store(CreateEntryRequest $request)
     {
-        $entry = Entry::create($request->validated());
-
-        $this->entryService->add_value_to_receipt($entry);
+        $entry = Entry::createMany($request->validated());
 
         return $this->respondCreated($entry);
     }

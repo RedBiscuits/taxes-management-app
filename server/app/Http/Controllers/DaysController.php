@@ -27,6 +27,10 @@ class DaysController extends Controller
             ->when(request('location_id'), function ($query, $search) {
                 $query->where('location_id', 'like', $search);
             })
+            ->where(function ($query) {
+                $query->whereNull('status')
+                    ->orWhere('status', 1);
+            })
             ->paginate();
 
         return $this->respondOk($days);
@@ -56,15 +60,19 @@ class DaysController extends Controller
 
     public function open(Day $day)
     {
-        $day->status = 1;
-        $day->save();
+        if($day->status == 0) {
+            return $this->respondError('day is already open');
+        }
+
+        $day->update(['status' => 1]);
+
         return $this->respondOk($day);
     }
 
     public function close(Day $day)
     {
-        $day->status = 0;
-        $day->save();
+        $day->update(['status' => 0]);
+
         return $this->respondOk($day);
     }
 }

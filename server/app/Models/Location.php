@@ -12,9 +12,8 @@ class Location extends Model
 
     protected $fillable = [
         'yearly_target',
-        'employee_id',
+        'user_id',
         'name',
-        'status',
     ];
     protected $appends = ['yearly_receipts'];
 
@@ -22,10 +21,7 @@ class Location extends Model
     {
         return $this->yearly_target / 12;
     }
-    public function getStatusAttribute($value)
-    {
-        return $value ? 'opened' : 'closed';
-    }
+
 
     public function getYearlyReceiptsAttribute()
     {
@@ -47,9 +43,9 @@ class Location extends Model
         })->toArray();
     }
 
-    public function employee()
+    public function user()
     {
-        return $this->belongsTo(Employee::class);
+        return $this->belongsTo(User::class);
     }
 
     public function days()

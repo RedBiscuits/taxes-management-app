@@ -24,6 +24,7 @@ class UserLoginRequest extends FormRequest
         return [
             'phone' => 'required|string|exists:users,phone',
             'password' => 'required|min:8',
+            'device_id' => 'required|string',
         ];
     }
 }

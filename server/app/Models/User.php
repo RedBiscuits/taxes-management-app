@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+
 
     /**
      * The attributes that are mass assignable.
@@ -21,7 +23,9 @@ class User extends Authenticatable
         'name',
         'phone',
         'password',
-        'job'
+        'job',
+        'location_id',
+        'device_id',
     ];
 
     /**
@@ -46,16 +50,11 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return $this instanceof Admin;
+        return $this->hasRole('admin');
     }
 
-    public function admin()
-    {
-        return $this->hasOne(Admin::class);
+    public function location(){
+        return $this->belongsTo(Location::class);
     }
 
-    public function employee()
-    {
-        return $this->hasOne(Employee::class);
-    }
 }
