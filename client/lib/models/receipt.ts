@@ -26,4 +26,5 @@ export type ReceiptEntryType =
 export type ReceiptEntry = {
   amount: number;
   type: ReceiptEntryType;
+  receipt_id: number;
 };

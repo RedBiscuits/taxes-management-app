@@ -8,12 +8,18 @@ import { router } from "expo-router";
 import Stack from "expo-router/stack";
 import React from "react";
 import { View, Text, FlatList, ActivityIndicator } from "react-native";
+import { useDayStore } from "./day.zustand";
+import { useReceiptStore } from "./receipt.zustand";
 
 const ReceiptsScreen = () => {
   const { data, isPending, error } = useCustomQuery<any>("/receipts");
+  const day_id = useDayStore((store) => store.day_id);
+  const createLocalReceipt = useReceiptStore((store) => store.createReceipt);
 
   const createReceipt = useCustomMutation("/receipts", "post", {
-    onSuccess: () => {
+    onSuccess: (data: any) => {
+      console.log("create receipt", data?.data?.data);
+      createLocalReceipt(data?.data?.data.id);
       router.push("/(user)/Add Reciept");
     },
   });
@@ -60,8 +66,8 @@ const ReceiptsScreen = () => {
         <Fab
           onPress={() =>
             createReceipt.mutate({
-              day_id: 1,
-              location_id: 1,
+              day_id,
+              location_id: 2,
             })
           }
         />

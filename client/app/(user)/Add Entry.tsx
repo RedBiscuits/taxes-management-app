@@ -15,6 +15,7 @@ import Input from "@/lib/components/Input";
 
 const AddEntryScreen = () => {
   const addEntry = useReceiptStore((state) => state.addEntry);
+  const receipt_id = useReceiptStore((state) => state.receipt_id);
 
   const {
     control,
@@ -28,7 +29,7 @@ const AddEntryScreen = () => {
     <>
       <Stack.Screen
         options={{
-          title: "اضف معاملة",
+          title: "اضف تحصيل",
           ...options,
         }}
       />
@@ -42,13 +43,20 @@ const AddEntryScreen = () => {
         <View className="pt-6 px-4 space-y-5">
           <View>
             <Text style={fonts.fontArabicSemi} className="text-lg mr-3 mb-2">
-              النوع
+              نوع التحصيل
             </Text>
             <Controller
               name="type"
               control={control}
               render={({ field: { onChange } }) => {
-                return <DropDown items={baseTypes} onChange={onChange} />;
+                return (
+                  <DropDown
+                    zindex={300}
+                    zindexinverse={100}
+                    items={taxTypes}
+                    onChange={onChange}
+                  />
+                );
               }}
             />
             {errors.type && (
@@ -56,7 +64,34 @@ const AddEntryScreen = () => {
                 style={fonts.fontArabicRegular}
                 className="text-red-600 text-center mt-2 text-lg"
               >
-                {errors.type.message}
+                {errors.type.message as string}
+              </Text>
+            )}
+          </View>
+          <View>
+            <Text style={fonts.fontArabicSemi} className="text-lg mr-3 mb-2">
+              نوع الضريبة
+            </Text>
+            <Controller
+              name="type2"
+              control={control}
+              render={({ field: { onChange } }) => {
+                return (
+                  <DropDown
+                    zindex={200}
+                    zindexinverse={200}
+                    items={paymentTypes}
+                    onChange={onChange}
+                  />
+                );
+              }}
+            />
+            {errors.type2 && (
+              <Text
+                style={fonts.fontArabicRegular}
+                className="text-red-600 text-center mt-2 text-lg"
+              >
+                {errors.type2.message as string}
               </Text>
             )}
           </View>
@@ -88,10 +123,10 @@ const AddEntryScreen = () => {
         <Button
           onPress={handleSubmit((data) => {
             addEntry({
+              receipt_id,
               type: {
                 value: data.type,
-                label: baseTypes.find((item) => item.value === data.type)!
-                  .label,
+                label: taxTypes.find((item) => item.value === data.type)!.label,
               } as ReceiptEntryType,
               amount: Number(data.amount),
             });
@@ -105,22 +140,85 @@ const AddEntryScreen = () => {
   );
 };
 
-const baseTypes = [
+const paymentTypes = [
   {
-    value: "sell",
-    label: "بيع",
+    value: "type1",
+    label: "نقدي",
   },
   {
-    value: "buy",
-    label: "شراء",
+    value: "type2",
+    label: "الكتروني - ماكينة",
   },
   {
-    value: "transfer",
-    label: "تحويل",
+    value: "type3",
+    label: "الكتروني - مدفوعة مواطن",
   },
   {
-    value: "expense",
-    label: "مصروف",
+    value: "type4",
+    label: "الكتروني - تحويل بنكي",
+  },
+];
+
+const taxTypes = [
+  {
+    value: "type1",
+    label: "ضريبة مباني",
+  },
+  {
+    value: "type2",
+    label: "ضريبة أطيان",
+  },
+  {
+    value: "type3",
+    label: "ضريبة ملاهي",
+  },
+  {
+    value: "type4",
+    label: "كشف رسمي",
+  },
+  {
+    value: "type5",
+    label: "تامينات",
+  },
+  {
+    value: "type6",
+    label: "طعون",
+  },
+  {
+    value: "type7",
+    label: "مصاريف حجز",
+  },
+  {
+    value: "type8",
+    label: "مصاريف رفع حجز",
+  },
+  {
+    value: "type9",
+    label: "اعانة بر",
+  },
+  {
+    value: "type10",
+    label: "اعانة سينما",
+  },
+  {
+    value: "type11",
+    label: "طابع شهيد",
+  },
+  {
+    value: "type12",
+    label: "شرطة",
+  },
+  {
+    value: "type13",
+    label: "تنمية محلية",
+  },
+  {
+    value: "type14",
+    label: "رسم درن",
+  },
+  {
+    value: "type15",
+    label: "معاشات",
   },
 ];
 

@@ -14,23 +14,23 @@ const Home = () => {
   const openDay = useDayStore((store) => store.setDay);
   const isDayOpen = useDayStore((store) => store.isOpen);
 
-  const createDay = useCustomMutation("/days/create", "post", {
-    onSuccess: (data) => {
+  const createDay = useCustomMutation("/days", "post", {
+    onSuccess: (data: any) => {
       setOpenDateModal(false);
       console.log(data.data);
 
-      // openDay(dayDate);
-      // router.push("/(user)/Add Reciept");
+      openDay(dayDate, data.data?.data?.id);
+      router.push("/(user)/Receipts");
     },
   });
 
   function createDayHandler() {
     createDay.mutate({
-      name: "يوم",
-      start_date: dayjs(),
-      end_date: dayjs().add(2, "day"),
-      time: dayDate,
-      location_id: String(1),
+      name: "reservation",
+      start_date: "2024/08/12 16:35:00",
+      end_date: "2024/08/13 16:35:00",
+      time: "2024/08/13 16:35:00",
+      location_id: "2",
     });
   }
 

@@ -8,6 +8,8 @@ import { fonts } from "@/lib/styles/fonts";
 const DropDown = (props: {
   onChange: (...event: any[]) => void;
   items: ItemType<ValueType>[];
+  zindex?: number;
+  zindexinverse?: number;
 }) => {
   const [open, setOpen] = useState(false);
   const [pickerValue, setPickerValue] = useState(null);
@@ -40,6 +42,8 @@ const DropDown = (props: {
       placeholderStyle={{
         color: "#64748b",
       }}
+      zIndex={props.zindex}
+      zIndexInverse={props.zindexinverse}
     />
   );
 };
