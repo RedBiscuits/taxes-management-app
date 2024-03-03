@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\CreateUserRequest;
 use App\Http\Requests\Auth\UserLoginRequest;
-use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,13 +12,20 @@ class AuthController extends Controller
 {
     public function login(UserLoginRequest $request)
     {
+
         if (Auth::attempt([
             'phone' => $request->validated()['phone'],
-            'password' => $request->validated()['password']
+            'password' => $request->validated()['password'],
         ])) {
-            $user = Auth::user()->load('admin', 'employee'); // Eager load admin and employee relationships
 
+            $user = Auth::user();
+
+            if($user->hasRole('employee') && $request->validated()['device_id'] !== $user->device_id){
+                return $this->respondError(null, 'Access from this device not allowed.');
+            }
             $token = $user->createToken(env('TOKEN_NAME'))->plainTextToken;
+            
+            $user->load('location');
 
             return $this->respondCreated([
                 'user' => $user,
@@ -32,7 +38,7 @@ class AuthController extends Controller
 
     public function register(CreateUserRequest $request)
     {
-        $user = Employee::create($request->validated());
+        $user = User::create($request->validated());
 
         return $this->respondOk($user, 'User created successfully');
     }

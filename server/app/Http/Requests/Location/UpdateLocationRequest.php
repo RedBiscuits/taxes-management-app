@@ -24,7 +24,7 @@ class UpdateLocationRequest extends FormRequest
         return [
             'name' => ['string', 'max:255'],
             'yearly_target' => ['numeric'],
-            'employee_id' => ['integer', 'min:1', 'exists:employees,id'],
+            'user_id' => ['integer', 'min:1', 'exists:users,id'],
         ];
     }
 }
