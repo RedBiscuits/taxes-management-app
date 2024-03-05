@@ -33,7 +33,6 @@ class DatabaseSeeder extends Seeder
             'name' => 'test location',
             'yearly_target' => 10000,
         ]);
-<<<<<<< Updated upstream
 
         $empd = \App\Models\User::create([
             'name' => 'Test employee',
@@ -45,7 +44,6 @@ class DatabaseSeeder extends Seeder
 
         ]);
         $empd->assignRole($emp);
-=======
         
         // $emp = \App\Models\User::create([
         //     'name' => 'eyad',
@@ -58,8 +56,6 @@ class DatabaseSeeder extends Seeder
         //Employee::create([
         //    'user_id' => $user->id
         //]);
-
->>>>>>> Stashed changes
 
     }
 }

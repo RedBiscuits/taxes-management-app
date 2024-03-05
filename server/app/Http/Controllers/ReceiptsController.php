@@ -30,6 +30,7 @@ class ReceiptsController extends Controller
             ->when(request('day_id'), function ($query, $search) {
                 $query->where('day_id', 'like', $search);
             })
+            ->with("entries")
             ->paginate();
 
         return $this->respondOk($Receipts);
