@@ -7,13 +7,14 @@ import {
 import React from "react";
 import { fonts } from "@/lib/styles/fonts";
 
-const Button = ({
+export const Button = ({
   text,
   loading,
   ...props
 }: { text: string; loading?: boolean } & PressableProps) => {
   return (
     <Pressable
+      disabled={loading}
       className="bg-sky-600 rounded-2xl p-5 mx-4 mt-6 flex items-center"
       {...props}
     >
@@ -30,5 +31,3 @@ const Button = ({
     </Pressable>
   );
 };
-
-export default Button;

@@ -2,22 +2,26 @@ import React from "react";
 import { Stack, router } from "expo-router";
 import { options } from "@/lib/shared/ScreenOptions";
 import { View } from "react-native";
-import Fab from "@/lib/components/Fab";
-import Reciept from "@/lib/components/Reciept";
-import { useReceiptStore } from "./receipt.zustand";
-import Button from "@/lib/components/Button";
+import { Fab, Button, Reciept } from "@/lib/components";
+import { useReceiptStore } from "./logic/receipt.zustand";
 import { useCustomMutation } from "@/lib/shared/query";
+import { useQueryClient } from "@tanstack/react-query";
+import { Receipt } from "@/lib/models";
 
 const AddRecieptScreen = () => {
   const entries = useReceiptStore((state) => state.entries);
   const receipt_id = useReceiptStore((state) => state.receipt_id);
-  const receipt = {
-    createdAt: new Date(),
+  const resetEntries = useReceiptStore((state) => state.resetReceipts);
+  const receipt: Receipt = {
+    created_at: new Date().toString(),
     entries,
-  };
+  } as Receipt;
 
-  const { mutate } = useCustomMutation("entries", "post", {
-    onSuccess: (data: any) => {
+  const qc = useQueryClient();
+  const { mutate, isPending } = useCustomMutation("entries", "post", {
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["/receipts"] });
+      resetEntries();
       router.back();
     },
   });
@@ -34,18 +38,19 @@ const AddRecieptScreen = () => {
       <View className="relative flex-1 px-2 py-4">
         <Reciept receipt={receipt} />
         <Button
+          loading={isPending}
           text="حفظ"
           onPress={() =>
             mutate({
               entries: entries.map((e) => ({
                 receipt_id,
-                type: e.type.value,
-                value: e.amount,
+                type: e.type,
+                value: e.value,
               })),
             })
           }
         />
-        <Fab onPress={() => router.push("/(user)/Add Entry")} />
+        <Fab onPress={() => router.push("/(user)/receipts/Add Entry")} />
       </View>
     </>
   );

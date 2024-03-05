@@ -1,6 +1,5 @@
-import Fab from "@/lib/components/Fab";
-import Reciept from "@/lib/components/Reciept";
-import { Receipt } from "@/lib/models/receipt";
+import { Fab, Reciept } from "@/lib/components";
+import { Receipt, Base_Model, Base_Response } from "@/lib/models";
 import { options } from "@/lib/shared/ScreenOptions";
 import { useCustomMutation, useCustomQuery } from "@/lib/shared/query";
 import { fonts } from "@/lib/styles/fonts";
@@ -8,21 +7,31 @@ import { router } from "expo-router";
 import Stack from "expo-router/stack";
 import React from "react";
 import { View, Text, FlatList, ActivityIndicator } from "react-native";
-import { useDayStore } from "./day.zustand";
-import { useReceiptStore } from "./receipt.zustand";
+import { useDayStore } from "../day/logic/day.zustand";
+import { useReceiptStore } from "./logic/receipt.zustand";
+
+type ReceiptData = {
+  day_id: number;
+  location_id: number;
+};
+
+type ReceiptResponse = Base_Model & ReceiptData;
 
 const ReceiptsScreen = () => {
-  const { data, isPending, error } = useCustomQuery<any>("/receipts");
+  const { data, isPending } = useCustomQuery<Receipt[]>("/receipts");
   const day_id = useDayStore((store) => store.day_id);
   const createLocalReceipt = useReceiptStore((store) => store.createReceipt);
 
-  const createReceipt = useCustomMutation("/receipts", "post", {
-    onSuccess: (data: any) => {
-      console.log("create receipt", data?.data?.data);
-      createLocalReceipt(data?.data?.data.id);
-      router.push("/(user)/Add Reciept");
-    },
-  });
+  const createReceipt = useCustomMutation<ReceiptData, ReceiptResponse>(
+    "/receipts",
+    "post",
+    {
+      onSuccess: (data) => {
+        createLocalReceipt(data.data.data.id);
+        router.push("/(user)/receipts/Add Reciept");
+      },
+    }
+  );
 
   return (
     <>
@@ -39,16 +48,16 @@ const ReceiptsScreen = () => {
               <ActivityIndicator color={"#0284c7"} size={"large"} />
             </View>
           );
-        } else if (data.data?.data?.length !== 0) {
+        } else if (data?.data.data.length !== 0) {
           return (
             <View className="flex-1">
               <FlatList
                 className="px-2 pt-4"
                 ListFooterComponent={<View className="h-16" />}
-                data={receipts}
+                data={data?.data.data || []}
                 renderItem={({ item }) => <Reciept receipt={item} />}
                 ItemSeparatorComponent={() => <View className="h-2" />}
-                keyExtractor={(item, index) => index.toString()}
+                keyExtractor={(item) => item.id.toString()}
               />
             </View>
           );
@@ -67,7 +76,7 @@ const ReceiptsScreen = () => {
           onPress={() =>
             createReceipt.mutate({
               day_id,
-              location_id: 2,
+              location_id: 1,
             })
           }
         />
@@ -75,65 +84,5 @@ const ReceiptsScreen = () => {
     </>
   );
 };
-
-const receipts: Receipt[] = [
-  {
-    createdAt: new Date(),
-    entries: [
-      {
-        type: {
-          value: "sell",
-          label: "بيع",
-        },
-        amount: 200,
-      },
-      {
-        type: {
-          value: "buy",
-          label: "شراء",
-        },
-        amount: 150,
-      },
-    ],
-  },
-  {
-    createdAt: new Date(),
-    entries: [
-      {
-        type: {
-          value: "sell",
-          label: "بيع",
-        },
-        amount: 200,
-      },
-      {
-        type: {
-          value: "buy",
-          label: "شراء",
-        },
-        amount: 150,
-      },
-    ],
-  },
-  {
-    createdAt: new Date(),
-    entries: [
-      {
-        type: {
-          value: "sell",
-          label: "بيع",
-        },
-        amount: 200,
-      },
-      {
-        type: {
-          value: "buy",
-          label: "شراء",
-        },
-        amount: 150,
-      },
-    ],
-  },
-];
 
 export default ReceiptsScreen;

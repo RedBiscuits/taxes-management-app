@@ -8,7 +8,7 @@ export async function setToken(token: string) {
   await SecureStore.setItemAsync("token", token);
 }
 
-export async function setUser(user: any) {
+export async function setUser(user: User) {
   await SecureStore.setItemAsync("user", JSON.stringify(user));
 }
 

@@ -1,4 +1,4 @@
-import BackButton from "@/lib/components/BackButton";
+import { BackButton } from "@/lib/components";
 
 export const options: any = {
   headerStyle: { backgroundColor: "#082f49" },

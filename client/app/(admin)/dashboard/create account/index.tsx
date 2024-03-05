@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, TextInput, View, ScrollView } from "react-native";
 import { fonts } from "@/lib/styles/fonts";
-import Button from "@/lib/components/Button";
+import { Button } from "@/lib/components";
 import { options } from "@/lib/shared/ScreenOptions";
 import { Stack } from "expo-router";
 

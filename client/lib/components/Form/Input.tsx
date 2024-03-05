@@ -1,8 +1,11 @@
 import { Text, TextInput, TextInputProps, View } from "react-native";
 import React from "react";
-import { fonts } from "../styles/fonts";
+import { fonts } from "../../styles/fonts";
 
-const Input = ({ label, ...props }: { label: string } & TextInputProps) => {
+export const Input = ({
+  label,
+  ...props
+}: { label: string } & TextInputProps) => {
   return (
     <View>
       <Text style={fonts.fontArabicSemi} className="text-lg mr-3 mb-2">
@@ -17,5 +20,3 @@ const Input = ({ label, ...props }: { label: string } & TextInputProps) => {
     </View>
   );
 };
-
-export default Input;

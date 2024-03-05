@@ -1,30 +1,14 @@
-import { z } from "zod";
+import { Base_Model } from "./Base_Model";
 
-export type Receipt = {
-  createdAt: Date;
-  entries: ReceiptEntry[];
+export type Receipt = Base_Model & {
+  location_id: number;
+  day_id: number;
+  total: number;
+  entries: Entry[];
 };
 
-export type ReceiptEntryType =
-  | {
-      value: "sell";
-      label: "بيع";
-    }
-  | {
-      value: "buy";
-      label: "شراء";
-    }
-  | {
-      value: "transfer";
-      label: "تحويل";
-    }
-  | {
-      value: "expense";
-      label: "مصروف";
-    };
-
-export type ReceiptEntry = {
-  amount: number;
-  type: ReceiptEntryType;
+export type Entry = Base_Model & {
+  value: number;
+  type: string;
   receipt_id: number;
 };

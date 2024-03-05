@@ -5,7 +5,7 @@ import DropDownPicker, {
 } from "react-native-dropdown-picker";
 import { fonts } from "@/lib/styles/fonts";
 
-const DropDown = (props: {
+export const DropDown = (props: {
   onChange: (...event: any[]) => void;
   items: ItemType<ValueType>[];
   zindex?: number;
@@ -47,5 +47,3 @@ const DropDown = (props: {
     />
   );
 };
-
-export default DropDown;

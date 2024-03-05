@@ -3,7 +3,7 @@ import React from "react";
 import Icon from "react-native-vector-icons/AntDesign";
 import { router } from "expo-router";
 
-const BackButton = () => {
+export const BackButton = () => {
   return (
     <Pressable onPress={() => router.canGoBack() && router.back()}>
       <Text>
@@ -12,5 +12,3 @@ const BackButton = () => {
     </Pressable>
   );
 };
-
-export default BackButton;

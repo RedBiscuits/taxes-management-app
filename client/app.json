@@ -16,13 +16,17 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "ExpoLocalization_supportsRTL": true
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.eyad_abdou.client"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -37,7 +41,13 @@
       "typedRoutes": true
     },
     "extra": {
-      "supportsRTL": true
+      "supportsRTL": true,
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "ead7c217-e81f-4d5a-a438-759265569d24"
+      }
     }
   }
 }

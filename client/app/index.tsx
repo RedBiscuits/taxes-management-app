@@ -2,7 +2,7 @@ import React from "react";
 import { Stack } from "expo-router/stack";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import Button from "@/lib/components/Button";
+import { Button } from "@/lib/components";
 import { options } from "@/lib/shared/ScreenOptions";
 import { View, Image } from "react-native";
 export default function App() {

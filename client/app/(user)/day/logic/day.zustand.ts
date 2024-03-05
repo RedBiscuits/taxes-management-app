@@ -1,14 +1,13 @@
-import { Dayjs } from "dayjs";
 import { create } from "zustand";
 
 type State = {
-  day: Dayjs | null;
+  day: Date | null;
   isOpen: boolean;
   day_id: number;
 };
 
 type Actions = {
-  setDay: (day: Dayjs, day_id: number) => void;
+  setDay: (day: Date, day_id: number) => void;
   closeDay: () => void;
 };
 

@@ -1,18 +1,17 @@
 import React from "react";
 import { Text, View } from "react-native";
 import { fonts } from "@/lib/styles/fonts";
-import Button from "@/lib/components/Button";
+import { Button, Input } from "@/lib/components";
 import { Stack, router } from "expo-router";
 import { options } from "@/lib/shared/ScreenOptions";
 import { Controller } from "react-hook-form";
-import Input from "@/lib/components/Input";
-import { ErrorText } from "@/lib/components/ErrorText";
-import { useLogin } from "./login.hooks";
+import { ErrorText } from "@/lib/components/Form/ErrorText";
+import { useLogin } from "./logic/login.hooks";
 
 export default function LoginScreen() {
   const { isPending, login, formState, control } = useLogin();
 
-  router.push("/home");
+  router.push("/(user)/day/");
 
   return (
     <>

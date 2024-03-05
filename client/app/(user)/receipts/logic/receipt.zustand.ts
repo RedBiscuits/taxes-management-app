@@ -1,15 +1,15 @@
-import { ReceiptEntry } from "@/lib/models/receipt";
+import { Entry } from "@/lib/models";
 import { create } from "zustand";
 
 type State = {
   receipt_id: number;
-  entries: ReceiptEntry[];
+  entries: Entry[];
 };
 
 type Actions = {
   createReceipt: (receipt_id: number) => void;
   resetReceipts: () => void;
-  addEntry: (entry: ReceiptEntry) => void;
+  addEntry: (entry: Entry) => void;
 };
 
 export const useReceiptStore = create<State & Actions>((set) => ({
