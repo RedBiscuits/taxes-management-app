@@ -29,33 +29,38 @@ class DatabaseSeeder extends Seeder
         ]);
         $admin->assignRole($adminRole);
 
-        $location = \App\Models\Location::create([
-            'name' => 'test location',
+        $location1 = \App\Models\Location::create([
+            'name' => 'الشروق',
             'yearly_target' => 10000,
         ]);
 
-        $empd = \App\Models\User::create([
-            'name' => 'Test employee',
-            'phone' => '01550935405',
+        $empd1 = \App\Models\User::create([
+            'name' => 'employee1',
+            'phone' => '01111111111',
             'job' => 'doggo',
             'password' => bcrypt('doggo123'),
-            'device_id' => '123456789',
-            'location_id' => $location->id
-
+            // 'device_id' => '123456789',
+            // 'location_id' => $location1->id
         ]);
-        $empd->assignRole($emp);
+        $empd1->assignRole($adminRole);
+
+
+
+        $location2 = \App\Models\Location::create([
+            'name' => 'بدر',
+            'yearly_target' => 10000,
+        ]);
+
+        $empd2 = \App\Models\User::create([
+            'name' => 'employee2',
+            'phone' => '02222222222',
+            'job' => 'doggo',
+            'password' => bcrypt('doggo123'),
+            // 'device_id' => '987654321',
+            // 'location_id' => $location2->id
+        ]);
+        $empd2->assignRole($adminRole);
         
-        // $emp = \App\Models\User::create([
-        //     'name' => 'eyad',
-        //     'phone' => '01551937083',
-        //     'job' => 'employee',
-        //     'password' => bcrypt('eyad1234')
-        // ]);
-        
-        
-        //Employee::create([
-        //    'user_id' => $user->id
-        //]);
 
     }
 }
