@@ -3,7 +3,7 @@ import { Stack } from "expo-router/stack";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Button } from "@/lib/components";
-import { options } from "@/lib/shared/ScreenOptions";
+import { options } from "@/lib/constants/ScreenOptions";
 import { View, Image } from "react-native";
 export default function App() {
   return (
@@ -26,6 +26,7 @@ export default function App() {
         <Button
           text="تسجيل الدخول"
           onPress={() => router.navigate("/login/")}
+          // onPress={() => router.push("/(admin)/dashboard/reports/")}
         />
 
         <StatusBar style="light" />

@@ -3,15 +3,13 @@ import { Text, View } from "react-native";
 import { fonts } from "@/lib/styles/fonts";
 import { Button, Input } from "@/lib/components";
 import { Stack, router } from "expo-router";
-import { options } from "@/lib/shared/ScreenOptions";
+import { options } from "@/lib/constants/ScreenOptions";
 import { Controller } from "react-hook-form";
 import { ErrorText } from "@/lib/components/Form/ErrorText";
 import { useLogin } from "./logic/login.hooks";
 
 export default function LoginScreen() {
   const { isPending, login, formState, control } = useLogin();
-
-  router.push("/(user)/day/");
 
   return (
     <>

@@ -1,9 +1,9 @@
-import React from "react";
-import { Text, TextInput, View, ScrollView } from "react-native";
-import { fonts } from "@/lib/styles/fonts";
 import { Button } from "@/lib/components";
-import { options } from "@/lib/shared/ScreenOptions";
+import { options } from "@/lib/constants/ScreenOptions";
+import { fonts } from "@/lib/styles/fonts";
 import { Stack } from "expo-router";
+import React from "react";
+import { ScrollView, Text, TextInput, View } from "react-native";
 
 const CreateAccountScreen = () => {
   return (

@@ -1,16 +1,25 @@
-import React from "react";
-import { Text, View } from "react-native";
-import { fonts } from "@/lib/styles/fonts";
 import { Button, DropDown, Input } from "@/lib/components";
-import { Stack } from "expo-router";
-import { options } from "@/lib/shared/ScreenOptions";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Entry, entrySchema } from "./logic/receipt.schema";
-import { router } from "expo-router";
-import { paymentTypes, taxTypes } from "@/lib/shared/types";
+import { options } from "@/lib/constants/ScreenOptions";
+import { paymentTypes, taxTypes } from "@/lib/constants";
 import { Entry as ReceiptEntry } from "@/lib/models";
+import { fonts } from "@/lib/styles/fonts";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Stack, router } from "expo-router";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Text, View } from "react-native";
+import { Entry, entrySchema } from "./logic/receipt.schema";
 import { useReceiptStore } from "./logic/receipt.zustand";
+
+const taxTypesData = taxTypes.map((type) => ({
+  label: type,
+  value: type,
+}));
+
+const paymentTypesData = paymentTypes.map((type) => ({
+  label: type,
+  value: type,
+}));
 
 const AddEntryScreen = () => {
   const addEntry = useReceiptStore((state) => state.addEntry);
@@ -41,19 +50,16 @@ const AddEntryScreen = () => {
         </Text>
         <View className="pt-6 px-4 space-y-5">
           <View>
-            <Text style={fonts.fontArabicSemi} className="text-lg mr-3 mb-2">
-              نوع الضريبة
-            </Text>
-
             <Controller
               name="taxType"
               control={control}
               render={({ field: { onChange } }) => {
                 return (
                   <DropDown
+                    label="نوع الضريبة"
                     zindex={300}
                     zindexinverse={100}
-                    items={taxTypes}
+                    items={taxTypesData}
                     onChange={onChange}
                   />
                 );
@@ -69,18 +75,16 @@ const AddEntryScreen = () => {
             )}
           </View>
           <View>
-            <Text style={fonts.fontArabicSemi} className="text-lg mr-3 mb-2">
-              نوع التحصيل
-            </Text>
             <Controller
               name="paymentType"
               control={control}
               render={({ field: { onChange } }) => {
                 return (
                   <DropDown
+                    label="نوع التحصيل"
                     zindex={200}
                     zindexinverse={200}
-                    items={paymentTypes}
+                    items={paymentTypesData}
                     onChange={onChange}
                   />
                 );

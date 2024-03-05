@@ -3,7 +3,7 @@ import { Button } from "@/lib/components";
 import { useCustomMutation } from "@/lib/shared/query";
 import { useDayStore } from "./logic/day.zustand";
 import { useState } from "react";
-import { options } from "@/lib/shared/ScreenOptions";
+import { options } from "@/lib/constants/ScreenOptions";
 import { View } from "react-native";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";

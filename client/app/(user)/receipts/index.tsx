@@ -1,14 +1,15 @@
 import { Fab, Reciept } from "@/lib/components";
 import { Receipt, Base_Model, Base_Response } from "@/lib/models";
-import { options } from "@/lib/shared/ScreenOptions";
+import { options } from "@/lib/constants/ScreenOptions";
 import { useCustomMutation, useCustomQuery } from "@/lib/shared/query";
 import { fonts } from "@/lib/styles/fonts";
 import { router } from "expo-router";
 import Stack from "expo-router/stack";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, ActivityIndicator } from "react-native";
 import { useDayStore } from "../day/logic/day.zustand";
 import { useReceiptStore } from "./logic/receipt.zustand";
+import { getUser } from "@/lib/shared/storage";
 
 type ReceiptData = {
   day_id: number;
@@ -18,9 +19,23 @@ type ReceiptData = {
 type ReceiptResponse = Base_Model & ReceiptData;
 
 const ReceiptsScreen = () => {
-  const { data, isPending } = useCustomQuery<Receipt[]>("/receipts");
+  const [locationId, setlocationId] = useState(0);
+  const { data, isPending } = useCustomQuery<Receipt[]>(
+    `/receipts?location_id=${locationId}`,
+    "get",
+    {
+      enabled: locationId !== 0,
+    }
+  );
   const day_id = useDayStore((store) => store.day_id);
   const createLocalReceipt = useReceiptStore((store) => store.createReceipt);
+
+  useEffect(() => {
+    (async () => {
+      const user = await getUser();
+      setlocationId(user?.name.endsWith("1") ? 1 : 2);
+    })();
+  }, []);
 
   const createReceipt = useCustomMutation<ReceiptData, ReceiptResponse>(
     "/receipts",
@@ -73,12 +88,14 @@ const ReceiptsScreen = () => {
       })()}
       {!isPending && (
         <Fab
-          onPress={() =>
+          onPress={async () => {
+            const user = await getUser();
+            const location_id = user?.name.endsWith("1") ? 1 : 2;
             createReceipt.mutate({
               day_id,
-              location_id: 1,
-            })
-          }
+              location_id,
+            });
+          }}
         />
       )}
     </>

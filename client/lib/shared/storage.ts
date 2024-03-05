@@ -1,4 +1,5 @@
 import * as SecureStore from "expo-secure-store";
+import { User } from "../models/user";
 
 export async function getToken() {
   return await SecureStore.getItemAsync("token");
@@ -19,24 +20,3 @@ export async function getUser() {
   }
   return JSON.parse(userString) as User;
 }
-
-export type User = {
-  id: number;
-  name: string;
-  phone: string;
-  job: string;
-  created_at: Date;
-  updated_at: Date;
-  admin: {
-    id: number;
-    user_id: number;
-    created_at: Date;
-    updated_at: Date;
-  } | null;
-  employee: {
-    id: number;
-    user_id: number;
-    created_at: Date;
-    updated_at: Date;
-  } | null;
-};

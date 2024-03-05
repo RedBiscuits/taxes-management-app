@@ -1,9 +1,10 @@
 import { useCustomMutation } from "@/lib/shared/query";
 import { LoginData, loginSchema } from "./login.schema";
-import { User, getUser, setToken, setUser } from "@/lib/shared/storage";
+import { getUser, setToken, setUser } from "@/lib/shared/storage";
 import { router } from "expo-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { User } from "@/lib/models/user";
 
 type LoginResponse = { user: User; token: string };
 export function useLogin() {
@@ -22,10 +23,10 @@ export function useLogin() {
       const user = await getUser();
 
       // switch this
-      if (user?.employee) {
-        router.push("/(admin)/dashboard/create account/");
-      } else {
+      if (user?.name.endsWith("1") || user?.name.endsWith("2")) {
         router.push("/(user)/day/");
+      } else {
+        router.push("/(admin)/dashboard/reports/");
       }
     },
     onError: (error) => {
