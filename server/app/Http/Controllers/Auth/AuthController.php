@@ -20,11 +20,17 @@ class AuthController extends Controller
 
             $user = Auth::user();
 
-            if($user->hasRole('employee') && $request->validated()['device_id'] !== $user->device_id){
-                return $this->respondError(null, 'Access from this device not allowed.');
+            if ($user->hasRole('employee')) {
+                if ($user->device_id && $request->validated()['device_id'] !== $user->device_id) {
+                    return $this->respondError(null, 'Access from this device not allowed.');
+                } else {
+                    $user->update([
+                        'device_id' => $request->validated()['device_id'],
+                    ]);
+                }
             }
             $token = $user->createToken(env('TOKEN_NAME'))->plainTextToken;
-            
+
             $user->load('location');
 
             return $this->respondCreated([
@@ -39,7 +45,7 @@ class AuthController extends Controller
     public function register(CreateUserRequest $request)
     {
         $user = User::create($request->validated());
-
+        $user->assignRole('employee');
         return $this->respondOk($user, 'User created successfully');
     }
 
