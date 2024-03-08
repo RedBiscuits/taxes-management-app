@@ -21,20 +21,17 @@ class EntriesController extends Controller
     public function index()
     {
         $Entrys = Entry::query()
-            ->when(request('time'), function ($query, $search) {
-                $query->where('time', 'like', "$search%");
+            ->when(request('payment_type'), function ($query, $search) {
+                $query->where('payment_type', 'like', "$search%");
             })
-            ->when(request('start_date'), function ($query, $search) {
-                $query->where('start_date', 'like', "$search%");
+            ->when(request('tax_type'), function ($query, $search) {
+                $query->where('tax_type', 'like', "$search%");
             })
-            ->when(request('end_date'), function ($query, $search) {
-                $query->where('end_date', 'like', "$search%");
+            ->when(request('value'), function ($query, $search) {
+                $query->where('value', 'like', "$search%");
             })
-            ->when(request('name'), function ($query, $search) {
-                $query->where('name', 'like', "$search%");
-            })
-            ->when(request('location_id'), function ($query, $search) {
-                $query->where('location_id', 'like', $search);
+            ->when(request('receipt_id'), function ($query, $search) {
+                $query->where('receipt_id', 'like', $search);
             })
             ->paginate();
 
@@ -55,7 +52,8 @@ class EntriesController extends Controller
         foreach ($entriesData as $entryData) {
             $entry = Entry::create([
                 'value' => $entryData['value'],
-                'type' => $entryData['type'],
+                'tax_type' => $entryData['tax_type'],
+                'payment_type' => $entryData['payment_type'],
                 'receipt_id' => $entryData['receipt_id'],
             ]);
 

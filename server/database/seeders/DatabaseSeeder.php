@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $emp = Role::firstOrCreate(['name' => 'employee']);
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
 
+
         $admin = \App\Models\User::create([
             'name' => 'Test User',
             'phone' => '01550935404',
@@ -27,12 +28,9 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('kitten123'),
 
         ]);
+
         $admin->assignRole($adminRole);
 
-        $location1 = \App\Models\Location::create([
-            'name' => 'الشروق',
-            'yearly_target' => 10000,
-        ]);
 
         $empd1 = \App\Models\User::create([
             'name' => 'employee1',
@@ -42,15 +40,6 @@ class DatabaseSeeder extends Seeder
             // 'device_id' => '123456789',
             // 'location_id' => $location1->id
         ]);
-        $empd1->assignRole($adminRole);
-
-
-
-        $location2 = \App\Models\Location::create([
-            'name' => 'بدر',
-            'yearly_target' => 10000,
-        ]);
-
         $empd2 = \App\Models\User::create([
             'name' => 'employee2',
             'phone' => '02222222222',
@@ -59,8 +48,20 @@ class DatabaseSeeder extends Seeder
             // 'device_id' => '987654321',
             // 'location_id' => $location2->id
         ]);
-        $empd2->assignRole($adminRole);
-        
 
+        $empd1->assignRole($emp);
+        $empd2->assignRole($emp);
+
+        
+        \App\Models\Location::create([
+            'name' => 'الشروق',
+            'yearly_target' => 10000,
+        ]);
+
+
+        \App\Models\Location::create([
+            'name' => 'بدر',
+            'yearly_target' => 10000,
+        ]);
     }
 }

@@ -23,7 +23,8 @@ class UpdateEntryRequest extends FormRequest
     {
         return [
             'value' => ['numeric', 'min:0'],
-            'type' => ['string'],
+            'tax_type' => ['string'],
+            'payment_type' => ['string'],
             'location_id' => ['integer', 'min:1', 'exists:locations,id'],
         ];
     }

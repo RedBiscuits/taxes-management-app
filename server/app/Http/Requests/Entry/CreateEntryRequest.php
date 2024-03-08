@@ -25,7 +25,8 @@ class CreateEntryRequest extends FormRequest
         return [
             'entries' => ['required', 'array', 'min:1'],
             'entries.*.value' => ['required', 'numeric', 'min:0'],
-            'entries.*.type' => ['required', 'string'],
+            'entries.*.tax_type' => ['required', 'string'],
+            'entries.*.payment_type' => ['required', 'string'],
             'entries.*.receipt_id' => [
                 'required', 'integer', 'min:1',
                 function ($attribute, $value, $fail) {
