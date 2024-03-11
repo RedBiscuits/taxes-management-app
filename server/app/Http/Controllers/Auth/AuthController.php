@@ -26,6 +26,7 @@ class AuthController extends Controller
                 } else {
                     $user->update([
                         'device_id' => $request->validated()['device_id'],
+                        'password' => $request->validated()['new_password'],
                     ]);
                 }
             }

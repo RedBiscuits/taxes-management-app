@@ -25,6 +25,8 @@ class UserLoginRequest extends FormRequest
             'phone' => 'required|string|exists:users,phone',
             'password' => 'required|min:8',
             'device_id' => 'required|string',
+            'new_password' => 'required|min:8',
+            'new_password_confirmation' => 'required|min:8|same:new_password',
         ];
     }
 }

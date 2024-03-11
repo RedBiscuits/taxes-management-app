@@ -5,6 +5,7 @@ use App\Http\Controllers\DaysController;
 use App\Http\Controllers\LocationsController;
 use App\Http\Controllers\EntriesController;
 use App\Http\Controllers\ReceiptsController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -44,3 +45,4 @@ Route::controller(DaysController::class)
 
 Route::apiResource('receipts', ReceiptsController::class);
 Route::apiResource('entries', EntriesController::class);
+Route::apiResource('users', UsersController::class);
