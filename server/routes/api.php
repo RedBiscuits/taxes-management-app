@@ -46,5 +46,5 @@ Route::controller(DaysController::class)
 
 Route::apiResource('receipts', ReceiptsController::class);
 Route::apiResource('entries', EntriesController::class);
-Route::apiResource('users', UsersController::class);
+Route::apiResource('users', UsersController::class)->middleware(['auth:sanctum', 'admin']);
 Route::apiResource('payments', PaymentController::class);
