@@ -1,17 +1,20 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Payments;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserLoginRequest extends FormRequest
+class UpdatePaymentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return auth('sanctum')->check() && (
+            auth('sanctum')->user()->hasRole('admin')
+            || auth('sanctum')->user()->id === $this->route('payment')->user_id
+        );
     }
 
     /**
@@ -22,11 +25,9 @@ class UserLoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone' => 'required|string|exists:users,phone',
-            'password' => 'required|min:8',
-            'device_id' => 'required|string',
-            'new_password' => 'min:8',
-            'new_password_confirmation' => 'min:8|same:new_password',
+            'amount' => ['numeric', 'min:0'],
+            'close_date' => ['date'],
+            'phone' => ['string', 'exists:users,phone'],
         ];
     }
 }
