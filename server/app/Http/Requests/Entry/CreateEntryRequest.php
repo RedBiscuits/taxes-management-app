@@ -31,7 +31,7 @@ class CreateEntryRequest extends FormRequest
                 'required', 'integer', 'min:1',
                 function ($attribute, $value, $fail) {
                     $receipt = Receipt::findOrFail($value);
-                    if (!$receipt->day->status) {
+                    if (!$receipt->day->status && !auth('sanctum')->user()->hasRole('admin')) {
                         $fail('The day associated with the receipt is not open.');
                     }
                 },
