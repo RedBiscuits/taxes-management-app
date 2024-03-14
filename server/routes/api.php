@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DaysController;
 use App\Http\Controllers\LocationsController;
 use App\Http\Controllers\EntriesController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReceiptsController;
 use App\Http\Controllers\UsersController;
@@ -21,6 +22,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::apiResource('locations', LocationsController::class);
+
+Route::apiResource('receipts', ReceiptsController::class);
+
+Route::apiResource('entries', EntriesController::class);
+
+Route::apiResource('users', UsersController::class)->middleware(['auth:sanctum', 'admin']);
+
+Route::apiResource('payments', PaymentController::class);
+
+Route::apiResource('logs', LogController::class);
+
+Route::apiResource('days', DaysController::class);
+Route::controller(DaysController::class)
+    ->prefix('days')
+    ->name('days.')
+    ->group(function () {
+        Route::post('/{day}/open', 'open')->name('open');
+        Route::post('/{day}/close', 'close')->name('close');
+    });
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -33,18 +55,3 @@ Route::controller(AuthController::class)
         Route::post('/logout', 'logout')->name('logout');
         Route::post('/register', 'register')->name('register');
     });
-
-Route::apiResource('locations', LocationsController::class);
-Route::apiResource('days', DaysController::class);
-Route::controller(DaysController::class)
-    ->prefix('days')
-    ->name('days.')
-    ->group(function () {
-        Route::post('/{day}/open', 'open')->name('open');
-        Route::post('/{day}/close', 'close')->name('close');
-    });
-
-Route::apiResource('receipts', ReceiptsController::class);
-Route::apiResource('entries', EntriesController::class);
-Route::apiResource('users', UsersController::class)->middleware(['auth:sanctum', 'admin']);
-Route::apiResource('payments', PaymentController::class);
