@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DaysController;
 use App\Http\Controllers\LocationsController;
 use App\Http\Controllers\EntriesController;
+use App\Http\Controllers\FeaturesController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReceiptsController;
@@ -22,15 +23,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// >> To Do <<
+// when Targets is done add enabled middleware to it
+
 Route::apiResource('locations', LocationsController::class);
 
-Route::apiResource('receipts', ReceiptsController::class);
+Route::apiResource('receipts', ReceiptsController::class)->middleware('receipts_enabled');
 
 Route::apiResource('entries', EntriesController::class);
 
 Route::apiResource('users', UsersController::class)->middleware(['auth:sanctum', 'admin']);
 
-Route::apiResource('payments', PaymentController::class);
+Route::apiResource('payments', PaymentController::class)->middleware('payments_enabled');
 
 Route::apiResource('logs', LogController::class);
 
@@ -43,10 +47,6 @@ Route::controller(DaysController::class)
         Route::post('/{day}/close', 'close')->name('close');
     });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::controller(AuthController::class)
     ->prefix('auth')
     ->name('auth.')
@@ -54,4 +54,15 @@ Route::controller(AuthController::class)
         Route::post('/login', 'login')->name('login');
         Route::post('/logout', 'logout')->name('logout');
         Route::post('/register', 'register')->name('register');
+    });
+
+Route::controller(FeaturesController::class)
+    ->prefix('features')
+    ->name('features.')
+    ->group(function () {
+        Route::patch('/toggle', 'toggle')->name('toggle');
+    });
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+        return $request->user();
     });
