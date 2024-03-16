@@ -1,4 +1,4 @@
-import { Fab, Reciept } from "@/lib/components";
+import { Button, Fab, Reciept } from "@/lib/components";
 import { Receipt, Base_Model, Base_Response } from "@/lib/models";
 import { options } from "@/lib/constants/ScreenOptions";
 import { useCustomMutation, useCustomQuery } from "@/lib/shared/query";
@@ -10,6 +10,7 @@ import { View, Text, FlatList, ActivityIndicator } from "react-native";
 import { useDayStore } from "../day/logic/day.zustand";
 import { useReceiptStore } from "./logic/receipt.zustand";
 import { getUser } from "@/lib/shared/storage";
+import { DatePickerModal } from "./_components/DatePickerModal";
 
 type ReceiptData = {
   day_id: number;
@@ -19,6 +20,15 @@ type ReceiptData = {
 type ReceiptResponse = Base_Model & ReceiptData;
 
 const ReceiptsScreen = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [type, setType] = useState("");
+
+  const openModal = (type: string) => {
+    setIsOpen(true);
+    setType(type);
+  };
+
   const [locationId, setlocationId] = useState(0);
   const { data, isPending } = useCustomQuery<Receipt[]>(
     `/receipts?location_id=${locationId}`,
@@ -43,7 +53,7 @@ const ReceiptsScreen = () => {
     {
       onSuccess: (data) => {
         createLocalReceipt(data.data.data.id);
-        router.push("/(user)/receipts/Add Reciept");
+        router.push("/user/receipts/Add Reciept");
       },
     }
   );
@@ -52,11 +62,27 @@ const ReceiptsScreen = () => {
     <>
       <Stack.Screen
         options={{
-          title: "الضرائب",
+          title: "التحصيلات",
           ...options,
         }}
       />
-      {(() => {
+
+      <View className="flex-1 justify-center bg-white">
+        <View>
+          <Button text="فتح يومية جديدة" onPress={() => openModal("new")} />
+          <Button text="عرض يومية قديمة" onPress={() => openModal("old")} />
+        </View>
+      </View>
+
+      <DatePickerModal
+        type={type}
+        open={isOpen}
+        toggleModal={setIsOpen}
+        date={date}
+        setDate={setDate}
+      />
+
+      {/* {(() => {
         if (isPending || createReceipt.isPending) {
           return (
             <View className="flex-1 justify-center">
@@ -97,7 +123,7 @@ const ReceiptsScreen = () => {
             });
           }}
         />
-      )}
+      )} */}
     </>
   );
 };

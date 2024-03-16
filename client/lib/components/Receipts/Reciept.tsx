@@ -3,6 +3,7 @@ import React from "react";
 import { Receipt } from "@/lib/models";
 import { fonts } from "@/lib/styles/fonts";
 import dayjs from "dayjs";
+import { Alphanumeric } from "../text";
 
 export function Reciept({
   receipt: { created_at, entries, total },
@@ -13,39 +14,57 @@ export function Reciept({
     !!entries?.length &&
     entries.map(({ id, type, value }) => (
       <View key={id} className="flex flex-row items-center justify-between">
-        <Text className="text-lg" style={fonts.fontArabicRegular}>
-          {value?.toFixed(2) || 0} جنيه
-        </Text>
-        <Text className="text-lg" style={fonts.fontArabicRegular}>
-          {type || "ضريبة"}
-        </Text>
+        <Alphanumeric className="text-lg" numberStyles={fonts.poppinsSemibold}>
+          جنيه
+          {value.toFixed(2)}
+        </Alphanumeric>
+        <View>
+          <Text className="text-lg" style={fonts.fontArabicRegular}>
+            {type || "ضريبة"}
+          </Text>
+          {/* TODO:fix this add the correc ttype to the ts type */}
+          <Text
+            className="text-sm text-black/60"
+            style={fonts.fontArabicRegular}
+          >
+            {type || "ضريبة"}
+          </Text>
+        </View>
       </View>
     ));
 
+  const recieptTotal =
+    total?.toFixed(2) ||
+    entries?.reduce((a, b) => a + b.value, 0).toFixed(2) ||
+    0;
+
   return (
-    <View className="bg-slate-200 rounded-xl p-4 space-y-2">
-      <View className="flex flex-row items-center justify-between">
-        <Text className="text" style={fonts.fontSansRegular}>
+    <View
+      style={{
+        elevation: 4,
+      }}
+      className="bg-white rounded-xl p-4 space-y-2"
+    >
+      <View className="flex flex-row items-center justify-center">
+        <Text className="text-lg" style={fonts.poppinsSemibold}>
           {dayjs(created_at).format("DD/MM/YYYY")}
         </Text>
-        <Text className="text" style={fonts.fontSansRegular}>
-          {dayjs(created_at).format("hh:mm A")}
-        </Text>
       </View>
-      <View className="h-px bg-sky-950 mb-2" />
+      <View className="h-px bg-black/10 my-2 " />
 
       {receipt_entries && (
         <View className="space-y-2">
           {receipt_entries}
-          <View className="h-px bg-sky-950 mt-2" />
+          <View className="h-px bg-black/10 my-2" />
 
           <View className="flex flex-row items-center justify-between">
-            <Text className="text-lg" style={fonts.fontArabicRegular}>
-              {total?.toFixed(2) ||
-                entries?.reduce((a, b) => a + b.value, 0).toFixed(2) ||
-                0}{" "}
+            <Alphanumeric
+              className="text-lg"
+              numberStyles={fonts.poppinsSemibold}
+            >
               جنيه
-            </Text>
+              {recieptTotal}
+            </Alphanumeric>
             <Text className="text-lg" style={fonts.fontArabicRegular}>
               الاجمالي
             </Text>

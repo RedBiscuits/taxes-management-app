@@ -27,7 +27,7 @@ const Home = () => {
     {
       onSuccess: (data) => {
         openDay(dayDate, data.data.data.id);
-        router.push("/(user)/receipts/");
+        router.push("/user/receipts/");
       },
     }
   );
@@ -66,7 +66,7 @@ const Home = () => {
   }
 
   if (isDayOpen) {
-    router.replace("/(user)/receipts/");
+    router.replace("/user/receipts/");
   }
   return (
     <>
@@ -76,7 +76,7 @@ const Home = () => {
           ...options,
         }}
       />
-      <View className="flex-1 justify-center">
+      <View className="flex-1 justify-center bg-white">
         <Button
           loading={createDay.isPending}
           onPress={() => showDatePicker()}

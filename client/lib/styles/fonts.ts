@@ -11,7 +11,10 @@ export const fonts = StyleSheet.create({
     fontFamily: "ElMessiri_600SemiBold",
   },
 
-  fontSansRegular: {
-    fontFamily: "sans-serif",
+  poppinsRegular: {
+    fontFamily: "Poppins_400Regular",
+  },
+  poppinsSemibold: {
+    fontFamily: "Poppins_600SemiBold",
   },
 });

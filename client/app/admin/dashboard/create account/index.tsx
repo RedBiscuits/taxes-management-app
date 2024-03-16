@@ -106,7 +106,7 @@ const CreateAccountScreen = () => {
               />
             </View>
           </View>
-          <Button text="انشاء حساب" className="my-10" />
+          {/* <Button text="انشاء حساب" className="my-10" /> */}
         </ScrollView>
       </View>
     </>

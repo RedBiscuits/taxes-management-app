@@ -41,7 +41,7 @@ const AddEntryScreen = () => {
           ...options,
         }}
       />
-      <View>
+      <View className="bg-white">
         <Text
           style={fonts.fontArabicBold}
           className="text-center text-3xl text-slate-800 mt-8"
