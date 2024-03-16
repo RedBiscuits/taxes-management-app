@@ -40,7 +40,7 @@ const AddRecieptScreen = () => {
         }}
       />
 
-      <View className="relative flex-1 px-2 py-4">
+      <View className="relative flex-1 px-2 py-4 bg-white">
         <Reciept receipt={receipt} />
         <Button
           loading={isPending}
@@ -55,7 +55,7 @@ const AddRecieptScreen = () => {
             })
           }
         />
-        <Fab onPress={() => router.push("/(user)/receipts/Add Entry")} />
+        <Fab onPress={() => router.push("/user/receipts/Add Entry")} />
       </View>
     </>
   );

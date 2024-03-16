@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Text, View } from "react-native";
 import { fonts } from "@/lib/styles/fonts";
 import { Button, Input } from "@/lib/components";
@@ -7,9 +7,12 @@ import { options } from "@/lib/constants/ScreenOptions";
 import { Controller } from "react-hook-form";
 import { ErrorText } from "@/lib/components/Form/ErrorText";
 import { useLogin } from "./logic/login.hooks";
+import { CallAdminModal } from "./_components/callAdminModal";
 
 export default function LoginScreen() {
   const { isPending, login, formState, control } = useLogin();
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleModal = () => setIsOpen(!isOpen);
 
   return (
     <>
@@ -19,7 +22,7 @@ export default function LoginScreen() {
           ...options,
         }}
       />
-      <View className="pt-8">
+      <View className="pt-8 bg-white">
         <Text
           style={fonts.fontArabicBold}
           className="text-center text-3xl text-slate-800"
@@ -67,6 +70,7 @@ export default function LoginScreen() {
           {formState.errors.root && formState.errors.root.message}
         </ErrorText>
         <Text
+          onPress={toggleModal}
           style={fonts.fontArabicRegular}
           className=" px-6 text-sky-950 text-lg mt-6 underline"
         >
@@ -78,10 +82,13 @@ export default function LoginScreen() {
           style={fonts.fontArabicRegular}
           className="text-center mt-10 text-lg"
         >
-          ليس لديك حساب ؟{" "}
-          <Text className="underline text-sky-950">انشاء حساب</Text>
+          ليس لديك حساب ؟
+          <Text onPress={toggleModal} className="underline text-sky-950">
+            انشاء حساب
+          </Text>
         </Text>
       </View>
+      <CallAdminModal open={isOpen} toggleModal={toggleModal} />
     </>
   );
 }

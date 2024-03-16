@@ -5,6 +5,8 @@ import {
   ElMessiri_400Regular,
   ElMessiri_700Bold,
   ElMessiri_600SemiBold,
+  Poppins_400Regular,
+  Poppins_600SemiBold
 } from "@expo-google-fonts/dev";
 import {
   QueryClient,
@@ -30,6 +32,8 @@ const RootLayout = () => {
     ElMessiri_400Regular,
     ElMessiri_700Bold,
     ElMessiri_600SemiBold,
+    Poppins_400Regular,
+    Poppins_600SemiBold,
   });
 
   if (!fontsLoaded) {
