@@ -30,7 +30,13 @@ class ReceiptsController extends Controller
             ->when(request('day_id'), function ($query, $search) {
                 $query->where('day_id', 'like', $search);
             })
-            ->with("entries")
+            ->with(["entries" => function ($query) {
+                $query->when(request('tax_type'), function ($query, $search) {
+                    $query->where('tax_type', 'like', $search . '%');
+                })->when(request('payment_type'), function ($query, $search) {
+                    $query->where('payment_type', 'like', $search . '%');
+                });
+            }])
             ->paginate();
 
         return $this->respondOk($Receipts);
@@ -38,7 +44,7 @@ class ReceiptsController extends Controller
 
     public function show(Receipt $Receipt)
     {
-        return $this->respondOk($Receipt);
+        return $this->respondOk($Receipt->load("entries"));
     }
 
     public function store(CreateReceiptRequest $request)

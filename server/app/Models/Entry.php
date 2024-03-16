@@ -11,7 +11,8 @@ class Entry extends Model
 
     protected $fillable = [
         'value',
-        'type',
+        'tax_type',
+        'payment_type',
         'receipt_id',
     ];
 
@@ -19,10 +20,8 @@ class Entry extends Model
     {
         parent::boot();
 
-        // Listen for the 'created' event
         static::created(function ($entry) {
-            // Increment the receipt's total value by the new entry's value
-            $entry->receipt->increment('total', $entry->value);
+            $entry->receipt->increment('total', floatval($entry->value));
         });
     }
 

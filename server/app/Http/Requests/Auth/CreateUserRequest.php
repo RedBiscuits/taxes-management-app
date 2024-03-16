@@ -28,7 +28,7 @@ class CreateUserRequest extends FormRequest
             'password_confirmation' => ['required', 'string', 'same:password'],
             'job' => ['required', 'string'],
             'location_id' => ['required','integer', 'min:1', 'exists:locations,id'],
-            'device_id' => ['required', 'string'],
+            // 'device_id' => ['required', 'string'],
         ];
     }
 }

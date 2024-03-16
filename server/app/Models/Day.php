@@ -22,4 +22,8 @@ class Day extends Model
         return $this->belongsTo(Location::class);
     }
 
+    public function receipts()
+    {
+        return $this->hasMany(Receipt::class);
+    }
 }

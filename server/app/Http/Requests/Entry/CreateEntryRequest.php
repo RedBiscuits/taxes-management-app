@@ -25,12 +25,13 @@ class CreateEntryRequest extends FormRequest
         return [
             'entries' => ['required', 'array', 'min:1'],
             'entries.*.value' => ['required', 'numeric', 'min:0'],
-            'entries.*.type' => ['required', 'string'],
+            'entries.*.tax_type' => ['required', 'string'],
+            'entries.*.payment_type' => ['required', 'string'],
             'entries.*.receipt_id' => [
                 'required', 'integer', 'min:1',
                 function ($attribute, $value, $fail) {
                     $receipt = Receipt::findOrFail($value);
-                    if (!$receipt->day->status) {
+                    if (!$receipt->day->status && !auth('sanctum')->user()->hasRole('admin')) {
                         $fail('The day associated with the receipt is not open.');
                     }
                 },

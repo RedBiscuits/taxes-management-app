@@ -1,17 +1,19 @@
 <?php
 
-namespace App\Http\Requests\Entry;
+namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateEntryRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        $user = auth('sanctum')->user();
+        return $user->hasRole('admin')
+            || $user->id === $this->route('user')->id;
     }
 
     /**
@@ -22,10 +24,12 @@ class UpdateEntryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'value' => ['numeric', 'min:0'],
-            'tax_type' => ['string'],
-            'payment_type' => ['string'],
+            'name' => ['string', 'max:255'],
+            'password' => ['string', 'min:8'],
+            'password_confirmation' => ['string', 'same:password'],
+            'job' => ['string'],
             'location_id' => ['integer', 'min:1', 'exists:locations,id'],
+            'role' => ['string', 'in:admin,employee'],
         ];
     }
 }

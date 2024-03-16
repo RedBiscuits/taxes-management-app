@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('entries', function (Blueprint $table) {
+        Schema::create('logs', function (Blueprint $table) {
             $table->id();
-            $table->double('value');
-            $table->String('tax_type');
-            $table->String('payment_type');
-            $table->foreignId('receipt_id')->constrained()->onDelete('cascade');
+            $table->string('content');
+            $table->string('version');
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('entries');
+        Schema::dropIfExists('logs');
     }
 };
