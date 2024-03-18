@@ -3,12 +3,43 @@ import {
   useMutation,
   UseMutationOptions,
   UseQueryOptions,
+  useQueryClient,
 } from "@tanstack/react-query";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { getToken } from "./storage";
-import { Base_Response } from "../models/Base_Reesponse";
+import { BaseResponse } from "@/lib/models";
+import { API_URL } from "@/lib/constants/api";
+import * as http from "@/lib/shared/fetch";
 
-export const API_URL = "https://briefly-easy-bluejay.ngrok-free.app/api";
+export function useGet<TData>(
+  url: string,
+  key: string[],
+  options?: UseQueryOptions<BaseResponse<TData>, Error, TData, string[]>
+) {
+  return useQuery({
+    queryKey: key,
+    queryFn: async () => await http.getRequest<TData>(url),
+    select: (data) => data.data,
+    ...options,
+  });
+}
+
+export function usePost<TData, TResponse = Response>(
+  url: string,
+  invalidate: string[][],
+  options?: UseMutationOptions<BaseResponse<TResponse>, Error, TData>
+) {
+  const qc = useQueryClient();
+  return useMutation<BaseResponse<TResponse>, Error, TData>({
+    mutationFn: async (data) =>
+      await http.postRequest<TData, TResponse>(url, data),
+    onSuccess: (...args) => {
+      invalidate.forEach((key) => qc.invalidateQueries({ queryKey: key }));
+      options?.onSuccess?.(...args);
+    },
+    ...options,
+  });
+}
 
 async function createInstance() {
   const token = await getToken();
@@ -28,7 +59,7 @@ export const useCustomQuery = <T>(
   method: "get" | "delete" = "get",
   options?: any
 ) => {
-  return useQuery<any, AxiosError, AxiosResponse<Base_Response<T>>>({
+  return useQuery<any, AxiosError, AxiosResponse<BaseResponse<T>>>({
     queryKey: [url],
     queryFn: async () => {
       const instance = await createInstance();
@@ -48,27 +79,25 @@ export const useCustomMutation = <TData, TResponse = any>(
   method: "post" | "patch" = "post",
   options?: Omit<
     UseMutationOptions<
-      AxiosResponse<Base_Response<TResponse>>,
+      AxiosResponse<BaseResponse<TResponse>>,
       AxiosError,
       TData
     >,
     "mutationFn"
   >
 ) => {
-  return useMutation<
-    AxiosResponse<Base_Response<TResponse>>,
-    AxiosError,
-    TData
-  >({
-    mutationKey: [url],
-    mutationFn: async (data) => {
-      const instance = await createInstance();
-      return await instance[method](url, data);
-    },
-    onSettled: (data, error) => {
-      console.log("data", data);
-      console.log("error", error);
-    },
-    ...options,
-  });
+  return useMutation<AxiosResponse<BaseResponse<TResponse>>, AxiosError, TData>(
+    {
+      mutationKey: [url],
+      mutationFn: async (data) => {
+        const instance = await createInstance();
+        return await instance[method](url, data);
+      },
+      onSettled: (data, error) => {
+        console.log("data", data);
+        console.log("error", error);
+      },
+      ...options,
+    }
+  );
 };

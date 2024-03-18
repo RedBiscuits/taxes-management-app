@@ -5,15 +5,30 @@ import { StatusBar } from "expo-status-bar";
 import { Button } from "@/lib/components";
 import { options } from "@/lib/constants/ScreenOptions";
 import { View, Image } from "react-native";
+import { getToken, getUser } from "@/lib/shared/storage";
 export default function App() {
-  const [isOpen, setIsOpen] = useState(false);
-  const toggleOpen = () => setIsOpen(!isOpen);
   useEffect(() => {
-    const timer = setTimeout(() => {
-      router.push("/manager/receipts/");
-    }, 1000);
-    return () => clearTimeout(timer);
+    (async () => {
+      if (await getToken()) {
+        const user = await getUser();
+        router.push("/manager/");
+
+        // switch (user?.roles[0].name) {
+        //   case "manager":
+        //     router.push("/manager/");
+        //     break;
+        //   case "employee":
+        //     router.push("/user/");
+        //     break;
+
+        //   default:
+        //     console.log("unknown role");
+        //     break;
+        // }
+      }
+    })();
   }, []);
+
   return (
     <>
       <Stack.Screen
@@ -31,7 +46,10 @@ export default function App() {
           />
         </View>
 
-        <Button text="تسجيل الدخول" onPress={() => router.push("/user/")} />
+        <Button
+          text="تسجيل الدخول"
+          onPress={() => router.push("/shared/login/")}
+        />
         <StatusBar style="light" />
       </View>
     </>

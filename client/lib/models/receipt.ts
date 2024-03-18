@@ -1,13 +1,13 @@
-import { Base_Model } from "./Base_Model";
+import { BaseModel } from "./BaseModel";
 
-export type Receipt = Base_Model & {
+export type Receipt = BaseModel & {
   location_id: number;
   day_id: number;
   total: number;
   entries: Entry[];
 };
 
-export type Entry = Base_Model & {
+export type Entry = BaseModel & {
   value: number;
   type: string;
   receipt_id: number;

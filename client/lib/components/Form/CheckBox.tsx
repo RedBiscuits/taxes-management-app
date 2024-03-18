@@ -6,9 +6,11 @@ import { fonts, colors } from "@/lib/styles";
 export default function CheckBox({
   children,
   onChange,
+  value,
 }: {
   children: string;
   onChange?: (isChecked: boolean) => void;
+  value: boolean;
 }) {
   let checkBoxRef: BouncyCheckbox | null = null;
 
@@ -24,6 +26,7 @@ export default function CheckBox({
         }}
         ref={(r) => (checkBoxRef = r)}
         onPress={onChange}
+        isChecked={value}
       />
       <Pressable className="flex-1" onPress={() => checkBoxRef?.onPress()}>
         <Text className="text-lg" style={fonts.fontArabicSemi}>

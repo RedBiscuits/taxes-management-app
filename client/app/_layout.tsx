@@ -6,7 +6,7 @@ import {
   ElMessiri_700Bold,
   ElMessiri_600SemiBold,
   Poppins_400Regular,
-  Poppins_600SemiBold
+  Poppins_600SemiBold,
 } from "@expo-google-fonts/dev";
 import {
   QueryClient,
@@ -16,6 +16,7 @@ import {
 import { useOnlineManager } from "@/lib/hooks/useOnlineManager";
 import { AppStateStatus, Platform } from "react-native";
 import { useAppState } from "@/lib/hooks/useAppStateChange";
+import ToastModal from "@/lib/components/toastModal/ToastModal";
 
 function onAppStateChange(status: AppStateStatus) {
   if (Platform.OS !== "web") {
@@ -43,6 +44,7 @@ const RootLayout = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Stack />
+      <ToastModal />
     </QueryClientProvider>
   );
 };

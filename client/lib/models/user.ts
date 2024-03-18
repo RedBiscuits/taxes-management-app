@@ -1,6 +1,6 @@
-import { Base_Model } from "./Base_Model";
+import { BaseModel } from "./BaseModel";
 
-export type User = Base_Model & {
+export type User = BaseModel & {
   id: number;
   name: string;
   phone: string;
@@ -8,6 +8,6 @@ export type User = Base_Model & {
   device_id: string;
   created_at: Date;
   updated_at: Date;
-  roles: { id: number; name: string }[];
+  roles: { id: number; name: "employee" | "manager" }[];
   location: any;
 };

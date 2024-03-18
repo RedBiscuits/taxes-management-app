@@ -1,5 +1,5 @@
 import * as SecureStore from "expo-secure-store";
-import { User } from "../models/user";
+import { User } from "@/lib/models";
 
 export async function getToken() {
   return await SecureStore.getItemAsync("token");

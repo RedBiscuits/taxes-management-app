@@ -1,4 +1,4 @@
-export type Base_Response<TData> = {
+export type BaseResponse<TData> = {
   success: boolean;
   message: string;
   data: TData;

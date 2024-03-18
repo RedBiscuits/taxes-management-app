@@ -3,9 +3,16 @@ import React from "react";
 import { Alphanumeric } from "../text";
 import dayjs from "dayjs";
 import { fonts } from "@/lib/styles/fonts";
+import { Payment } from "@/lib/models";
 
 // TODO:change to correct type
-export function PaymentCard({ phone, amount, date, endDate, elevation }: any) {
+export function PaymentCard({
+  phone,
+  amount,
+  created_at,
+  close_data,
+  elevation,
+}: { elevation?: boolean } & Payment) {
   return (
     <View
       style={{
@@ -17,12 +24,12 @@ export function PaymentCard({ phone, amount, date, endDate, elevation }: any) {
       <PaymentField label="المبلغ" value={amount} />
       <PaymentField
         label="تاريخ الطلب"
-        value={dayjs(date).format("DD/MM/YYYY")}
+        value={dayjs(created_at).format("DD/MM/YYYY")}
       />
-      {endDate && (
+      {close_data && (
         <PaymentField
           label="تاريخ السداد"
-          value={dayjs(date).format("DD/MM/YYYY")}
+          value={dayjs(created_at).format("DD/MM/YYYY")}
         />
       )}
     </View>

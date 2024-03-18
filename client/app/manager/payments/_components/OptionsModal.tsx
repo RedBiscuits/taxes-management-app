@@ -1,15 +1,24 @@
 import { View, Text, Modal, Pressable } from "react-native";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { fonts } from "@/lib/styles";
 import { DatePicker, Button } from "@/lib/components";
 import CheckBox from "@/lib/components/Form/CheckBox";
 import Icon from "react-native-vector-icons/AntDesign";
+import { Options } from "../types/options";
 
-export function OptionsModal() {
+export function OptionsModal({
+  options,
+  setOptions,
+}: {
+  options: Options;
+  setOptions: Dispatch<SetStateAction<Options>>;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [date, setDate] = useState(new Date());
-
   const toggleModal = () => setIsOpen((x) => !x);
+
+  const [localOptions, setLocalOptions] = useState<Options>(options);
+
   return (
     <>
       <View>
@@ -48,10 +57,23 @@ export function OptionsModal() {
               />
               <DatePicker date={date} setDate={setDate} label="تاريخ النهاية" />
               <View className="my-6">
-                <CheckBox>مدفوع</CheckBox>
+                <CheckBox
+                  onChange={(status) =>
+                    setLocalOptions((prv) => ({
+                      ...prv,
+                      status,
+                    }))
+                  }
+                  value={localOptions.status}
+                >
+                  مدفوع
+                </CheckBox>
               </View>
               <Button
-                onPress={toggleModal}
+                onPress={() => {
+                  setOptions(localOptions);
+                  toggleModal();
+                }}
                 text="تأكيد"
                 className="mt-8 w-full mx-auto"
               />

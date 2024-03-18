@@ -1,10 +1,11 @@
-import { useCustomMutation } from "@/lib/shared/query";
+import { usePost } from "@/lib/shared/query";
 import { LoginData, loginSchema } from "./login.schema";
 import { getUser, setToken, setUser } from "@/lib/shared/storage";
 import { router } from "expo-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "@/lib/models/user";
+import { User } from "@/lib/models";
+import * as Application from "expo-application";
 
 type LoginResponse = { user: User; token: string };
 export function useLogin() {
@@ -12,26 +13,33 @@ export function useLogin() {
     resolver: zodResolver(loginSchema),
   });
 
-  const { mutate, isPending } = useCustomMutation<
+  const { mutate, isPending } = usePost<
     LoginData & { device_id: string },
     LoginResponse
-  >("/auth/login", "post", {
+  >("auth/login", [], {
+    onError: (error) => {
+      console.log("error", error.message);
+      setError("root", { message: "الهاتف او كلمة المرور غير صحيح" });
+    },
+
     onSuccess: async (data) => {
-      await setToken(data.data.data.token);
-      await setUser(data.data.data.user);
+      await setToken(data.data.token);
+      await setUser(data.data.user);
 
       const user = await getUser();
 
-      // switch this
-      if (user?.name.endsWith("1") || user?.name.endsWith("2")) {
-        router.push("/(user)/day/");
-      } else {
-        router.push("/(admin)/dashboard/reports/");
+      switch (user?.roles[0].name) {
+        case "manager":
+          router.push("/manager/");
+          break;
+        case "employee":
+          router.push("/user/");
+          break;
+
+        default:
+          console.log("unknown role");
+          break;
       }
-    },
-    onError: (error) => {
-      console.log("error", JSON.stringify(error, null, 2));
-      setError("root", { message: "الهاتف او كلمة المرور غير صحيح" });
     },
   });
 
@@ -40,7 +48,11 @@ export function useLogin() {
     formState,
     isPending,
     login: handleSubmit(async (data: LoginData) =>
-      mutate({ ...data, device_id: "123" })
+      mutate({
+        ...data,
+        // device_id: Application.getAndroidId()
+        device_id: "123456789",
+      })
     ),
   };
 }

@@ -15,7 +15,10 @@ export default function MainUserScreen() {
       />
       <View className="flex-1 justify-center bg-white">
         <View>
-          <Button text="التحصيلات" />
+          <Button
+            text="التحصيلات"
+            onPress={() => router.push("/user/receipts/")}
+          />
           <Button
             text="اوامر التوريد"
             onPress={() => router.push("/user/payments/")}

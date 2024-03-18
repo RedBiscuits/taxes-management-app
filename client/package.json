@@ -22,8 +22,10 @@
     "dayjs": "^1.11.10",
     "expo": "~50.0.7",
     "expo-app-loading": "^2.1.1",
+    "expo-application": "~5.8.3",
     "expo-constants": "~15.4.5",
     "expo-font": "~11.10.3",
+    "expo-linear-gradient": "~12.7.2",
     "expo-linking": "~6.2.2",
     "expo-localization": "~14.8.3",
     "expo-router": "~3.4.7",
@@ -43,9 +45,9 @@
     "react-native-vector-icons": "^10.0.3",
     "react-native-web": "~0.19.6",
     "typescript": "^5.3.0",
+    "use-debounce": "^10.0.0",
     "zod": "^3.22.4",
-    "zustand": "^4.5.1",
-    "expo-linear-gradient": "~12.7.2"
+    "zustand": "^4.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { Text, View } from "react-native";
 import { fonts } from "@/lib/styles/fonts";
-import { Button, Input } from "@/lib/components";
-import { Stack, router } from "expo-router";
+import { Button } from "@/lib/components";
+import { Stack } from "expo-router";
 import { options } from "@/lib/constants/ScreenOptions";
-import { Controller } from "react-hook-form";
 import { ErrorText } from "@/lib/components/Form/ErrorText";
 import { useLogin } from "./logic/login.hooks";
 import { CallAdminModal } from "./_components/callAdminModal";
+import { ControlledInput } from "@/lib/components/Form/ControlledInput";
+import SecureControlledInput from "@/lib/components/Form/SecureControlledInput";
 
 export default function LoginScreen() {
   const { isPending, login, formState, control } = useLogin();
@@ -22,7 +23,7 @@ export default function LoginScreen() {
           ...options,
         }}
       />
-      <View className="pt-8 bg-white">
+      <View className="pt-8 bg-white flex-1">
         <Text
           style={fonts.fontArabicBold}
           className="text-center text-3xl text-slate-800"
@@ -31,40 +32,19 @@ export default function LoginScreen() {
         </Text>
 
         <View className="pt-6 px-4 space-y-5">
-          <Controller
+          <ControlledInput
+            control={control}
             name="phone"
-            control={control}
-            render={({ field: { onChange, value, onBlur } }) => (
-              <Input
-                label="رقم الهاتف"
-                placeholder="رقم الهاتف"
-                inputMode="tel"
-                value={value}
-                onBlur={onBlur}
-                onChangeText={onChange}
-              />
-            )}
+            label="رقم الهاتف"
+            placeholder="رقم الهاتف"
+            inputMode="tel"
           />
-          <ErrorText>
-            {formState.errors.phone && formState.errors.phone.message}
-          </ErrorText>
-          <Controller
+          <SecureControlledInput
+            control={control}
             name="password"
-            control={control}
-            render={({ field: { onChange, value, onBlur } }) => (
-              <Input
-                label="كلمة المرور"
-                placeholder="كلمة المرور"
-                value={value}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                secureTextEntry={true}
-              />
-            )}
+            label="كلمة المرور"
+            placeholder="كلمة المرور"
           />
-          <ErrorText>
-            {formState.errors.password && formState.errors.password.message}
-          </ErrorText>
         </View>
         <ErrorText>
           {formState.errors.root && formState.errors.root.message}

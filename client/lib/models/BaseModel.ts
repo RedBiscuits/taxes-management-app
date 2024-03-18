@@ -1,4 +1,4 @@
-export type Base_Model = {
+export type BaseModel = {
   id: number;
   created_at: string;
   updated_at: string;
