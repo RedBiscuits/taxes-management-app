@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->float('amount');
             $table->string('phone');
-            $table->date('close_data')->nullable()->default(null);
+            $table->date('close_date')->nullable()->default(null);
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

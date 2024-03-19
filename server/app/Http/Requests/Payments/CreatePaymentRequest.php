@@ -32,6 +32,7 @@ class CreatePaymentRequest extends FormRequest
             'amount' => ['required', 'numeric', 'min:0'],
             'phone' => ['required', 'string', 'exists:users,phone'],
             'user_id' => ['required', 'integer', 'min:1', 'exists:users,id'],
+            'created_at' => ['date'],
         ];
     }
 }

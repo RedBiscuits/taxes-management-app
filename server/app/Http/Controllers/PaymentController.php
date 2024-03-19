@@ -15,25 +15,32 @@ class PaymentController extends Controller
     public function index()
     {
         $payments = Payment::query()
-            ->when(request('phone'), function ($query, $search) {
-                $query->where('phone', 'like', "$search%");
+            ->when(request('phone'), function ($query) {
+                return $query->phone(request('phone'));
             })
-            ->when(request('is_paid'), function ($query, $search) {
-                $query->where('is_paid', 'like', $search);
+            ->when(request('is_paid'), function ($query) {
+                return $query->isPaid(request('is_paid'));
             })
-            ->when(request('amount'), function ($query, $search) {
-                $query->where('amount', 'like', "$search%");
+            ->when(request('amount'), function ($query) {
+                return $query->amount(request('amount'));
             })
-            ->when(request('status'), function ($query, $search) {
-                $query->where('status', 'like', $search);
+            ->when(request('status'), function ($query) {
+                return $query->status(request('status'));
             })
-            ->when(request('user_id'), function ($query, $search) {
-                $query->where('user_id', 'like', $search);
+            ->when(request('user_id'), function ($query) {
+                return $query->userId(request('user_id'));
             })
-            ->when(request('location_id'), function ($query, $search) {
-                $query->where('location_id', 'like', $search);
+            ->when(request('location_id'), function ($query) {
+                return $query->locationId(request('location_id'));
+            })
+            ->when(request('created_at_operator') && request('created_at'), function ($query) {
+                return $query->createdAt(request('created_at_operator'), request('created_at'));
+            })
+            ->when(request('close_date_operator') && request('close_date'), function ($query) {
+                return $query->closeDate(request('close_date_operator'), request('close_date'));
             })
             ->paginate();
+
 
         return $this->respondOk($payments);
     }
@@ -45,7 +52,6 @@ class PaymentController extends Controller
     public function store(CreatePaymentRequest $request)
     {
         return $this->respondCreated(Payment::create($request->validated()));
-
     }
 
     /**
@@ -54,7 +60,6 @@ class PaymentController extends Controller
     public function show(Payment $payment)
     {
         return $this->respondOk($payment);
-
     }
 
 
