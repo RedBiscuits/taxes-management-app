@@ -8,6 +8,7 @@ use App\Http\Controllers\FeaturesController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReceiptsController;
+use App\Http\Controllers\TargetController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,28 +26,38 @@ use Illuminate\Support\Facades\Route;
 
 // >> To Do <<
 // when Targets is done add enabled middleware to it
+Route::middleware('auth:sanctum')->group(function () {
 
-Route::apiResource('locations', LocationsController::class);
+    Route::apiResource('locations', LocationsController::class);
 
-Route::apiResource('receipts', ReceiptsController::class)->middleware('receipts_enabled');
+    Route::apiResource('targets', TargetController::class);
 
-Route::apiResource('entries', EntriesController::class);
+    Route::apiResource('receipts', ReceiptsController::class)->middleware('receipts_enabled');
 
-Route::apiResource('users', UsersController::class)->middleware(['auth:sanctum', 'admin']);
+    Route::apiResource('entries', EntriesController::class);
 
-Route::apiResource('payments', PaymentController::class)->middleware('payments_enabled');
+    Route::apiResource('users', UsersController::class)->middleware(['admin']);
 
-Route::apiResource('logs', LogController::class);
+    Route::apiResource('payments', PaymentController::class)->middleware('payments_enabled');
 
-Route::apiResource('days', DaysController::class);
-Route::controller(DaysController::class)
-    ->prefix('days')
-    ->name('days.')
-    ->group(function () {
-        Route::post('/{day}/open', 'open')->name('open');
-        Route::post('/{day}/close', 'close')->name('close');
-    });
+    Route::apiResource('logs', LogController::class);
 
+    Route::apiResource('days', DaysController::class);
+    Route::controller(DaysController::class)
+        ->prefix('days')
+        ->name('days.')
+        ->group(function () {
+            Route::post('/{day}/open', 'open')->name('open');
+            Route::post('/{day}/close', 'close')->name('close');
+        });
+
+    Route::controller(FeaturesController::class)
+        ->prefix('features')
+        ->name('features.')
+        ->group(function () {
+            Route::patch('/toggle', 'toggle')->name('toggle');
+        });
+});
 Route::controller(AuthController::class)
     ->prefix('auth')
     ->name('auth.')
@@ -54,15 +65,4 @@ Route::controller(AuthController::class)
         Route::post('/login', 'login')->name('login');
         Route::post('/logout', 'logout')->name('logout');
         Route::post('/register', 'register')->name('register');
-    });
-
-Route::controller(FeaturesController::class)
-    ->prefix('features')
-    ->name('features.')
-    ->group(function () {
-        Route::patch('/toggle', 'toggle')->name('toggle');
-    });
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-        return $request->user();
     });

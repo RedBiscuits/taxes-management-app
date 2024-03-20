@@ -11,7 +11,7 @@ class UpdateLogRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth('sanctum')->check() && auth('sanctum')->user()->hasRole('admin');
+        return auth('sanctum')->user()->hasRole('admin');
     }
 
     /**

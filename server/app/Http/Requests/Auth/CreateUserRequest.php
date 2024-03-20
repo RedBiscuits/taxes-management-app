@@ -11,7 +11,7 @@ class CreateUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth('sanctum')->check();
+        return auth('sanctum')->check() && auth('sanctum')->user()->hasRole('admin');
     }
 
     /**

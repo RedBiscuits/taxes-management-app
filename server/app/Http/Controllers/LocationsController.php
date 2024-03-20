@@ -23,7 +23,9 @@ class LocationsController extends Controller
             })
             ->when(request('user_id'), function ($query, $search) {
                 $query->where('user_id', 'like', $search);
-            })
+            })->with(
+                ['targets', 'receipts', 'days']
+            )
             ->paginate();
 
         return $this->respondOk($locations);
@@ -31,12 +33,20 @@ class LocationsController extends Controller
 
     public function show(Location $location)
     {
-        return $this->respondOk($location);
+        return $this->respondOk(
+            $location->load(
+                ['targets', 'receipts', 'days']
+            )
+        );
     }
 
     public function store(CreateLocationRequest $request)
     {
-        return $this->respondCreated(Location::create($request->validated()));
+        return $this->respondCreated(
+            Location::create(
+                $request->validated()
+            )
+        );
     }
 
     public function update(UpdateLocationRequest $request, Location $location)

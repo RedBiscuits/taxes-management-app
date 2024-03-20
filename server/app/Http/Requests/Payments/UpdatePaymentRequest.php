@@ -11,10 +11,8 @@ class UpdatePaymentRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth('sanctum')->check() && (
-            auth('sanctum')->user()->hasRole('admin')
-            || auth('sanctum')->user()->id === $this->route('payment')->user_id
-        );
+        return auth('sanctum')->user()->hasRole('admin')
+            || auth('sanctum')->user()->id === $this->route('payment')->user_id;
     }
 
     /**

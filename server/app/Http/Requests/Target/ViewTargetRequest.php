@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests\Receipt;
+namespace App\Http\Requests\Target;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateReceiptRequest extends FormRequest
+class ViewTargetRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return auth('sanctum')->user()->hasAnyRole(['admin', 'employee']);
+        return auth('sanctum')->user()->hasAnyRole(['admin', 'manager']);
     }
 
     /**
@@ -22,9 +22,7 @@ class UpdateReceiptRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'location_id' => ['integer', 'min:1', 'exists:locations,id'],
-            'day_id' => ['integer', 'min:1', 'exists:days,id'],
-
+            //
         ];
     }
 }

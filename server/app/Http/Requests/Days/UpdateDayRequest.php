@@ -11,7 +11,7 @@ class UpdateDayRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth('sanctum')->user()->hasAnyRole(['admin', 'employee']);
     }
 
     /**

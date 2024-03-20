@@ -57,4 +57,9 @@ class Location extends Model
     {
         return $this->hasMany(Receipt::class);
     }
+
+    public function targets()
+    {
+        return $this->hasMany(Target::class);
+    }
 }

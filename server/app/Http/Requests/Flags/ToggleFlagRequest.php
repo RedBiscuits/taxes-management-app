@@ -11,9 +11,8 @@ class ToggleFlagRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $user = auth('sanctum')->user();
-        return $user
-            && $user->hasRole('admin');
+
+        return auth('sanctum')->user()->hasRole('admin');
     }
 
     /**

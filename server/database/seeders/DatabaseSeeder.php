@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         $emp = Role::firstOrCreate(['name' => 'employee']);
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $managerRole = Role::firstOrCreate(['name' => 'manager']);
 
 
         $admin = \App\Models\User::create([
@@ -52,7 +53,20 @@ class DatabaseSeeder extends Seeder
         $empd1->assignRole($emp);
         $empd2->assignRole($emp);
 
-        
+
+        $man = \App\Models\User::create([
+            'name' => 'manager1',
+            'phone' => '01550935411',
+            'job' => 'wifo',
+            'password' => bcrypt('wiffo123'),
+            // 'device_id' => '987654321',
+            // 'location_id' => $location2->id
+        ]);
+
+        $man->assignRole($managerRole);
+
+
+
         \App\Models\Location::create([
             'name' => 'الشروق',
             'yearly_target' => 10000,
