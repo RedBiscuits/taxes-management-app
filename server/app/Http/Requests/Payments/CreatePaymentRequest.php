@@ -11,14 +11,17 @@ class CreatePaymentRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if (
-            auth('sanctum')->user()->hasRole('admin')
-            && auth('sanctum')->user()->location_id == $this->get('location_id')
-        ) {
-            $this->merge(['user_id' => auth('sanctum')->user()->id]);
-            return true;
-        }
-        return false;
+        // if (
+        //     auth('sanctum')->user()->hasRole('admin')
+        //     && auth('sanctum')->user()->location_id == $this->get('location_id')
+        // ) {
+        //     $this->merge(['user_id' => auth('sanctum')->user()->id]);
+        //     return true;
+        // }
+        // return false;
+
+        return auth('sanctum')->user()->hasRole('admin')
+            || auth('sanctum')->user()->id === $this->route('payment')->user_id;
     }
 
     /**

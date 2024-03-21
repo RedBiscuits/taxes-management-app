@@ -26,6 +26,6 @@ class UpdatePaymentRequest extends FormRequest
             'amount' => ['numeric', 'min:0'],
             'close_date' => ['date'],
             'phone' => ['string'],
-        ];git
+        ];
     }
 }

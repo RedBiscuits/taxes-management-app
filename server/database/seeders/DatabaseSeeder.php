@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\Admin;
 use App\Models\Employee;
+use App\Models\Payment;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
@@ -52,6 +53,11 @@ class DatabaseSeeder extends Seeder
 
         $empd1->assignRole($emp);
         $empd2->assignRole($emp);
+
+
+        Payment::factory(10)->create([
+            'user_id' => $empd1->id
+        ]);
 
 
         $man = \App\Models\User::create([
