@@ -1,38 +1,37 @@
 import { View, Text, FlatList, ActivityIndicator } from "react-native";
 import React from "react";
-import { options } from "@/lib/constants";
 import { Stack } from "expo-router";
-import dayjs from "dayjs";
+import { options } from "@/lib/constants";
+import { useOldDayStore } from "./logic/OldDay/oldDay.zustand";
 import { Alphanumeric, Reciept } from "@/lib/components";
+import { colors, fonts } from "@/lib/styles";
 import { PaginatedResponse, Receipt } from "@/lib/models";
 import { LinearGradient } from "expo-linear-gradient";
-import { colors, fonts } from "@/lib/styles";
 import { useGet } from "@/lib/shared/query";
-import { useOpenDay } from "./logic/openDay/openDay.hooks";
 
-export default function NewReceipts() {
-  const { data: openDay } = useOpenDay();
+export default function OldDayReceipts() {
+  const day = useOldDayStore((s) => s.day);
 
-  // TODO: filter by location
+  // TODO: filter by day
   const { data, isPending } = useGet<PaginatedResponse<Receipt>>(
-    `receipts?day_id=${openDay?.id}`,
-    ["receipts", String(openDay?.id)]
+    `receipts?day_id=${day?.id}`,
+    ["receipts", String(day?.id)]
   );
 
   return (
     <>
       <Stack.Screen
         options={{
-          title: "اليومية الجديدة",
+          title: "اليومية القديمة",
           ...options,
         }}
       />
-      <View className="flex-1 bg-white pt-3">
-        <Alphanumeric classes="text-center text-xl w-full">
-          {dayjs().format("YYYY-MM-DD")}
-        </Alphanumeric>
 
-        <View className="flex-1 bg-slate-200 mt-3">
+      <View className="flex-1">
+        <Alphanumeric classes="w-full text-center pt-2 text-lg">
+          {day?.time || ""}
+        </Alphanumeric>
+        <View className="flex-1 bg-slate-200 mt-2">
           <LinearGradient
             className="h-2"
             colors={["rgba(0,0,0,0.3)", "transparent"]}
@@ -53,7 +52,19 @@ export default function NewReceipts() {
                 <FlatList
                   className="px-2 pt-4"
                   ListFooterComponent={<View className="h-16" />}
-                  data={data.data}
+                  data={
+                    data.data
+                    //   [
+                    //   receipt,
+                    //   receipt,
+                    //   receipt,
+                    //   receipt,
+                    //   receipt,
+                    //   receipt,
+                    //   receipt,
+                    //   receipt,
+                    // ]
+                  }
                   renderItem={({ item }) => <Reciept receipt={item} />}
                   ItemSeparatorComponent={() => <View className="h-2" />}
                   keyExtractor={(item) => item.id.toString()}

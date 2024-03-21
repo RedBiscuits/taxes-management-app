@@ -32,7 +32,9 @@ export const DropDown = (props: {
         onChangeValue={onChange}
         style={[
           {
-            borderWidth: 0,
+            borderWidth: 1,
+            borderColor: "#cbd5e1",
+            borderRadius: 14,
             backgroundColor: "#e2e8f0",
             paddingVertical: 20,
           },

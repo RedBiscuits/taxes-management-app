@@ -7,3 +7,4 @@ export * from "./CheckBoxWithText";
 export * from "./ControlledDatePicker";
 export * from "./ControlledInput";
 export * from "./SecureControlledInput";
+export * from "./ControlledDropDown";

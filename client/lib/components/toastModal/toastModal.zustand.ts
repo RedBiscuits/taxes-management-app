@@ -14,7 +14,7 @@ type Actions = {
   };
 };
 
-export const useToast = create<State & Actions>((set) => ({
+export const useToast = create<State & Actions>()((set) => ({
   isOpen: false,
   type: "success",
   message: "تم التحقق من البريد الالكتروني",

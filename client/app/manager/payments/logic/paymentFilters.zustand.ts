@@ -10,7 +10,7 @@ type Actions = {
   resetFilters: () => void;
 };
 
-export const usePaymentFilters = create<Actions & State>((set) => ({
+export const usePaymentFilters = create<Actions & State>()((set) => ({
   filters: {
     status: false,
   },

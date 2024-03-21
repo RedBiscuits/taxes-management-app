@@ -14,7 +14,7 @@ export default function App() {
 
       if (await getToken()) {
         const user = await getUser();
-        router.push("/user/");
+        router.push("/user/receipts/");
 
         // switch (user?.roles[0].name) {
         //   case "manager":

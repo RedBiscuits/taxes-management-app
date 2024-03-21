@@ -38,7 +38,6 @@ export function usePost<TData, TResponse = Response>(
       await http.postRequest<TData, TResponse>(url, data),
     onSuccess: (...args) => {
       invalidate.forEach((key) => qc.invalidateQueries({ queryKey: key }));
-      console.log("hello from inner on success");
       onSuccess?.(...args);
     },
     ...rest,

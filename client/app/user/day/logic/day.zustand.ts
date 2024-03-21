@@ -11,7 +11,7 @@ type Actions = {
   closeDay: () => void;
 };
 
-export const useDayStore = create<State & Actions>((set) => ({
+export const useDayStore = create<State & Actions>()((set) => ({
   day: null,
   isOpen: false,
   day_id: 0,

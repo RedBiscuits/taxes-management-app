@@ -20,3 +20,4 @@ export async function getUser() {
   }
   return JSON.parse(userString) as User;
 }
+

@@ -4,3 +4,4 @@ export * from "./receipt";
 export * from "./payment";
 export * from "./user";
 export * from "./PaginatedResponse";
+export * from "./Day";

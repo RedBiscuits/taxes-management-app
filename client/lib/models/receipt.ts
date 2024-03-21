@@ -9,6 +9,7 @@ export type Receipt = BaseModel & {
 
 export type Entry = BaseModel & {
   value: number;
-  type: string;
+  tax_type: string;
+  payment_type: string;
   receipt_id: number;
 };

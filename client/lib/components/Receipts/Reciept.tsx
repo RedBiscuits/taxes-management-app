@@ -12,7 +12,7 @@ export function Reciept({
 }) {
   const receipt_entries =
     !!entries?.length &&
-    entries.map(({ id, type, value }) => (
+    entries.map(({ id, tax_type, payment_type, value }) => (
       <View key={id} className="flex flex-row items-center justify-between">
         <Alphanumeric className="text-lg" numberStyles={fonts.poppinsSemibold}>
           جنيه
@@ -20,14 +20,14 @@ export function Reciept({
         </Alphanumeric>
         <View>
           <Text className="text-lg" style={fonts.fontArabicRegular}>
-            {type || "ضريبة"}
+            {tax_type || "ضريبة"}
           </Text>
           {/* TODO:fix this add the correc ttype to the ts type */}
           <Text
             className="text-sm text-black/60"
             style={fonts.fontArabicRegular}
           >
-            {type || "ضريبة"}
+            {payment_type || "ضريبة"}
           </Text>
         </View>
       </View>
