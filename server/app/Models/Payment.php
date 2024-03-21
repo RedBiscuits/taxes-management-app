@@ -66,6 +66,11 @@ class Payment extends Model
 
     public function scopeCloseDate($query, $operator, $date)
     {
-        return $query->whereDate('close_date', $operator, $date);
+        if ($date === null || $date === '') {
+            return $query->whereNull('close_date');
+        } else {
+            return $query->whereDate('close_date', $operator, $date);
+        }
     }
+
 }

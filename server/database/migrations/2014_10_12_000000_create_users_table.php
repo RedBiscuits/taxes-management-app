@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('phone')->unique();
             $table->string('job');
             $table->string('password');
-            $table->foreignId('location_id')->nullable();
             $table->string('device_id')->nullable();
             $table->rememberToken();
             $table->timestamps();

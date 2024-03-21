@@ -16,28 +16,46 @@ class PaymentController extends Controller
     {
         $payments = Payment::query()
             ->when(request('phone'), function ($query) {
-                return $query->phone(request('phone'));
+                return $query->phone(
+                    request('phone')
+                );
             })
             ->when(request('is_paid'), function ($query) {
-                return $query->isPaid(request('is_paid'));
+                return $query->isPaid(
+                    request('is_paid')
+                );
             })
             ->when(request('amount'), function ($query) {
-                return $query->amount(request('amount'));
+                return $query->amount(
+                    request('amount')
+                );
             })
             ->when(request('status'), function ($query) {
-                return $query->status(request('status'));
+                return $query->status(
+                    request('status')
+                );
             })
             ->when(request('user_id'), function ($query) {
-                return $query->userId(request('user_id'));
+                return $query->userId(
+                    request('user_id')
+                );
             })
             ->when(request('location_id'), function ($query) {
-                return $query->locationId(request('location_id'));
+                return $query->locationId(
+                    request('location_id')
+                );
             })
             ->when(request('created_at_operator') && request('created_at'), function ($query) {
-                return $query->createdAt(request('created_at_operator'), request('created_at'));
+                return $query->createdAt(
+                    request('created_at_operator'),
+                    request('created_at')
+                );
             })
-            ->when(request('close_date_operator') && request('close_date'), function ($query) {
-                return $query->closeDate(request('close_date_operator'), request('close_date'));
+            ->when(request('close_date_operator'), function ($query) {
+                return $query->closeDate(
+                    request('close_date_operator'),
+                    request()->get('close_date', null)
+                );
             })
             ->paginate();
 

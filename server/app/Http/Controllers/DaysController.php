@@ -28,8 +28,9 @@ class DaysController extends Controller
                 $query->where('location_id', 'like', $search);
             })
             ->where(function ($query) {
-                $query->whereNull('status')
-                    ->orWhere('status', 1);
+                request()->filled('status') ?
+                    $query->where('status', request('status')) :
+                    $query->whereNull('status')->orWhere('status', 1);
             })
             ->paginate();
 
