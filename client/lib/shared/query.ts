@@ -27,17 +27,41 @@ export function useGet<TData>(
 export function usePost<TData, TResponse = Response>(
   url: string,
   invalidate: string[][],
-  options?: UseMutationOptions<BaseResponse<TResponse>, Error, TData>
+  options: UseMutationOptions<BaseResponse<TResponse>, Error, TData> = {}
 ) {
   const qc = useQueryClient();
+
+  const { onSuccess, ...rest } = options;
+
   return useMutation<BaseResponse<TResponse>, Error, TData>({
     mutationFn: async (data) =>
       await http.postRequest<TData, TResponse>(url, data),
     onSuccess: (...args) => {
       invalidate.forEach((key) => qc.invalidateQueries({ queryKey: key }));
-      options?.onSuccess?.(...args);
+      console.log("hello from inner on success");
+      onSuccess?.(...args);
     },
-    ...options,
+    ...rest,
+  });
+}
+export function usePatch<TData, TResponse = Response>(
+  url: string,
+  invalidate: string[][],
+  options: UseMutationOptions<BaseResponse<TResponse>, Error, TData> = {}
+) {
+  const qc = useQueryClient();
+
+  const { onSuccess, ...rest } = options;
+
+  return useMutation<BaseResponse<TResponse>, Error, TData>({
+    mutationFn: async (data) =>
+      await http.patchRequest<TData, TResponse>(url, data),
+    onSuccess: (...args) => {
+      invalidate.forEach((key) => qc.invalidateQueries({ queryKey: key }));
+      console.log("hello from inner on success");
+      onSuccess?.(...args);
+    },
+    ...rest,
   });
 }
 

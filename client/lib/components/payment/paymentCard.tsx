@@ -10,7 +10,7 @@ export function PaymentCard({
   phone,
   amount,
   created_at,
-  close_data,
+  close_date,
   elevation,
 }: { elevation?: boolean } & Payment) {
   return (
@@ -24,12 +24,12 @@ export function PaymentCard({
       <PaymentField label="المبلغ" value={amount} />
       <PaymentField
         label="تاريخ الطلب"
-        value={dayjs(created_at).format("DD/MM/YYYY")}
+        value={dayjs(created_at).format("YYYY/MM/DD")}
       />
-      {close_data && (
+      {close_date && (
         <PaymentField
           label="تاريخ السداد"
-          value={dayjs(created_at).format("DD/MM/YYYY")}
+          value={dayjs(close_date).format("YYYY/MM/DD")}
         />
       )}
     </View>

@@ -5,13 +5,16 @@ import { StatusBar } from "expo-status-bar";
 import { Button } from "@/lib/components";
 import { options } from "@/lib/constants/ScreenOptions";
 import { View, Image } from "react-native";
-import { getToken, getUser } from "@/lib/shared/storage";
+import { getToken, getUser, setToken, setUser } from "@/lib/shared/storage";
 export default function App() {
   useEffect(() => {
     (async () => {
+      // await setToken("");
+      // await setUser(null!);
+
       if (await getToken()) {
         const user = await getUser();
-        router.push("/manager/");
+        router.push("/user/");
 
         // switch (user?.roles[0].name) {
         //   case "manager":

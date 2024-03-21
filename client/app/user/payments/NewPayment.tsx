@@ -1,14 +1,15 @@
 import { View } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import { Stack } from "expo-router";
 import { options } from "@/lib/constants";
-import { Button, DatePicker } from "@/lib/components";
-import { ControlledInput } from "@/lib/components/Form/ControlledInput";
+import {
+  ControlledInput,
+  ControlledDatePicker,
+  Button,
+} from "@/lib/components";
 import { usePayment } from "./logic/payment.hooks";
 
 export default function NewPaymentsScreen() {
-  // const [date, setDate] = useState(new Date());
-
   const { control, isPending, addPayment } = usePayment();
 
   return (
@@ -35,19 +36,14 @@ export default function NewPaymentsScreen() {
           inputMode="decimal"
         />
 
-        {/* <DatePicker
-          date={date}
-          setDate={setDate}
+        <ControlledDatePicker
+          control={control}
+          name="date"
           label="التاريخ"
           classes="mb-4"
-        /> */}
-
-        <Button
-          loading={isPending}
-          onPress={addPayment}
-          text="تسجيل"
-          className=""
         />
+
+        <Button loading={isPending} onPress={addPayment} text="تسجيل" />
       </View>
     </>
   );

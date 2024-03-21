@@ -12,9 +12,11 @@ import { Stack } from "expo-router";
 import { Button, DatePicker, Input, PaymentCard } from "@/lib/components";
 import { LinearGradient } from "expo-linear-gradient";
 import { colors, fonts } from "@/lib/styles";
-import { useGet } from "@/lib/shared/query";
+import { useGet, usePatch } from "@/lib/shared/query";
 import { PaginatedResponse, Payment } from "@/lib/models";
 import { useDebouncedCallback } from "use-debounce";
+import Icon from "react-native-vector-icons/AntDesign";
+import { useToast } from "@/lib/components/toastModal/toastModal.zustand";
 
 export default function PayPaymentScreen() {
   const [query, setQuery] = useState("");
@@ -64,7 +66,9 @@ export default function PayPaymentScreen() {
                 <FlatList
                   data={data?.data}
                   renderItem={({ item }) => (
-                    <Pressable onPress={() => setPayment(item)}>
+                    <Pressable
+                      onPress={() => !item.close_date && setPayment(item)}
+                    >
                       <PaymentCard elevation={true} {...item} />
                     </Pressable>
                   )}
@@ -98,22 +102,49 @@ function ConfirmPaymentModal({
   payment?: Payment;
 }) {
   const [date, setDate] = useState(new Date());
+  const { toast } = useToast();
+
+  const { mutate, isPending } = usePatch<Payment>(
+    `payments/${payment?.id}`,
+    [["payments"]],
+    {
+      onSuccess: () => {
+        toast.success("تمت العملية بنجاح");
+      },
+      onError: (error) => {
+        console.log(error);
+        toast.error("حدث خطأ ما");
+      },
+      onSettled: () => {
+        toggleModal(undefined);
+      },
+    }
+  );
+
+  if (!payment) return null;
   return (
     <Modal visible={!!payment} animationType="fade" transparent>
       <View className="flex-1 bg-black/50">
         <View className="  flex w-full justify-center absolute top-32">
           <View className="mx-4 bg-white p-6  rounded-lg">
+            <View className="flex flex-row w-full justify-end">
+              <Text onPress={() => toggleModal(undefined)}>
+                <Icon name="close" size={22} />
+              </Text>
+            </View>
+
             <Text
               style={fonts.fontArabicBold}
               className="text-xl text-center mb-6"
             >
               تسديد امر توريد
             </Text>
-            {payment && <PaymentCard {...payment} elevation={false} />}
+            <PaymentCard {...payment} elevation={false} />
             <View className="my-2" />
             <DatePicker date={date} setDate={setDate} label="تاريخ التسديد" />
             <Button
-              onPress={() => toggleModal(undefined)}
+              loading={isPending}
+              onPress={() => mutate({ ...payment, close_date: date.toJSON() })}
               text="تأكيد"
               className="mt-8 w-full mx-auto"
             />

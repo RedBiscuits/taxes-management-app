@@ -31,8 +31,10 @@ async function postRequest<TRequest, TResponse = Response>(
   const data: BaseResponse<TResponse> = await res.json();
   return data;
 }
-
-async function patchRequest<T>(url: string, body: T) {
+async function patchRequest<TRequest, TResponse = Response>(
+  url: string,
+  body: TRequest
+) {
   const res = await fetch(`${API_URL}${url}`, {
     method: "PATCH",
     headers: await getHeaders(),
@@ -41,7 +43,8 @@ async function patchRequest<T>(url: string, body: T) {
   if (!res.ok) {
     handleError(res, "PATCH");
   }
-  return res;
+  const data: BaseResponse<TResponse> = await res.json();
+  return data;
 }
 
 async function deleteRequest(url: string) {
