@@ -25,7 +25,7 @@ class UpdatePaymentRequest extends FormRequest
         return [
             'amount' => ['numeric', 'min:0'],
             'close_date' => ['date'],
-            'phone' => ['string', 'exists:users,phone'],
-        ];
+            'phone' => ['string'],
+        ];git
     }
 }

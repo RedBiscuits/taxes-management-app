@@ -30,7 +30,7 @@ class CreatePaymentRequest extends FormRequest
     {
         return [
             'amount' => ['required', 'numeric', 'min:0'],
-            'phone' => ['required', 'string', 'exists:users,phone'],
+            'phone' => ['required', 'string'],
             'user_id' => ['required', 'integer', 'min:1', 'exists:users,id'],
             'created_at' => ['date'],
         ];
