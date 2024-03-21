@@ -20,8 +20,8 @@ class CreatePaymentRequest extends FormRequest
         // }
         // return false;
 
-        return auth('sanctum')->user()->hasRole('admin')
-            || auth('sanctum')->user()->id === $this->route('payment')->user_id;
+        return auth('sanctum')->user()->hasAnyRole(['admin', 'employee']);
+
     }
 
     /**
