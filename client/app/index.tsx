@@ -6,15 +6,25 @@ import { Button } from "@/lib/components";
 import { options } from "@/lib/constants/ScreenOptions";
 import { View, Image } from "react-native";
 import { getToken, getUser, setToken, setUser } from "@/lib/shared/storage";
+import { useOpenDay } from "./user/receipts/logic/openDay/openDay.hooks";
+import { useCurrentReceipt } from "./user/receipts/logic/receipts/receipt.hooks";
 export default function App() {
+  const { day } = useOpenDay();
+  const { currentReceipt } = useCurrentReceipt();
   useEffect(() => {
     (async () => {
       // await setToken("");
       // await setUser(null!);
+      // day.set(null);
+      // currentReceipt.set(null);
+      const token = await getToken();
+      if (token) {
+        // console.log("token exists", token);
 
-      if (await getToken()) {
         const user = await getUser();
-        router.push("/user/receipts/");
+        router.push("/user/");
+
+        // console.log("user", JSON.stringify(user, null, 2));
 
         // switch (user?.roles[0].name) {
         //   case "manager":

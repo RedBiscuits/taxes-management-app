@@ -11,8 +11,8 @@ import { useGet } from "@/lib/shared/query";
 import { useOpenDay } from "./logic/openDay/openDay.hooks";
 
 export default function NewReceipts() {
-  const { data: openDay } = useOpenDay();
-
+  const { day } = useOpenDay();
+  const openDay = day.get();
   // TODO: filter by location
   const { data, isPending } = useGet<PaginatedResponse<Receipt>>(
     `receipts?day_id=${openDay?.id}`,

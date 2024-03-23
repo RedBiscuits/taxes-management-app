@@ -22,9 +22,9 @@ export default function MainManagerPaymentsScreen() {
 
   useEffect(() => {
     const tempUrl = constructUrl(query, searchOptions);
-    console.log("tempUrl =>", tempUrl);
+    // console.log("tempUrl =>", tempUrl);
     const params = tempUrl.slice(url.indexOf("?") + 1);
-    console.log("params => ", params);
+    // console.log("params => ", params);
 
     setUrl(tempUrl);
   }, [query, searchOptions.status]);

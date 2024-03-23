@@ -5,7 +5,6 @@ import dayjs from "dayjs";
 import { fonts } from "@/lib/styles/fonts";
 import { Payment } from "@/lib/models";
 
-// TODO:change to correct type
 export function PaymentCard({
   phone,
   amount,

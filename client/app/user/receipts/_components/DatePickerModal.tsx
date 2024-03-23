@@ -7,8 +7,8 @@ import Icon from "react-native-vector-icons/AntDesign";
 import { usePost } from "@/lib/shared/query";
 import { BaseModel, Day } from "@/lib/models";
 import { useToast } from "@/lib/components/toastModal/toastModal.zustand";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import dayjs from "dayjs";
+import { useOpenDay } from "../logic/openDay/openDay.hooks";
 
 export function DatePickerModal({
   isOpen,
@@ -19,16 +19,18 @@ export function DatePickerModal({
 }) {
   const { toast } = useToast();
   const [date, setDate] = useState(new Date());
+  const { day } = useOpenDay();
+
   const { mutate, isPending } = usePost<Omit<Day, keyof BaseModel>, Day>(
     "days",
-    [],
+    [["current_day"]],
     {
       onSuccess: async (data) => {
         setIsOpen(false);
-        router.push("/user/receipts/NewReceipts");
+        router.push("/user/receipts/NewDay");
         console.log(data.data);
         toast.success("تمت فتح يومية جديدة بنجاح");
-        await AsyncStorage.setItem("current_day", JSON.stringify(data.data));
+        day.set(data.data);
       },
       onError: (error) => {
         console.log(error);

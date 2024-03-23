@@ -6,14 +6,13 @@ import { useToast } from "@/lib/components/toastModal/toastModal.zustand";
 import { getUser } from "@/lib/shared/storage";
 
 export function usePayment() {
-  const { control, handleSubmit, watch, reset } = useForm<PaymentData>({
+  const { control, handleSubmit, reset } = useForm<PaymentData>({
     resolver: zodResolver(paymentSchema),
     defaultValues: {
-      date: new Date(),
+      created_at: new Date(),
     },
   });
 
-  // console.log("watch", JSON.stringify(watch(), null, 2));
   const { toast } = useToast();
 
   const { mutate, isPending } = usePost<PaymentData & { user_id: number }>(

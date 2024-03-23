@@ -14,7 +14,7 @@ export const paymentSchema = z.object({
     })
     .regex(/^01[0125]\d{8}$/, "رقم الهاتف غير صحيح"),
   // TODO:add date
-  date: z.date({
+  created_at: z.date({
     required_error: "التاريخ مطلوب",
     invalid_type_error: "التاريخ مطلوب",
   }),

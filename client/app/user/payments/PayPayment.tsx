@@ -12,22 +12,28 @@ import { Stack } from "expo-router";
 import { Button, DatePicker, Input, PaymentCard } from "@/lib/components";
 import { LinearGradient } from "expo-linear-gradient";
 import { colors, fonts } from "@/lib/styles";
-import { useGet, usePatch } from "@/lib/shared/query";
-import { PaginatedResponse, Payment } from "@/lib/models";
+import { useInfiniteGet, usePatch } from "@/lib/shared/query";
+import { Payment } from "@/lib/models";
 import { useDebouncedCallback } from "use-debounce";
 import Icon from "react-native-vector-icons/AntDesign";
 import { useToast } from "@/lib/components/toastModal/toastModal.zustand";
+import dayjs from "dayjs";
 
 export default function PayPaymentScreen() {
   const [query, setQuery] = useState("");
   const [payment, setPayment] = useState<Payment>();
-
-  const { data, isPending } = useGet<PaginatedResponse<Payment>>(
-    !!query ? `payments?phone=${query}` : "payments",
-    ["payments", query]
-  );
-
   const handleSearch = useDebouncedCallback((term) => setQuery(term), 300);
+
+  // TODO: filter by location id
+  const { data, isPending, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useInfiniteGet<Payment>(
+      !!query
+        ? `payments?close_date_operator==&phone=${query}`
+        : "payments?close_date_operator==",
+      ["payments", query]
+    );
+
+  console.log("hasNextPage => ", JSON.stringify(hasNextPage, null, 2));
 
   return (
     <>
@@ -64,7 +70,7 @@ export default function PayPaymentScreen() {
             else
               return (
                 <FlatList
-                  data={data?.data}
+                  data={data?.pages.map((g) => g.data.data).flat() || []}
                   renderItem={({ item }) => (
                     <Pressable
                       onPress={() => !item.close_date && setPayment(item)}
@@ -73,7 +79,17 @@ export default function PayPaymentScreen() {
                     </Pressable>
                   )}
                   keyExtractor={(item) => item.id.toString()}
-                  ListFooterComponent={() => <View className="h-10" />}
+                  onEndReached={() => hasNextPage && fetchNextPage()}
+                  ListFooterComponent={() => (
+                    <View className="h-10">
+                      {isFetchingNextPage && (
+                        <ActivityIndicator
+                          size={"large"}
+                          color={colors.primary_blue}
+                        />
+                      )}
+                    </View>
+                  )}
                   ListEmptyComponent={() => (
                     <View className="flex-1">
                       <Text
@@ -103,6 +119,8 @@ function ConfirmPaymentModal({
 }) {
   const [date, setDate] = useState(new Date());
   const { toast } = useToast();
+
+  console.log("payment", JSON.stringify(payment, null, 2));
 
   const { mutate, isPending } = usePatch<Payment>(
     `payments/${payment?.id}`,
@@ -144,7 +162,13 @@ function ConfirmPaymentModal({
             <DatePicker date={date} setDate={setDate} label="تاريخ التسديد" />
             <Button
               loading={isPending}
-              onPress={() => mutate({ ...payment, close_date: date.toJSON() })}
+              onPress={() =>
+                mutate({
+                  ...payment,
+                  close_date:
+                    dayjs(date).format("YYYY-MM-DDTHH:mm:ss.SSSSSS") + "Z",
+                })
+              }
               text="تأكيد"
               className="mt-8 w-full mx-auto"
             />

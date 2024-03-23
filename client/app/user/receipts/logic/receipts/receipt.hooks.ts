@@ -2,6 +2,7 @@ import { useToast } from "@/lib/components/toastModal/toastModal.zustand";
 import { Entry, Receipt } from "@/lib/models";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { router } from "expo-router";
 
 export function useCurrentReceipt() {
   const qc = useQueryClient();
@@ -11,7 +12,7 @@ export function useCurrentReceipt() {
     queryKey: ["current_receipt"],
     queryFn: async () => {
       const currentReceipt = await AsyncStorage.getItem("current_receipt");
-      if (!currentReceipt) throw new Error("no current receipt");
+      if (!currentReceipt) return null;
       return JSON.parse(currentReceipt) as Receipt;
     },
   });
@@ -19,7 +20,7 @@ export function useCurrentReceipt() {
   const addEntry = useMutation({
     mutationFn: async (entry: Entry) => {
       const currentReceipt = await AsyncStorage.getItem("current_receipt");
-      if (!currentReceipt) throw new Error("no current receipt");
+      if (!currentReceipt) return null;
       console.log("current receipt", currentReceipt);
 
       const receipt = JSON.parse(currentReceipt) as Receipt;
@@ -42,10 +43,18 @@ export function useCurrentReceipt() {
         ? await AsyncStorage.setItem("current_receipt", JSON.stringify(receipt))
         : await AsyncStorage.removeItem("current_receipt");
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       console.log("invalidating");
-      
-      qc.invalidateQueries({ queryKey: ["current_receipt"] });
+
+      await qc.refetchQueries({ queryKey: ["current_receipt"] });
+      const data = qc.getQueryData(["current_receipt"]);
+
+      console.log("data", JSON.stringify(data, null, 2));
+
+      if (data) {
+        console.log("redirecting to new reciept");
+        router.push("/user/receipts/NewReciept");
+      }
     },
     onError: (error) => {
       toast.error("حدث خطأ ما");
@@ -56,7 +65,7 @@ export function useCurrentReceipt() {
   return {
     currentReceipt: {
       get: () => currentReceipt.data,
-      set: setCurrentReceipt.mutateAsync,
+      set: setCurrentReceipt.mutate,
       addEntry: addEntry.mutate,
     },
   };

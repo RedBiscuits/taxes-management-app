@@ -22,7 +22,6 @@ export function Reciept({
           <Text className="text-lg" style={fonts.fontArabicRegular}>
             {tax_type || "ضريبة"}
           </Text>
-          {/* TODO:fix this add the correc ttype to the ts type */}
           <Text
             className="text-sm text-black/60"
             style={fonts.fontArabicRegular}
