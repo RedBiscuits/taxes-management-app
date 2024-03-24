@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
         $admin->assignRole($adminRole);
 
 
+
         $empd1 = \App\Models\User::create([
             'name' => 'employee1',
             'phone' => '01111111111',
@@ -55,7 +56,24 @@ class DatabaseSeeder extends Seeder
         $empd2->assignRole($emp);
 
 
-        Payment::factory(10)->create([
+
+        $location1 = \App\Models\Location::create([
+            'name' => 'الشروق',
+            'yearly_target' => 10000,
+            "user_id" => $empd1->id
+        ]);
+
+
+        $location2 = \App\Models\Location::create([
+            'name' => 'بدر',
+            'yearly_target' => 10000,
+            "user_id" => $empd2->id
+
+        ]);
+
+
+
+        Payment::factory(40)->create([
             'user_id' => $empd1->id
         ]);
 
@@ -73,15 +91,6 @@ class DatabaseSeeder extends Seeder
 
 
 
-        \App\Models\Location::create([
-            'name' => 'الشروق',
-            'yearly_target' => 10000,
-        ]);
 
-
-        \App\Models\Location::create([
-            'name' => 'بدر',
-            'yearly_target' => 10000,
-        ]);
     }
 }
