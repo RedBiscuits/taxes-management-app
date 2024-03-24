@@ -1,14 +1,16 @@
+import { PaginatedResponse } from "./../models/paginatedResponse";
 import {
   useQuery,
   useMutation,
   UseMutationOptions,
   UseQueryOptions,
   useQueryClient,
+  useInfiniteQuery,
+  UndefinedInitialDataInfiniteOptions,
+  InfiniteData,
+  UseInfiniteQueryOptions,
 } from "@tanstack/react-query";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { getToken } from "./storage";
 import { BaseResponse } from "@/lib/models";
-import { API_URL } from "@/lib/constants/api";
 import * as http from "@/lib/shared/fetch";
 
 export function useGet<TData>(
@@ -20,6 +22,35 @@ export function useGet<TData>(
     queryKey: key,
     queryFn: async () => await http.getRequest<TData>(url),
     select: (data) => data.data,
+    ...options,
+  });
+}
+
+export function useInfiniteGet<TData>(
+  url: string,
+  key: string[],
+  options?: Partial<
+    UndefinedInitialDataInfiniteOptions<
+      BaseResponse<PaginatedResponse<TData>>,
+      Error,
+      InfiniteData<BaseResponse<PaginatedResponse<TData>>>,
+      string[],
+      number
+    >
+  >
+) {
+  return useInfiniteQuery({
+    queryKey: key,
+    queryFn: async ({ pageParam }) => {
+      const fullUrl = url.includes("?")
+        ? `${url}&page=${pageParam}`
+        : `${url}?page=${pageParam}`;
+
+      return await http.getRequest<PaginatedResponse<TData>>(fullUrl);
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, __, lastPageParams) =>
+      lastPage.data.last_page === lastPageParams ? null : lastPageParams + 1,
     ...options,
   });
 }
@@ -63,64 +94,3 @@ export function usePatch<TData, TResponse = Response>(
     ...rest,
   });
 }
-
-async function createInstance() {
-  const token = await getToken();
-  return axios.create({
-    baseURL: API_URL,
-    headers: {
-      "content-Type": "application/json",
-      accept: "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    // timeout: 3000,
-  });
-}
-
-export const useCustomQuery = <T>(
-  url: string,
-  method: "get" | "delete" = "get",
-  options?: any
-) => {
-  return useQuery<any, AxiosError, AxiosResponse<BaseResponse<T>>>({
-    queryKey: [url],
-    queryFn: async () => {
-      const instance = await createInstance();
-      return await instance[method](url);
-    },
-    select: (data) => data.data,
-    onSettled: (data: any, error: any) => {
-      console.log("data", data);
-      console.log("error", error);
-    },
-    ...options,
-  });
-};
-
-export const useCustomMutation = <TData, TResponse = any>(
-  url: string,
-  method: "post" | "patch" = "post",
-  options?: Omit<
-    UseMutationOptions<
-      AxiosResponse<BaseResponse<TResponse>>,
-      AxiosError,
-      TData
-    >,
-    "mutationFn"
-  >
-) => {
-  return useMutation<AxiosResponse<BaseResponse<TResponse>>, AxiosError, TData>(
-    {
-      mutationKey: [url],
-      mutationFn: async (data) => {
-        const instance = await createInstance();
-        return await instance[method](url, data);
-      },
-      onSettled: (data, error) => {
-        console.log("data", data);
-        console.log("error", error);
-      },
-      ...options,
-    }
-  );
-};

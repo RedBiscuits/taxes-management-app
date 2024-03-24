@@ -6,28 +6,41 @@ import {
   ActivityIndicator,
   Pressable,
 } from "react-native";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { options } from "@/lib/constants";
 import { Stack } from "expo-router";
 import { Button, DatePicker, Input, PaymentCard } from "@/lib/components";
 import { LinearGradient } from "expo-linear-gradient";
 import { colors, fonts } from "@/lib/styles";
-import { useGet, usePatch } from "@/lib/shared/query";
-import { PaginatedResponse, Payment } from "@/lib/models";
+import { useInfiniteGet, usePatch } from "@/lib/shared/query";
+import { Payment, User } from "@/lib/models";
 import { useDebouncedCallback } from "use-debounce";
 import Icon from "react-native-vector-icons/AntDesign";
 import { useToast } from "@/lib/components/toastModal/toastModal.zustand";
+import dayjs from "dayjs";
+import { getUser } from "@/lib/shared/storage";
 
 export default function PayPaymentScreen() {
   const [query, setQuery] = useState("");
   const [payment, setPayment] = useState<Payment>();
-
-  const { data, isPending } = useGet<PaginatedResponse<Payment>>(
-    !!query ? `payments?phone=${query}` : "payments",
-    ["payments", query]
-  );
-
   const handleSearch = useDebouncedCallback((term) => setQuery(term), 300);
+
+  const [user, setuser] = useState<User | null>(null);
+  useEffect(() => {
+    (async () => {
+      const user = await getUser();
+      setuser(user);
+    })();
+  }, []);
+
+  const { data, isPending, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useInfiniteGet<Payment>(
+      !!query
+        ? `payments?user_id=${user?.id}&close_date_operator==&phone=${query}`
+        : `payments?user_id=${user?.id}&close_date_operator==`,
+      ["payments", query],
+      { enabled: !!user }
+    );
 
   return (
     <>
@@ -63,28 +76,40 @@ export default function PayPaymentScreen() {
               );
             else
               return (
-                <FlatList
-                  data={data?.data}
-                  renderItem={({ item }) => (
-                    <Pressable
-                      onPress={() => !item.close_date && setPayment(item)}
-                    >
-                      <PaymentCard elevation={true} {...item} />
-                    </Pressable>
-                  )}
-                  keyExtractor={(item) => item.id.toString()}
-                  ListFooterComponent={() => <View className="h-10" />}
-                  ListEmptyComponent={() => (
-                    <View className="flex-1">
-                      <Text
-                        style={fonts.fontArabicBold}
-                        className="text-center text-xl mt-20"
+                <>
+                  <FlatList
+                    data={data?.pages.flatMap((page) => page.data.data) || []}
+                    renderItem={({ item, index }) => (
+                      <Pressable
+                        onPress={() => !item.close_date && setPayment(item)}
                       >
-                        لا توجد بيانات
-                      </Text>
-                    </View>
-                  )}
-                />
+                        <PaymentCard elevation={true} {...item} />
+                      </Pressable>
+                    )}
+                    keyExtractor={(item) => item.id.toString()}
+                    onEndReached={() => hasNextPage && fetchNextPage()}
+                    ListFooterComponent={() => (
+                      <View className="h-10">
+                        {isFetchingNextPage && (
+                          <ActivityIndicator
+                            size={"large"}
+                            color={colors.primary_blue}
+                          />
+                        )}
+                      </View>
+                    )}
+                    ListEmptyComponent={() => (
+                      <View className="flex-1">
+                        <Text
+                          style={fonts.fontArabicBold}
+                          className="text-center text-xl mt-20"
+                        >
+                          لا توجد بيانات
+                        </Text>
+                      </View>
+                    )}
+                  />
+                </>
               );
           })()}
         </View>
@@ -103,6 +128,8 @@ function ConfirmPaymentModal({
 }) {
   const [date, setDate] = useState(new Date());
   const { toast } = useToast();
+
+  console.log("payment", JSON.stringify(payment, null, 2));
 
   const { mutate, isPending } = usePatch<Payment>(
     `payments/${payment?.id}`,
@@ -144,7 +171,13 @@ function ConfirmPaymentModal({
             <DatePicker date={date} setDate={setDate} label="تاريخ التسديد" />
             <Button
               loading={isPending}
-              onPress={() => mutate({ ...payment, close_date: date.toJSON() })}
+              onPress={() =>
+                mutate({
+                  ...payment,
+                  close_date:
+                    dayjs(date).format("YYYY-MM-DDTHH:mm:ss.SSSSSS") + "Z",
+                })
+              }
               text="تأكيد"
               className="mt-8 w-full mx-auto"
             />

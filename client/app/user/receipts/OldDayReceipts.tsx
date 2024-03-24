@@ -7,16 +7,17 @@ import { Alphanumeric, Reciept } from "@/lib/components";
 import { colors, fonts } from "@/lib/styles";
 import { PaginatedResponse, Receipt } from "@/lib/models";
 import { LinearGradient } from "expo-linear-gradient";
-import { useGet } from "@/lib/shared/query";
+import { useGet, useInfiniteGet } from "@/lib/shared/query";
 
 export default function OldDayReceipts() {
   const day = useOldDayStore((s) => s.day);
 
-  // TODO: filter by day
-  const { data, isPending } = useGet<PaginatedResponse<Receipt>>(
-    `receipts?day_id=${day?.id}`,
-    ["receipts", String(day?.id)]
-  );
+  // TODO: filter by location id
+  const { data, isPending, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useInfiniteGet<Receipt>(`receipts?day_id=${day?.id}`, [
+      "receipts",
+      String(day?.id),
+    ]);
 
   return (
     <>
@@ -51,23 +52,21 @@ export default function OldDayReceipts() {
               return (
                 <FlatList
                   className="px-2 pt-4"
-                  ListFooterComponent={<View className="h-16" />}
-                  data={
-                    data.data
-                    //   [
-                    //   receipt,
-                    //   receipt,
-                    //   receipt,
-                    //   receipt,
-                    //   receipt,
-                    //   receipt,
-                    //   receipt,
-                    //   receipt,
-                    // ]
-                  }
+                  data={data?.pages.flatMap((page) => page.data.data) || []}
                   renderItem={({ item }) => <Reciept receipt={item} />}
+                  onEndReached={() => hasNextPage && fetchNextPage()}
                   ItemSeparatorComponent={() => <View className="h-2" />}
                   keyExtractor={(item) => item.id.toString()}
+                  ListFooterComponent={() => (
+                    <View className="h-10">
+                      {isFetchingNextPage && (
+                        <ActivityIndicator
+                          size={"large"}
+                          color={colors.primary_blue}
+                        />
+                      )}
+                    </View>
+                  )}
                   ListEmptyComponent={() => (
                     <View className="flex-1">
                       <Text

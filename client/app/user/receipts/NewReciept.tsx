@@ -14,9 +14,9 @@ const AddRecieptScreen = () => {
   const { toast } = useToast();
 
   const { mutate, isPending } = usePost("entries", [["receipts"]], {
-    onSuccess: async () => {
-      toast.success("تمت العملية بنجاح");
-      await currentReceipt.set(null);
+    onSuccess: () => {
+      toast.success("تم حفظ التحصيل بنجاح");
+      currentReceipt.set(null);
       router.back();
     },
     onError: (error) => {
@@ -50,7 +50,6 @@ const AddRecieptScreen = () => {
                 value: e.value,
               })),
             });
-            await currentReceipt.set(null);
           }}
         />
         <Fab onPress={() => router.push("/user/receipts/NewEntry")} />

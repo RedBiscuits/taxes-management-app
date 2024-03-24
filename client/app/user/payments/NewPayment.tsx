@@ -38,7 +38,7 @@ export default function NewPaymentsScreen() {
 
         <ControlledDatePicker
           control={control}
-          name="date"
+          name="created_at"
           label="التاريخ"
           classes="mb-4"
         />

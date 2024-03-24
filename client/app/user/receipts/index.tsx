@@ -12,7 +12,7 @@ const ReceiptsScreen = () => {
   const [isOldModalOpen, setIsOldModalOpen] = useState(false);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
-  const { data: openDay } = useOpenDay();
+  const { day } = useOpenDay();
 
   return (
     <>
@@ -25,8 +25,7 @@ const ReceiptsScreen = () => {
 
       <View className="flex-1 justify-center bg-white">
         <View>
-          {/* TODO: if day is open make it continue day */}
-          {openDay ? (
+          {day.get() ? (
             <Button
               text="استكمال اليومية"
               onPress={() => router.push("/user/receipts/NewDay")}

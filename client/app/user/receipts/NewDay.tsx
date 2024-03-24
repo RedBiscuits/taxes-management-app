@@ -9,14 +9,14 @@ import { CloseDayCofirmModal } from "./_components/CloseDayConfirmModal";
 import { usePost } from "@/lib/shared/query";
 import { useToast } from "@/lib/components/toastModal/toastModal.zustand";
 import { useCurrentReceipt } from "./logic/receipts/receipt.hooks";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Receipt } from "@/lib/models";
 
 type NewReceipt = { day_id: number; location_id: number };
 
 export default function NewDayScreen() {
   const [isOpen, setIsOpen] = useState(false);
-  const { data: openDay } = useOpenDay();
+  const { day } = useOpenDay();
+  const openDay = day.get();
   const { currentReceipt } = useCurrentReceipt();
 
   const { toast } = useToast();
@@ -25,11 +25,11 @@ export default function NewDayScreen() {
     "receipts",
     [["receipts"]],
     {
-      onSuccess: async (data) => {
-        await currentReceipt.set(data.data);
-        if (currentReceipt.get()) {
-          router.push("/user/receipts/NewReciept");
-        }
+      onSuccess: (data) => {
+        console.log("before set");
+        currentReceipt.set(data.data);
+        console.log("after set");
+        toast.success("تمت العملية بنجاح");
       },
       onError: (error) => {
         toast.error("حدث خطأ ما");
@@ -37,7 +37,6 @@ export default function NewDayScreen() {
       },
     }
   );
-  console.log(currentReceipt.get());
 
   if (!openDay) return router.push("/user/receipts/");
   return (
@@ -58,7 +57,6 @@ export default function NewDayScreen() {
 
         <View className="flex-1 justify-center">
           <View>
-            {/* TODO:if there is a receipt continue that receipt */}
             {currentReceipt.get() ? (
               <Button
                 text="استكمال التحصيل"
@@ -79,9 +77,9 @@ export default function NewDayScreen() {
             />
             <Button
               text="اغلاق اليومية"
-              onPress={async () => {
+              onPress={() => {
                 setIsOpen(true);
-                await currentReceipt.set(null);
+                currentReceipt.set(null);
               }}
             />
           </View>
