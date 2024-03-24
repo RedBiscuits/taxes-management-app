@@ -50,6 +50,11 @@ class PaymentController extends Controller
                     request('created_at_operator'),
                     request('created_at')
                 );
+            })->when(request('created_at_operator_2') && request('created_at'), function ($query) {
+                return $query->createdAt(
+                    request('created_at_operator_2'),
+                    request('created_at')
+                );
             })
             ->when(request('close_date_operator'), function ($query) {
                 return $query->closeDate(
