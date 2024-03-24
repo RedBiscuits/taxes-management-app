@@ -26,10 +26,15 @@ class CreateReceiptRequest extends FormRequest
             'day_id' => [
                 'required', 'integer', 'min:1',
                 function ($attribute, $value, $fail) {
-                    $day = Day::findOrFail($value)->select('status')->first();
+                    $day = Day::find($value);
 
-                    if (!$day->status) {
-                        $fail('day is not open');
+                    if (!$day) {
+                        $fail('Invalid day selected.');
+                        return;
+                    }
+
+                    if ($day->status == 0) {
+                        $fail('The selected day is not open.');
                     }
                 },
             ],

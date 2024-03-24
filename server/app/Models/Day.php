@@ -14,7 +14,8 @@ class Day extends Model
         'start_date',
         'end_date',
         'name',
-        'location_id'
+        'location_id',
+        'status'
     ];
 
     public function location()

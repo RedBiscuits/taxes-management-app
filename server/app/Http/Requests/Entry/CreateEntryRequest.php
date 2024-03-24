@@ -30,9 +30,16 @@ class CreateEntryRequest extends FormRequest
             'entries.*.receipt_id' => [
                 'required', 'integer', 'min:1',
                 function ($attribute, $value, $fail) {
-                    $receipt = Receipt::findOrFail($value);
-                    if (!$receipt->day->status && !auth('sanctum')->user()->hasRole('admin')) {
+                    $receipt = Receipt::find($value);
+
+                    if (!$receipt) {
+                        $fail('Invalid day selected.');
+                        return;
+                    }
+
+                    if ($receipt->day->status == 0 && !auth('sanctum')->user()->hasRole('admin')) {
                         $fail('The day associated with the receipt is not open.');
+                        return;
                     }
                 },
             ],
