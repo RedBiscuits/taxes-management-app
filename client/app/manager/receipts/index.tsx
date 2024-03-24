@@ -70,7 +70,8 @@ const receipt = {
   entries: [
     {
       value: 0,
-      type: "ضريبة",
+      tax_type: "ضريبة",
+      payment_type: "ضريبة",
       receipt_id: 1,
     } as Entry,
   ],

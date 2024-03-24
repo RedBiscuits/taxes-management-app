@@ -1,8 +1,7 @@
 import { View, Text, Modal, Pressable } from "react-native";
 import React, { useState } from "react";
 import { fonts } from "@/lib/styles";
-import { DatePicker, Button, DropDown } from "@/lib/components";
-import CheckBox from "@/lib/components/Form/CheckBox";
+import { DatePicker, Button } from "@/lib/components";
 import Icon from "react-native-vector-icons/AntDesign";
 
 export function OptionsModal() {

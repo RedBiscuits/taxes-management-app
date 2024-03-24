@@ -1,23 +1,17 @@
 import { View, Text, Modal, Pressable } from "react-native";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { useState } from "react";
 import { fonts } from "@/lib/styles";
-import { DatePicker, Button } from "@/lib/components";
-import CheckBox from "@/lib/components/Form/CheckBox";
+import { Button, ControlledDatePicker } from "@/lib/components";
 import Icon from "react-native-vector-icons/AntDesign";
-import { Options } from "../types/options";
+import { useFilteredPayments } from "../logic/paymentFilters.hooks";
+import { ControlledCheckBox } from "@/lib/components/Form/ControlledCheckBox";
+import { ControlledCheckBoxWithText } from "@/lib/components/Form/ControlledCheckBoxWithText";
 
-export function OptionsModal({
-  options,
-  setOptions,
-}: {
-  options: Options;
-  setOptions: Dispatch<SetStateAction<Options>>;
-}) {
+export function OptionsModal() {
   const [isOpen, setIsOpen] = useState(false);
-  const [date, setDate] = useState(new Date());
   const toggleModal = () => setIsOpen((x) => !x);
 
-  const [localOptions, setLocalOptions] = useState<Options>(options);
+  const { control, setFilters, getValues } = useFilteredPayments();
 
   return (
     <>
@@ -49,30 +43,47 @@ export function OptionsModal({
                 خيارات البحث
               </Text>
               <View className="my-2" />
-              <DatePicker
-                date={date}
-                setDate={setDate}
-                label="تاريخ البداية"
-                classes="mb-4"
-              />
-              <DatePicker date={date} setDate={setDate} label="تاريخ النهاية" />
+              <View className="flex flex-row justify-end items-center">
+                <ControlledCheckBox
+                  control={control}
+                  name="created_at.status"
+                  classes="mt-8"
+                />
+                <ControlledDatePicker
+                  control={control}
+                  disabled={!getValues("created_at.status")}
+                  label="تاريخ البداية"
+                  classes="mb-4 w-64 ml-4"
+                  name="created_at.value"
+                />
+              </View>
+              <View className="flex flex-row justify-end items-center">
+                <ControlledCheckBox
+                  control={control}
+                  name="close_date.status"
+                  classes="mt-8"
+                />
+                <ControlledDatePicker
+                  control={control}
+                  disabled={!getValues("close_date.status")}
+                  label="تاريخ النهاية"
+                  classes="mb-4 w-64 ml-4"
+                  name="close_date.value"
+                />
+              </View>
               <View className="my-6">
-                <CheckBox
-                  onChange={(status) =>
-                    setLocalOptions((prv) => ({
-                      ...prv,
-                      status,
-                    }))
-                  }
-                  value={localOptions.status}
+                <ControlledCheckBoxWithText
+                  control={control}
+                  name="status"
+                  classes="px-2 mt-4"
                 >
                   مدفوع
-                </CheckBox>
+                </ControlledCheckBoxWithText>
               </View>
               <Button
                 onPress={() => {
-                  setOptions(localOptions);
-                  toggleModal();
+                  setFilters();
+                  // toggleModal();
                 }}
                 text="تأكيد"
                 className="mt-8 w-full mx-auto"

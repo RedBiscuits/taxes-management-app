@@ -5,9 +5,9 @@ import { options } from "@/lib/constants";
 import { useOldDayStore } from "./logic/OldDay/oldDay.zustand";
 import { Alphanumeric, Reciept } from "@/lib/components";
 import { colors, fonts } from "@/lib/styles";
-import { PaginatedResponse, Receipt } from "@/lib/models";
+import { Receipt } from "@/lib/models";
 import { LinearGradient } from "expo-linear-gradient";
-import { useGet, useInfiniteGet } from "@/lib/shared/query";
+import { useInfiniteGet } from "@/lib/shared/query";
 
 export default function OldDayReceipts() {
   const day = useOldDayStore((s) => s.day);

@@ -3,5 +3,5 @@ export * from "./BaseResponse";
 export * from "./receipt";
 export * from "./payment";
 export * from "./user";
-export * from "./PaginatedResponse";
+export * from "./paginatedResponse";
 export * from "./Day";

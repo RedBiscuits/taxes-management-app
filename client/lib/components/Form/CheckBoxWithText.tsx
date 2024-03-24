@@ -7,15 +7,17 @@ export function CheckBoxWithText({
   children,
   onChange,
   value,
+  classes,
 }: {
   children: string;
   onChange?: (isChecked: boolean) => void;
   value: boolean;
+  classes: string;
 }) {
   let checkBoxRef: BouncyCheckbox | null = null;
 
   return (
-    <View className="flex flex-row justify-between items-center">
+    <View className={`flex flex-row justify-between items-center ${classes}`}>
       <BouncyCheckbox
         fillColor={colors.primary_blue}
         iconStyle={{

@@ -6,33 +6,38 @@ import { Input, PaymentCard } from "@/lib/components";
 import { LinearGradient } from "expo-linear-gradient";
 import { colors, fonts } from "@/lib/styles";
 import { OptionsModal } from "./_components/OptionsModal";
-import { PaginatedResponse, Payment } from "@/lib/models";
-import { useGet } from "@/lib/shared/query";
-import { Options } from "./types/options";
+import { Payment } from "@/lib/models";
+import { useInfiniteGet } from "@/lib/shared/query";
 import { useDebouncedCallback } from "use-debounce";
+import { usePaymentFilters } from "./logic/paymentFilters.zustand";
+import { PaymentFilters } from "./logic/paymentFilters.schema";
+import { formatDate } from "@/lib/shared/date";
 
 export default function MainManagerPaymentsScreen() {
   const [query, setQuery] = useState("");
-  const [searchOptions, setSearchOptions] = useState<Options>({
-    status: false,
-  });
+
+  const filters = usePaymentFilters((s) => s.filters);
+
   const [url, setUrl] = useState("payments");
 
   const handleSearch = useDebouncedCallback((term) => setQuery(term), 300);
 
   useEffect(() => {
-    const tempUrl = constructUrl(query, searchOptions);
-    // console.log("tempUrl =>", tempUrl);
-    const params = tempUrl.slice(url.indexOf("?") + 1);
-    // console.log("params => ", params);
-
+    const tempUrl = constructUrl(query, filters);
+    console.log("tempUrl ");
+    console.log(
+      "--------------------------------------------------------------"
+    );
+    console.log(`------------${tempUrl}------------`);
+    console.log(
+      "--------------------------------------------------------------"
+    );
     setUrl(tempUrl);
-  }, [query, searchOptions.status]);
+  }, [query, filters]);
 
-  const { data, isPending } = useGet<PaginatedResponse<Payment>>(url, [
-    "payments",
-    url.slice(url.indexOf("?") + 1),
-  ]);
+  // TODO:filter by location id
+  const { data, isPending, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useInfiniteGet<Payment>(url, ["payments", url.slice(url.indexOf("?") + 1)]);
 
   return (
     <>
@@ -49,7 +54,7 @@ export default function MainManagerPaymentsScreen() {
           onChangeText={handleSearch}
           inputMode="tel"
         />
-        <OptionsModal options={searchOptions} setOptions={setSearchOptions} />
+        <OptionsModal />
         <View className="flex-1 bg-slate-200 mt-6">
           <LinearGradient
             className="h-2"
@@ -69,12 +74,22 @@ export default function MainManagerPaymentsScreen() {
             else
               return (
                 <FlatList
-                  data={data?.data}
+                  data={data?.pages.flatMap((page) => page.data.data) || []}
                   renderItem={({ item }) => (
                     <PaymentCard elevation={true} {...item} />
                   )}
                   keyExtractor={(item) => item.id.toString()}
-                  ListFooterComponent={() => <View className="h-10" />}
+                  onEndReached={() => hasNextPage && fetchNextPage()}
+                  ListFooterComponent={() => (
+                    <View className="h-10">
+                      {isFetchingNextPage && (
+                        <ActivityIndicator
+                          size={"large"}
+                          color={colors.primary_blue}
+                        />
+                      )}
+                    </View>
+                  )}
                   ListEmptyComponent={() => (
                     <View className="flex-1">
                       <Text
@@ -94,11 +109,23 @@ export default function MainManagerPaymentsScreen() {
   );
 }
 
-const constructUrl = (query: string, searchOptions: Options) => {
+const constructUrl = (query: string, searchOptions: PaymentFilters) => {
   const params = new URLSearchParams();
   Object.entries(searchOptions).forEach(([key, value]) => {
-    if (value) {
-      params.append(key, String(value));
+    if (key === "created_at" || key === "close_date") {
+      if (searchOptions[key].status && searchOptions[key].value) {
+        params.append(key, formatDate(searchOptions[key].value as Date));
+      }
+
+      if (key === "close_date") {
+        params.append(`${key}_operator`, "<=");
+      } else {
+        params.append(`${key}_operator`, ">=");
+      }
+    } else {
+      if (value) {
+        params.append(key, String(value));
+      }
     }
   });
   if (query) {

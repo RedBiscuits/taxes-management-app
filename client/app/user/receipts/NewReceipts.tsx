@@ -4,20 +4,21 @@ import { options } from "@/lib/constants";
 import { Stack } from "expo-router";
 import dayjs from "dayjs";
 import { Alphanumeric, Reciept } from "@/lib/components";
-import { PaginatedResponse, Receipt } from "@/lib/models";
+import { Receipt } from "@/lib/models";
 import { LinearGradient } from "expo-linear-gradient";
 import { colors, fonts } from "@/lib/styles";
-import { useGet } from "@/lib/shared/query";
+import { useInfiniteGet } from "@/lib/shared/query";
 import { useOpenDay } from "./logic/openDay/openDay.hooks";
 
 export default function NewReceipts() {
   const { day } = useOpenDay();
   const openDay = day.get();
   // TODO: filter by location
-  const { data, isPending } = useGet<PaginatedResponse<Receipt>>(
-    `receipts?day_id=${openDay?.id}`,
-    ["receipts", String(openDay?.id)]
-  );
+  const { data, isPending, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useInfiniteGet<Receipt>(`receipts?day_id=${openDay?.id}`, [
+      "receipts",
+      String(openDay?.id),
+    ]);
 
   return (
     <>
@@ -29,7 +30,7 @@ export default function NewReceipts() {
       />
       <View className="flex-1 bg-white pt-3">
         <Alphanumeric classes="text-center text-xl w-full">
-          {dayjs().format("YYYY-MM-DD")}
+          {dayjs(openDay?.time).format("YYYY-MM-DD")}
         </Alphanumeric>
 
         <View className="flex-1 bg-slate-200 mt-3">
@@ -52,11 +53,21 @@ export default function NewReceipts() {
               return (
                 <FlatList
                   className="px-2 pt-4"
-                  ListFooterComponent={<View className="h-16" />}
-                  data={data.data}
+                  data={data?.pages.flatMap((page) => page.data.data) || []}
                   renderItem={({ item }) => <Reciept receipt={item} />}
                   ItemSeparatorComponent={() => <View className="h-2" />}
                   keyExtractor={(item) => item.id.toString()}
+                  onEndReached={() => hasNextPage && fetchNextPage()}
+                  ListFooterComponent={() => (
+                    <View className="h-10">
+                      {isFetchingNextPage && (
+                        <ActivityIndicator
+                          size={"large"}
+                          color={colors.primary_blue}
+                        />
+                      )}
+                    </View>
+                  )}
                   ListEmptyComponent={() => (
                     <View className="flex-1">
                       <Text

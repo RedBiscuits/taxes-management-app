@@ -18,7 +18,7 @@ export function useLogin() {
     LoginResponse
   >("auth/login", [], {
     onError: (error) => {
-      // console.log("error", error.message);
+      console.log("error", error.message);
       setError("root", { message: "الهاتف او كلمة المرور غير صحيح" });
     },
 

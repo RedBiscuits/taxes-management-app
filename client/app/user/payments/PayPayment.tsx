@@ -19,6 +19,7 @@ import Icon from "react-native-vector-icons/AntDesign";
 import { useToast } from "@/lib/components/toastModal/toastModal.zustand";
 import dayjs from "dayjs";
 import { getUser } from "@/lib/shared/storage";
+import { formatDate } from "@/lib/shared/date";
 
 export default function PayPaymentScreen() {
   const [query, setQuery] = useState("");
@@ -174,8 +175,7 @@ function ConfirmPaymentModal({
               onPress={() =>
                 mutate({
                   ...payment,
-                  close_date:
-                    dayjs(date).format("YYYY-MM-DDTHH:mm:ss.SSSSSS") + "Z",
+                  close_date: formatDate(date),
                 })
               }
               text="تأكيد"

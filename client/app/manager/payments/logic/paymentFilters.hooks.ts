@@ -4,15 +4,31 @@ import { PaymentFilters, paymentFiltersSchema } from "./paymentFilters.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export function useFilteredPayments() {
-  const { control, handleSubmit, watch } = useForm<PaymentFilters>({
+  const { control, handleSubmit, watch, getValues } = useForm<PaymentFilters>({
     resolver: zodResolver(paymentFiltersSchema),
+    defaultValues: {
+      status: false,
+      created_at: {
+        value: new Date(),
+        status: false,
+      },
+      close_date: {
+        value: new Date(),
+        status: false,
+      },
+    },
   });
   const setFilters = usePaymentFilters((s) => s.setFilters);
 
+  console.log("watch", watch());
+
   return {
     control,
-    sitFilters: handleSubmit((data) => {
+    setFilters: handleSubmit((data) => {
+      console.log("filter data", JSON.stringify(data, null, 2));
+
       setFilters(data);
     }),
+    getValues,
   };
 }

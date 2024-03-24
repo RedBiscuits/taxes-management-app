@@ -22,7 +22,7 @@ export default function App() {
         // console.log("token exists", token);
 
         const user = await getUser();
-        router.push("/user/");
+        router.push("/manager/");
 
         // console.log("user", JSON.stringify(user, null, 2));
 
