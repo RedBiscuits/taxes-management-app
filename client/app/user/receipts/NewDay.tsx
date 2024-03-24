@@ -37,9 +37,6 @@ export default function NewDayScreen() {
       },
     }
   );
-  // console.log(currentReceipt.get());
-
-  // console.log("open day", JSON.stringify(openDay, null, 2));
 
   if (!openDay) return router.push("/user/receipts/");
   return (
@@ -60,7 +57,6 @@ export default function NewDayScreen() {
 
         <View className="flex-1 justify-center">
           <View>
-            {/* TODO:if there is a receipt continue that receipt */}
             {currentReceipt.get() ? (
               <Button
                 text="استكمال التحصيل"

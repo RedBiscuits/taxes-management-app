@@ -7,6 +7,8 @@ import {
   useQueryClient,
   useInfiniteQuery,
   UndefinedInitialDataInfiniteOptions,
+  InfiniteData,
+  UseInfiniteQueryOptions,
 } from "@tanstack/react-query";
 import { BaseResponse } from "@/lib/models";
 import * as http from "@/lib/shared/fetch";
@@ -27,32 +29,29 @@ export function useGet<TData>(
 export function useInfiniteGet<TData>(
   url: string,
   key: string[],
-  // options?: UndefinedInitialDataInfiniteOptions<
-  //   BaseResponse<PaginatedResponse<TData>>,
-  //   Error,
-  //   PaginatedResponse<TData>,
-  //   string[],
-  //   number
-  // >
+  options?: Partial<
+    UndefinedInitialDataInfiniteOptions<
+      BaseResponse<PaginatedResponse<TData>>,
+      Error,
+      InfiniteData<BaseResponse<PaginatedResponse<TData>>>,
+      string[],
+      number
+    >
+  >
 ) {
   return useInfiniteQuery({
     queryKey: key,
-    
     queryFn: async ({ pageParam }) => {
-      const fullUrl = url.endsWith("?")
+      const fullUrl = url.includes("?")
         ? `${url}&page=${pageParam}`
         : `${url}?page=${pageParam}`;
 
       return await http.getRequest<PaginatedResponse<TData>>(fullUrl);
     },
     initialPageParam: 1,
-    getNextPageParam: (lastPage, __, lastPageParams) => {
-      return lastPage.data.last_page === lastPageParams
-        ? null
-        : lastPageParams + 1;
-    },
-    
-    // ...options,
+    getNextPageParam: (lastPage, __, lastPageParams) =>
+      lastPage.data.last_page === lastPageParams ? null : lastPageParams + 1,
+    ...options,
   });
 }
 

@@ -6,34 +6,41 @@ import {
   ActivityIndicator,
   Pressable,
 } from "react-native";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { options } from "@/lib/constants";
 import { Stack } from "expo-router";
 import { Button, DatePicker, Input, PaymentCard } from "@/lib/components";
 import { LinearGradient } from "expo-linear-gradient";
 import { colors, fonts } from "@/lib/styles";
 import { useInfiniteGet, usePatch } from "@/lib/shared/query";
-import { Payment } from "@/lib/models";
+import { Payment, User } from "@/lib/models";
 import { useDebouncedCallback } from "use-debounce";
 import Icon from "react-native-vector-icons/AntDesign";
 import { useToast } from "@/lib/components/toastModal/toastModal.zustand";
 import dayjs from "dayjs";
+import { getUser } from "@/lib/shared/storage";
 
 export default function PayPaymentScreen() {
   const [query, setQuery] = useState("");
   const [payment, setPayment] = useState<Payment>();
   const handleSearch = useDebouncedCallback((term) => setQuery(term), 300);
 
-  // TODO: filter by location id
+  const [user, setuser] = useState<User | null>(null);
+  useEffect(() => {
+    (async () => {
+      const user = await getUser();
+      setuser(user);
+    })();
+  }, []);
+
   const { data, isPending, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useInfiniteGet<Payment>(
       !!query
-        ? `payments?close_date_operator==&phone=${query}`
-        : "payments?close_date_operator==",
-      ["payments", query]
+        ? `payments?user_id=${user?.id}&close_date_operator==&phone=${query}`
+        : `payments?user_id=${user?.id}&close_date_operator==`,
+      ["payments", query],
+      { enabled: !!user }
     );
-
-  console.log("hasNextPage => ", JSON.stringify(hasNextPage, null, 2));
 
   return (
     <>
@@ -69,38 +76,40 @@ export default function PayPaymentScreen() {
               );
             else
               return (
-                <FlatList
-                  data={data?.pages.map((g) => g.data.data).flat() || []}
-                  renderItem={({ item }) => (
-                    <Pressable
-                      onPress={() => !item.close_date && setPayment(item)}
-                    >
-                      <PaymentCard elevation={true} {...item} />
-                    </Pressable>
-                  )}
-                  keyExtractor={(item) => item.id.toString()}
-                  onEndReached={() => hasNextPage && fetchNextPage()}
-                  ListFooterComponent={() => (
-                    <View className="h-10">
-                      {isFetchingNextPage && (
-                        <ActivityIndicator
-                          size={"large"}
-                          color={colors.primary_blue}
-                        />
-                      )}
-                    </View>
-                  )}
-                  ListEmptyComponent={() => (
-                    <View className="flex-1">
-                      <Text
-                        style={fonts.fontArabicBold}
-                        className="text-center text-xl mt-20"
+                <>
+                  <FlatList
+                    data={data?.pages.flatMap((page) => page.data.data) || []}
+                    renderItem={({ item, index }) => (
+                      <Pressable
+                        onPress={() => !item.close_date && setPayment(item)}
                       >
-                        لا توجد بيانات
-                      </Text>
-                    </View>
-                  )}
-                />
+                        <PaymentCard elevation={true} {...item} />
+                      </Pressable>
+                    )}
+                    keyExtractor={(item) => item.id.toString()}
+                    onEndReached={() => hasNextPage && fetchNextPage()}
+                    ListFooterComponent={() => (
+                      <View className="h-10">
+                        {isFetchingNextPage && (
+                          <ActivityIndicator
+                            size={"large"}
+                            color={colors.primary_blue}
+                          />
+                        )}
+                      </View>
+                    )}
+                    ListEmptyComponent={() => (
+                      <View className="flex-1">
+                        <Text
+                          style={fonts.fontArabicBold}
+                          className="text-center text-xl mt-20"
+                        >
+                          لا توجد بيانات
+                        </Text>
+                      </View>
+                    )}
+                  />
+                </>
               );
           })()}
         </View>
