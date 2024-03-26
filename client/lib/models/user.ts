@@ -9,5 +9,9 @@ export type User = BaseModel & {
   created_at: Date;
   updated_at: Date;
   roles: { id: number; name: "employee" | "manager" }[];
-  location: any;
+  location: {
+    id: number;
+    name: string;
+    yearly_target: number;
+  };
 };

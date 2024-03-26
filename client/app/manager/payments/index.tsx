@@ -12,32 +12,19 @@ import { useDebouncedCallback } from "use-debounce";
 import { usePaymentFilters } from "./logic/paymentFilters.zustand";
 import { PaymentFilters } from "./logic/paymentFilters.schema";
 import { formatDate } from "@/lib/shared/date";
+import { getUser } from "@/lib/shared/storage";
 
 export default function MainManagerPaymentsScreen() {
   const [query, setQuery] = useState("");
 
   const filters = usePaymentFilters((s) => s.filters);
 
-  const [url, setUrl] = useState("payments");
-
   const handleSearch = useDebouncedCallback((term) => setQuery(term), 300);
 
-  useEffect(() => {
-    const tempUrl = constructUrl(query, filters);
-    console.log("tempUrl ");
-    console.log(
-      "--------------------------------------------------------------"
-    );
-    console.log(`------------${tempUrl}------------`);
-    console.log(
-      "--------------------------------------------------------------"
-    );
-    setUrl(tempUrl);
-  }, [query, filters]);
+  const url = useUrl(query, filters);
 
-  // TODO:filter by location id
   const { data, isPending, hasNextPage, fetchNextPage, isFetchingNextPage } =
-    useInfiniteGet<Payment>(url, ["payments", url.slice(url.indexOf("?") + 1)]);
+    useInfiniteGet<Payment>(url, [url]);
 
   return (
     <>
@@ -109,28 +96,32 @@ export default function MainManagerPaymentsScreen() {
   );
 }
 
-const constructUrl = (query: string, searchOptions: PaymentFilters) => {
+const constructUrl = async (query: string, searchOptions: PaymentFilters) => {
   const params = new URLSearchParams();
   Object.entries(searchOptions).forEach(([key, value]) => {
-    if (key === "created_at" || key === "close_date") {
+    if (key === "created_at") {
       if (searchOptions[key].status && searchOptions[key].value) {
         params.append(key, formatDate(searchOptions[key].value as Date));
-      }
-
-      if (key === "close_date") {
         params.append(`${key}_operator`, "<=");
-      } else {
+      }
+    } else if (key === "created_at_2") {
+      if (searchOptions[key].status && searchOptions[key].value) {
+        params.append(key, formatDate(searchOptions[key].value as Date));
         params.append(`${key}_operator`, ">=");
       }
-    } else {
+    } else if (key === "payed") {
       if (value) {
-        params.append(key, String(value));
+        params.append("close_date", "0000-00-00T00:00:00Z");
+        params.append("close_date_operator", "<>");
       }
     }
   });
-  if (query) {
-    params.append("phone", query);
-  }
+
+  if (query) params.append("phone", query);
+
+  const user = await getUser();
+  if (user) params.append("location_id", user.location.id.toString());
+
   const paramString = params.toString();
   if (paramString) {
     return `payments?${paramString}`;
@@ -138,3 +129,23 @@ const constructUrl = (query: string, searchOptions: PaymentFilters) => {
     return "payments";
   }
 };
+
+function useUrl(query: string, filters: PaymentFilters) {
+  const [url, setUrl] = useState("payments");
+  useEffect(() => {
+    (async () => {
+      const tempUrl = await constructUrl(query, filters);
+      console.log(
+        "--------------------------------------------------------------"
+      );
+      console.log(`------------ payment url ------------`);
+      console.log(`------------${tempUrl}------------`);
+      console.log(
+        "--------------------------------------------------------------"
+      );
+      setUrl(tempUrl);
+    })();
+  }, [query, filters]);
+
+  return url;
+}

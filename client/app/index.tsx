@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Stack } from "expo-router/stack";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -8,6 +8,7 @@ import { View, Image } from "react-native";
 import { getToken, getUser, setToken, setUser } from "@/lib/shared/storage";
 import { useOpenDay } from "./user/receipts/logic/openDay/openDay.hooks";
 import { useCurrentReceipt } from "./user/receipts/logic/receipts/receipt.hooks";
+
 export default function App() {
   const { day } = useOpenDay();
   const { currentReceipt } = useCurrentReceipt();

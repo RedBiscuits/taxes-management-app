@@ -22,3 +22,13 @@ export const paymentTypes = [
   "الكتروني - مدفوعة مواطن",
   "الكتروني - تحويل بنكي",
 ] as const;
+
+export const taxTypesData = taxTypes.map((type) => ({
+  label: type,
+  value: type,
+}));
+
+export const paymentTypesData = paymentTypes.map((type) => ({
+  label: type,
+  value: type,
+}));

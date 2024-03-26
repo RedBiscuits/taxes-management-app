@@ -4,7 +4,7 @@ import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
 import { DropDown } from "./DropDown";
 import { ErrorText } from "./ErrorText";
 
-export default function ControlledDropDown<T extends FieldValues>({
+export function ControlledDropDown<T extends FieldValues>({
   name,
   control,
   ...props
@@ -20,13 +20,7 @@ export default function ControlledDropDown<T extends FieldValues>({
         render={({ field: { onChange }, formState }) => {
           return (
             <>
-              <DropDown
-                {...props}
-                onChange={onChange}
-                // zindex={300}
-                // zindexinverse={100}
-                // items={taxTypesData}
-              />
+              <DropDown {...props} onChange={onChange} />
               <ErrorText>
                 {(formState.errors[name]?.message as string) || null}
               </ErrorText>

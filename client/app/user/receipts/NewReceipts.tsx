@@ -9,14 +9,18 @@ import { LinearGradient } from "expo-linear-gradient";
 import { colors, fonts } from "@/lib/styles";
 import { useInfiniteGet } from "@/lib/shared/query";
 import { useOpenDay } from "./logic/openDay/openDay.hooks";
+import { useUser } from "@/lib/shared/storage";
 
 export default function NewReceipts() {
   const { day } = useOpenDay();
   const openDay = day.get();
-  // TODO: filter by location
+
+  const user = useUser();
+  const baseUrl = "receipts?location_id=" + user?.location.id;
+
   const { data, isPending, hasNextPage, fetchNextPage, isFetchingNextPage } =
-    useInfiniteGet<Receipt>(`receipts?day_id=${openDay?.id}`, [
-      "receipts",
+    useInfiniteGet<Receipt>(`${baseUrl}&day_id=${openDay?.id}`, [
+      baseUrl,
       String(openDay?.id),
     ]);
 

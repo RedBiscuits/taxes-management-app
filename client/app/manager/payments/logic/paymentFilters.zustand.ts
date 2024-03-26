@@ -10,20 +10,20 @@ type Actions = {
   resetFilters: () => void;
 };
 
-const initailState: PaymentFilters = {
-  status: false,
+export const initailState: PaymentFilters = {
   created_at: {
-    value: undefined,
+    value: new Date(),
     status: false,
   },
-  close_date: {
-    value: undefined,
+  created_at_2: {
+    value: new Date(),
     status: false,
   },
+  payed: false,
 };
 
 export const usePaymentFilters = create<Actions & State>()((set) => ({
-  filters: initailState,
-  setFilters: (filters) => set({ filters }),
-  resetFilters: () => set({ filters: { ...initailState } }),
+  filters: { ...initailState },
+  setFilters: (filters) => set({ filters }, true),
+  resetFilters: () => set({ filters: { ...initailState } }, true),
 }));

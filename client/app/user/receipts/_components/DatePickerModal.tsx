@@ -9,6 +9,7 @@ import { BaseModel, Day } from "@/lib/models";
 import { useToast } from "@/lib/components/toastModal/toastModal.zustand";
 import dayjs from "dayjs";
 import { useOpenDay } from "../logic/openDay/openDay.hooks";
+import { getUser } from "@/lib/shared/storage";
 
 export function DatePickerModal({
   isOpen,
@@ -63,24 +64,16 @@ export function DatePickerModal({
                 label="التاريخ"
                 classes="mb-4"
               />
-
-              {/* 
-                TODO:send request to server to create date
-                and save it to store
-                and save it to async storage
-                and keep it open as long as it is not closed
-              */}
               <Button
                 loading={isPending}
-                onPress={() =>
+                onPress={async () =>
                   mutate({
                     time: dayjs(date).format("YYYY/MM/DD HH:mm:ss"),
                     start_date: dayjs(date).format("YYYY/MM/DD HH:mm:ss"),
                     end_date: dayjs(date).format("YYYY/MM/DD HH:mm:ss"),
                     name: "day",
                     status: true,
-                    // TODO: get location id from store
-                    location_id: 1,
+                    location_id: (await getUser())!.location.id,
                   })
                 }
                 text="تأكيد"

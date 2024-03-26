@@ -10,6 +10,7 @@ import { usePost } from "@/lib/shared/query";
 import { useToast } from "@/lib/components/toastModal/toastModal.zustand";
 import { useCurrentReceipt } from "./logic/receipts/receipt.hooks";
 import { Receipt } from "@/lib/models";
+import { getUser } from "@/lib/shared/storage";
 
 type NewReceipt = { day_id: number; location_id: number };
 
@@ -66,8 +67,12 @@ export default function NewDayScreen() {
               <Button
                 loading={isPending}
                 text="اضافة تحصيل جديد"
-                // TODO:get location id
-                onPress={() => mutate({ day_id: openDay.id, location_id: 1 })}
+                onPress={async () =>
+                  mutate({
+                    day_id: openDay.id,
+                    location_id: (await getUser())!.location.id,
+                  })
+                }
               />
             )}
 

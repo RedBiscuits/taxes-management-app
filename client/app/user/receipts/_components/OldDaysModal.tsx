@@ -14,6 +14,7 @@ import {
 import Icon from "react-native-vector-icons/AntDesign";
 import { useOldDayStore } from "../logic/OldDay/oldDay.zustand";
 import { router } from "expo-router";
+import { useUser } from "@/lib/shared/storage";
 
 export function OldDaysModal({
   isOpen,
@@ -22,9 +23,12 @@ export function OldDaysModal({
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-  // TODO:send location id in request
-  const { data, isPending } = useGet<PaginatedResponse<Day>>("days", [
-    "days",
+  const user = useUser();
+
+  const baseUrl = "days?location_id=" + user?.location.id;
+
+  const { data, isPending } = useGet<PaginatedResponse<Day>>(baseUrl, [
+    baseUrl,
     "old",
   ]);
 

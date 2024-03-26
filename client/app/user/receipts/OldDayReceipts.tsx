@@ -8,14 +8,17 @@ import { colors, fonts } from "@/lib/styles";
 import { Receipt } from "@/lib/models";
 import { LinearGradient } from "expo-linear-gradient";
 import { useInfiniteGet } from "@/lib/shared/query";
+import { useUser } from "@/lib/shared/storage";
 
 export default function OldDayReceipts() {
   const day = useOldDayStore((s) => s.day);
 
-  // TODO: filter by location id
+  const user = useUser();
+
+  const baseUrl = "receipts?location_id=" + user?.location.id;
   const { data, isPending, hasNextPage, fetchNextPage, isFetchingNextPage } =
-    useInfiniteGet<Receipt>(`receipts?day_id=${day?.id}`, [
-      "receipts",
+    useInfiniteGet<Receipt>(`${baseUrl}&day_id=${day?.id}`, [
+      baseUrl,
       String(day?.id),
     ]);
 

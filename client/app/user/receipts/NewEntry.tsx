@@ -1,6 +1,6 @@
-import { Button, ControlledInput, DropDown, Input } from "@/lib/components";
+import { Button, ControlledDropDown, ControlledInput } from "@/lib/components";
 import { options } from "@/lib/constants/ScreenOptions";
-import { paymentTypes, taxTypes } from "@/lib/constants";
+import { paymentTypesData, taxTypesData } from "@/lib/constants";
 import { Entry as ReceiptEntry } from "@/lib/models";
 import { fonts } from "@/lib/styles/fonts";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,18 +9,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import { Entry, entrySchema } from "./logic/receipts/receipt.schema";
-import ControlledDropDown from "@/lib/components/Form/ControlledDropDown";
 import { useCurrentReceipt } from "./logic/receipts/receipt.hooks";
-
-const taxTypesData = taxTypes.map((type) => ({
-  label: type,
-  value: type,
-}));
-
-const paymentTypesData = paymentTypes.map((type) => ({
-  label: type,
-  value: type,
-}));
 
 const AddEntryScreen = () => {
   const { currentReceipt } = useCurrentReceipt();

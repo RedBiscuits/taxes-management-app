@@ -11,7 +11,7 @@ export function OptionsModal() {
   const [isOpen, setIsOpen] = useState(false);
   const toggleModal = () => setIsOpen((x) => !x);
 
-  const { control, setFilters, getValues } = useFilteredPayments();
+  const { control, setFilters, watch } = useFilteredPayments();
 
   return (
     <>
@@ -51,7 +51,7 @@ export function OptionsModal() {
                 />
                 <ControlledDatePicker
                   control={control}
-                  disabled={!getValues("created_at.status")}
+                  disabled={!watch("created_at.status")}
                   label="تاريخ البداية"
                   classes="mb-4 w-64 ml-4"
                   name="created_at.value"
@@ -60,21 +60,21 @@ export function OptionsModal() {
               <View className="flex flex-row justify-end items-center">
                 <ControlledCheckBox
                   control={control}
-                  name="close_date.status"
+                  name="created_at_2.status"
                   classes="mt-8"
                 />
                 <ControlledDatePicker
                   control={control}
-                  disabled={!getValues("close_date.status")}
+                  disabled={!watch("created_at_2.status")}
                   label="تاريخ النهاية"
                   classes="mb-4 w-64 ml-4"
-                  name="close_date.value"
+                  name="created_at_2.value"
                 />
               </View>
               <View className="my-6">
                 <ControlledCheckBoxWithText
                   control={control}
-                  name="status"
+                  name="payed"
                   classes="px-2 mt-4"
                 >
                   مدفوع
@@ -83,7 +83,7 @@ export function OptionsModal() {
               <Button
                 onPress={() => {
                   setFilters();
-                  // toggleModal();
+                  toggleModal();
                 }}
                 text="تأكيد"
                 className="mt-8 w-full mx-auto"
