@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import { SideBar, MobileSideBar } from "@/components/layout";
+import { Toaster } from "@/components/ui/sonner";
+import { arabic } from "@/shared/fonts";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,8 +15,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="ar" dir="rtl">
+      <body>
+        <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+          <SideBar />
+          <main className="flex flex-1 flex-col gap-4 lg:gap-6 ">
+            <div className="flex flex-col flex-1 ">
+              <MobileSideBar />
+
+              <div className="px-2 py-2 bg-blue-100 flex-1">{children}</div>
+            </div>
+          </main>
+        </div>
+        <Toaster
+          richColors
+          toastOptions={{
+            className: arabic.className,
+          }}
+          dir="rtl"
+          theme="light"
+        />
+      </body>
     </html>
   );
 }
