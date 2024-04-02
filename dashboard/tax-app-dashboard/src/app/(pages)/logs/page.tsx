@@ -1,3 +1,4 @@
+import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getLatestLog } from "@/shared/actions/logs";
@@ -9,11 +10,11 @@ export default async function page() {
 
   return (
     <>
-      <div className="bg-white rounded-lg my-4 mx-2  px-4 py-4">
+      <Layout>
         <p className={cn("text-lg", arabic.className)}>{log.content}</p>
-      </div>
+      </Layout>
       <Link href={`/logs/edit`}>
-        <Button className="mx-2" size={"lg"}>
+        <Button className="mx-2 mt-2" size={"lg"}>
           تعديل
         </Button>
       </Link>

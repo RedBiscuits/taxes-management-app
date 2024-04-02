@@ -18,9 +18,10 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loading } from "@/components/loading";
+import { Loading } from "@/components/lib/loading";
 import { addLog } from "@/shared/actions/logs";
-import { toast } from "sonner"
+import { toast } from "sonner";
+import { Layout } from "@/components/layout";
 
 export default function EditLogForm({ log }: { log: Log }) {
   const form = useForm<LogSchema>({
@@ -43,7 +44,7 @@ export default function EditLogForm({ log }: { log: Log }) {
   const isLoading = form.formState.isSubmitting;
 
   return (
-    <div className="bg-white rounded-lg my-4 mx-2  px-4 py-4">
+    <Layout>
       <Form {...form}>
         <form onSubmit={onSubmit} className=" space-y-6">
           <FormField
@@ -86,7 +87,7 @@ export default function EditLogForm({ log }: { log: Log }) {
           </div>
         </form>
       </Form>
-    </div>
+    </Layout>
   );
 }
 

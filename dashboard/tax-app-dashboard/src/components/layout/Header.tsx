@@ -20,6 +20,10 @@ function getHeader(pathname: string) {
   switch (route) {
     case "logs":
       return "التنبيهات";
+    case "settings":
+      return "الاعدادات";
+    case "users":
+      return "الموظفين";
     default:
       return "التحصيلات";
   }

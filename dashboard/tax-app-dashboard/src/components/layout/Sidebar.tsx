@@ -41,21 +41,21 @@ export function SideBar() {
                 المستهدف
               </Link>
               <Link
-                href="#"
+                href="/users"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               >
                 <FaRegUser className="size-6" />
                 الموظفين
               </Link>
               <Link
-                href="#"
+                href="/settings"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               >
                 <IoSettingsOutline className="size-6" />
                 الاعدادات
               </Link>
               <Link
-                href="logs"
+                href="/logs"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               >
                 <FaRegBell className="size-6" />
