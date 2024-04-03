@@ -24,6 +24,8 @@ function getHeader(pathname: string) {
       return "الاعدادات";
     case "users":
       return "الموظفين";
+    case "payments":
+      return "التوريدات";
     default:
       return "التحصيلات";
   }

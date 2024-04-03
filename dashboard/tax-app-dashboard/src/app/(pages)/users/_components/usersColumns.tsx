@@ -3,6 +3,7 @@
 import { col } from "@/shared/tableColumn";
 import { User } from "@/models";
 import { createColumnHelper } from "@tanstack/react-table";
+import { UserActions } from "./userActions";
 
 const columnHelper = createColumnHelper<User>();
 
@@ -17,8 +18,9 @@ export const columns = [
     cell: (info) => info.getValue(),
     header: () => "المأمورية",
   }),
-  columnHelper.accessor((r) => r.id, {
+  columnHelper.accessor((r) => r, {
     id: "actions",
-    header: () => "الخيارات",
+    cell: UserActions,
+    header: () => <p className="text-center">الخيارات</p>,
   }),
 ];

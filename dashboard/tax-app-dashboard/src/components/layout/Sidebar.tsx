@@ -27,7 +27,7 @@ export function SideBar() {
                 <LuWallet className="size-6" /> التحصيلات
               </Link>
               <Link
-                href="#"
+                href="/payments"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               >
                 <IoReceiptOutline className="size-6" />

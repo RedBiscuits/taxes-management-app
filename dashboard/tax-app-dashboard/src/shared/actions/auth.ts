@@ -3,6 +3,8 @@
 import { BaseResponse } from "@/models";
 import { setToken } from "../cookies";
 import * as http from "../fetch";
+import { UserData } from "@/app/(pages)/users/new/_components/createUserForm";
+import { revalidatePath } from "next/cache";
 
 type LoginData = {
   phone: string;
@@ -24,5 +26,15 @@ export async function login(phone: string, password: string) {
   if (res.success) {
     setToken(res.data.token);
   }
+  return res;
+}
+
+export async function createUser(User: UserData) {
+  const res = await http.postRequest<UserData, { success: boolean }>(
+    `${endpoint}register`,
+    User
+  );
+
+  if (res.success) revalidatePath("/users");
   return res;
 }

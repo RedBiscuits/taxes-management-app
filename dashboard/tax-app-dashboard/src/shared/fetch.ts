@@ -5,7 +5,11 @@ const API_URL = "http://127.0.0.1:8000/api/";
 const revalidate_interval = 60;
 
 async function getRequest<T>(url: string, page?: number) {
-  const res = await fetch(`${API_URL}${url}?page=${page}`, {
+  const fullUrl = url.includes("?")
+    ? `${API_URL}${url}&page=${page}`
+    : `${API_URL}${url}?page=${page}`;
+
+  const res = await fetch(fullUrl, {
     method: "GET",
     headers: getHeaders(),
     next: { revalidate: revalidate_interval },
@@ -74,6 +78,8 @@ function handleError(
   res: Response,
   method: "GET" | "POST" | "DELETE" | "PATCH"
 ) {
+  res.json().then((data) => console.log(data));
+
   throw new Error(`
                     ${method} Request Failed
                     Url: ${res.url}

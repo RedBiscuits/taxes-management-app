@@ -1,24 +1,32 @@
 import { CellContext, DisplayColumnDef } from "@tanstack/react-table";
 import { formatTableHeader, truncateText } from "./text";
 import dayjs from "dayjs";
+import { nullable } from "zod";
 
 export const col = <T,>(
   name: keyof T,
-  options?: { header?: string; truncate?: boolean; date?: boolean }
+  options?: {
+    header?: string;
+    truncate?: boolean;
+    date?: boolean;
+    nullable?: boolean;
+  }
 ): [(row: T) => string, DisplayColumnDef<T, string>] => {
   return [
     (row: T) => String(row[name]),
     {
       id: String(name),
-      cell: ({ getValue }: CellContext<T, string>) => (
-        <p>
-          {options?.truncate
-            ? truncateText(getValue())
-            : options?.date
-            ? dayjs(getValue()).format("DD/MM/YYYY")
-            : getValue()}
-        </p>
-      ),
+      cell: ({ getValue }: CellContext<T, string>) => {
+        const value = options?.truncate
+          ? truncateText(getValue())
+          : options?.date
+          ? dayjs(getValue()).isValid()
+            ? dayjs(getValue()).format("YYYY/MM/DD")
+            : null
+          : getValue();
+
+        return <p>{options?.nullable ? value || " - " : value}</p>;
+      },
       header: () => (
         <p className="capitalize min-w-32">
           {options?.header ??
@@ -34,4 +42,7 @@ const dictionary: Record<string, string> = {
   job: "الوظيفة",
   phone: "رقم الهاتف",
   location: "المأمورية",
+  amount: "المبلغ",
+  created_at: "تاريخ الانشاء",
+  close_date: "تاريخ الدفع",
 };

@@ -34,8 +34,9 @@ export const Paginator = ({
   // last page = 4, page = 4 => ..., 3, [4]
 
   const paginationItems = [
-    page > 1 && <PaginationPrevious href={`${pathname}?page=${page - 1}`} />,
-    page > 2 && <PaginationEllipsis />,
+    page < lastPage && <PaginationNext href={buildUrl(Number(page) + 1)} />,
+    page < lastPage - 1 && lastPage > 3 && <PaginationEllipsis />,
+
     ...Array.from(
       { length: Math.min(3, lastPage, lastPage - page + 2) },
       (_, i) => {
@@ -50,9 +51,9 @@ export const Paginator = ({
           </PaginationLink>
         );
       }
-    ),
-    page < lastPage - 1 && lastPage > 3 && <PaginationEllipsis />,
-    page < lastPage && <PaginationNext href={buildUrl(Number(page) + 1)} />,
+    ).reverse(),
+    page > 2 && <PaginationEllipsis />,
+    page > 1 && <PaginationPrevious href={`${pathname}?page=${page - 1}`} />,
   ];
 
   if (paginationItems.filter(Boolean).length < 2) return null;
