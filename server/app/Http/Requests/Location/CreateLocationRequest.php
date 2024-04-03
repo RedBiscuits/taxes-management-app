@@ -24,7 +24,6 @@ class CreateLocationRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'yearly_target' => ['required', 'numeric'],
-            'user_id' => ['required', 'integer', 'min:1', 'exists:users,id'],
         ];
     }
 }

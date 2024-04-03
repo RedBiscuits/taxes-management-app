@@ -45,7 +45,7 @@ class Location extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(User::class);
     }
 
     public function days()

@@ -56,6 +56,7 @@ Route::middleware('auth:sanctum')->group(function () {
         ->name('features.')
         ->group(function () {
             Route::patch('/toggle', 'toggle')->name('toggle');
+            Route::get('/', 'get')->name('get');
         });
 });
 Route::controller(AuthController::class)

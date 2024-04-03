@@ -29,6 +29,8 @@ class CreateUserRequest extends FormRequest
             'job' => ['required', 'string'],
             'location_id' => ['required','integer', 'min:1', 'exists:locations,id'],
             // 'device_id' => ['required', 'string'],
+            'location_id' => ['required', 'integer', 'min:1', 'exists:locations,id'],
+
         ];
     }
 }
