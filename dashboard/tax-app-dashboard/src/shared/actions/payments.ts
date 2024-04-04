@@ -9,8 +9,11 @@ const endpoint = "payments/";
 
 export async function getPayments(page: number = 1, filters?: string) {
   const fullUrl = filters ? `${endpoint}?${filters}` : `${endpoint}`;
-
+  console.log(fullUrl);
   return await http.getRequest<PaginatedResponse<Payment>>(fullUrl, page);
+}
+export async function getSinglePayment(id: number) {
+  return await http.getRequest<Payment>(`${endpoint}${id}`);
 }
 
 export async function createPayment(data: PaymentData) {
@@ -31,4 +34,15 @@ export async function deletePayment(id: number) {
     revalidatePath("/payments");
   }
   return res.ok;
+}
+
+export async function updatePayment(data: PaymentData, id: number) {
+  const res = await http.patchRequest<PaymentData & { user_id: number }>(
+    `${endpoint}${id}`,
+    { ...data, user_id: 1 }
+  );
+  if (res.success) {
+    revalidatePath("/payments");
+  }
+  return res;
 }

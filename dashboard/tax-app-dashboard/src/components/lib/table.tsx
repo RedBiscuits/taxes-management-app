@@ -109,7 +109,7 @@ export const DataTable = <T,>({
         <TableBodyUI table={table} onRowClick={onRowClick} />
       </TableMain>
       {table.getPageCount() !== 1 && (
-        <div className="shadow-md bg-white py-2 pb-4 rounded-md mb-4">
+        <div className=" bg-white py-2 pb-4 rounded-md mb-4">
           <Paginator
             page={table.getState().pagination.pageIndex}
             lastPage={table.getPageCount()}

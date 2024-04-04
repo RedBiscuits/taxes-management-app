@@ -22,24 +22,31 @@ import { Payment } from "@/models";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { DatePicker } from "@/components/lib/datePicker";
-import { createPayment } from "@/shared/actions/payments";
+import { createPayment, updatePayment } from "@/shared/actions/payments";
 
-export default function UpsertUserForm({ payement }: { payement?: Payment }) {
+export default function UpsertUserForm({ payment }: { payment?: Payment }) {
   const form = useForm<PaymentData>({
     resolver: zodResolver(paymentSchema),
-    // defaultValues: payement
-    //   ? {
-    //       ...payement,
-    //     }
-    //   : {},
+    defaultValues: payment
+      ? {
+          amount: payment.amount,
+          phone: payment.phone,
+          created_at: new Date(payment.created_at),
+          ...(payment.close_date
+            ? { close_date: new Date(payment?.close_date) }
+            : {}),
+        }
+      : {},
   });
 
   const router = useRouter();
   const onSubmit = form.handleSubmit(async (data) => {
     try {
-      const res = await createPayment(data);
+      const res = payment
+        ? await updatePayment(data, payment.id)
+        : await createPayment(data);
       if (res.success) {
-        toast.success(`تم ${payement ? "تعديل" : "اضافة"} التوريد بنجاح`);
+        toast.success(`تم ${payment ? "تعديل" : "اضافة"} التوريد بنجاح`);
         router.push("/payments");
       } else {
         toast.error("حدث خطأ ما");
@@ -53,7 +60,7 @@ export default function UpsertUserForm({ payement }: { payement?: Payment }) {
   return (
     <Layout>
       <p className="text-xl font-semibold mb-6">
-        {payement ? "تعديل التوريد" : "اضافة توريد جديد"}
+        {payment ? "تعديل التوريد" : "اضافة توريد جديد"}
       </p>
       <Form {...form}>
         <form onSubmit={onSubmit} className="max-w-xl space-y-4">
@@ -97,6 +104,19 @@ export default function UpsertUserForm({ payement }: { payement?: Payment }) {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>التاريخ</FormLabel>
+                <FormControl>
+                  <DatePicker value={field.value} onChange={field.onChange} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="close_date"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>تاريخ التسديد</FormLabel>
                 <FormControl>
                   <DatePicker value={field.value} onChange={field.onChange} />
                 </FormControl>
@@ -149,5 +169,29 @@ export const paymentSchema = z.object({
     invalid_type_error: "التاريخ مطلوب",
   }),
 });
+export const updatePaymentSchema = z.object({
+  amount: z.coerce
+    .number({
+      required_error: "المبلغ مطلوب",
+      invalid_type_error: "المبلغ مطلوب",
+    })
+    .min(1, "المبلغ مطلوب"),
+  phone: z
+    .string({
+      required_error: "رقم الهاتف مطلوب",
+      invalid_type_error: "رقم الهاتف مطلوب",
+    })
+    .regex(/^01[0125]\d{8}$/, "رقم الهاتف غير صحيح"),
+  created_at: z.date({
+    required_error: "التاريخ مطلوب",
+    invalid_type_error: "التاريخ مطلوب",
+  }),
+  close_date: z
+    .date({
+      required_error: "التاريخ مطلوب",
+      invalid_type_error: "التاريخ مطلوب",
+    })
+    .optional(),
+});
 
-export type PaymentData = z.infer<typeof paymentSchema>;
+export type PaymentData = z.infer<typeof updatePaymentSchema>;
