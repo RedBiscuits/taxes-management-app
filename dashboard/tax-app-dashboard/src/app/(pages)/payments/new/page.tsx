@@ -1,6 +1,6 @@
 import React from "react";
-import UpsertUserForm from "./_components/upsertPaymentForm";
+import UpsertPaymentForm from "./_components/upsertPaymentForm";
 
 export default function page() {
-  return <UpsertUserForm />;
+  return <UpsertPaymentForm />;
 }

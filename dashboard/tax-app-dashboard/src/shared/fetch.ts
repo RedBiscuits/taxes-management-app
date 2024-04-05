@@ -5,9 +5,11 @@ const API_URL = "http://127.0.0.1:8000/api/";
 const revalidate_interval = 60;
 
 async function getRequest<T>(url: string, page?: number) {
-  const fullUrl = url.includes("?")
-    ? `${API_URL}${url}&page=${page}`
-    : `${API_URL}${url}?page=${page}`;
+  const fullUrl = page
+    ? url.includes("?")
+      ? `${API_URL}${url}&page=${page}`
+      : `${API_URL}${url}?page=${page}`
+    : `${API_URL}${url}`;
 
   const res = await fetch(fullUrl, {
     method: "GET",

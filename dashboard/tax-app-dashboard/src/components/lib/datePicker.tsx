@@ -15,9 +15,11 @@ import dayjs from "dayjs";
 export function DatePicker({
   value,
   onChange,
+  disabled = false,
 }: {
-  value: Date;
+  value: Date | undefined;
   onChange: (value: Date | undefined) => void;
+  disabled?: boolean;
 }) {
   return (
     <Popover>
@@ -25,8 +27,9 @@ export function DatePicker({
         <Button
           variant={"outline"}
           className={cn(
-            "justify-start items-baseline text-left font-normal",
-            !value && "text-muted-foreground"
+            "min-w-60 justify-start items-baseline text-left font-normal",
+            !value && "text-muted-foreground",
+            disabled && "opacity-50"
           )}
         >
           <CalendarIcon className="ml-2 h-4 w-4" />
@@ -40,7 +43,12 @@ export function DatePicker({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
-        <Calendar mode="single" selected={value} onSelect={onChange} />
+        <Calendar
+          disabled={disabled}
+          mode="single"
+          selected={value}
+          onSelect={onChange}
+        />
       </PopoverContent>
     </Popover>
   );
