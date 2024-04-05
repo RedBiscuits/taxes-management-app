@@ -16,7 +16,6 @@ export default function Header() {
 
 function getHeader(pathname: string) {
   const route = pathname.split("/")[1];
-
   switch (route) {
     case "logs":
       return "التنبيهات";
@@ -26,6 +25,10 @@ function getHeader(pathname: string) {
       return "الموظفين";
     case "payments":
       return "التوريدات";
+    case "receipts":
+      return "التحصيلات";
+    case "target":
+      return "المستهدف";
     default:
       return "التحصيلات";
   }

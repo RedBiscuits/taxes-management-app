@@ -31,16 +31,11 @@ import {
 import { Location } from "@/models";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export function FiltersModal({ locations }: { locations: Location[] }) {
-  const form = useForm<PaymentFilters>({
-    resolver: zodResolver(paymentFiltersSchema),
+  const form = useForm<ReceiptFilters>({
+    resolver: zodResolver(receiptFiltersSchema),
   });
 
   const pathname = usePathname();
@@ -67,6 +62,11 @@ export function FiltersModal({ locations }: { locations: Location[] }) {
           params.set("close_date_operator", "<>");
         }
       }
+      // else if (key === "location_id") {
+      //   if (value) {
+      //     params.set(key, String(data[key]) || "");
+      //   }
+      // }
     });
 
     const url = `${pathname}?${params.toString()}`;
@@ -241,17 +241,11 @@ export function FiltersModal({ locations }: { locations: Location[] }) {
     </Dialog>
   );
 }
-export const paymentFiltersSchema = z.object({
-  created_at: z.object({
-    value: z.date().optional(),
-    status: z.boolean().optional(),
-  }),
-  created_at_2: z.object({
-    value: z.date().optional(),
-    status: z.boolean().optional(),
-  }),
-  payed: z.boolean().optional(),
-  // location_id: z.coerce.number().optional(),
+export const receiptFiltersSchema = z.object({
+  
+  tax_type: z.string().optional(),
+  payment_type: z.string().optional(),
+  location_id: z.coerce.number().optional(),
 });
 
-export type PaymentFilters = z.infer<typeof paymentFiltersSchema>;
+export type ReceiptFilters = z.infer<typeof receiptFiltersSchema>;

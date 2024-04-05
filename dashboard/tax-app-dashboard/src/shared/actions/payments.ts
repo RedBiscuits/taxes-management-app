@@ -9,7 +9,6 @@ const endpoint = "payments/";
 
 export async function getPayments(page: number = 1, filters?: string) {
   const fullUrl = filters ? `${endpoint}?${filters}` : `${endpoint}`;
-  console.log(fullUrl);
   return await http.getRequest<PaginatedResponse<Payment>>(fullUrl, page);
 }
 export async function getSinglePayment(id: number) {

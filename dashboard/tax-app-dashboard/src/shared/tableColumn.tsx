@@ -1,7 +1,6 @@
 import { CellContext, DisplayColumnDef } from "@tanstack/react-table";
 import { formatTableHeader, truncateText } from "./text";
 import dayjs from "dayjs";
-import { nullable } from "zod";
 
 export const col = <T,>(
   name: keyof T,
@@ -45,4 +44,9 @@ const dictionary: Record<string, string> = {
   amount: "المبلغ",
   created_at: "تاريخ الانشاء",
   close_date: "تاريخ الدفع",
+  day_id: "اليوم",
+  location_id: "المأمورية",
+  tax_type: "نوع الضريبة",
+  payment_type: "نوع الدفع",
+  value: "المبلغ",
 };

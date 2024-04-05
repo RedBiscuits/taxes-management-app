@@ -21,7 +21,7 @@ export function SideBar() {
           <div className="flex-1 border-l border-slate-800 py-8 pr-14 h-full ">
             <nav className="grid items-start justify-start gap-5 px-2 text-lg font-semibold lg:px-4 ">
               <Link
-                href="#"
+                href="/receipts"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
               >
                 <LuWallet className="size-6" /> التحصيلات

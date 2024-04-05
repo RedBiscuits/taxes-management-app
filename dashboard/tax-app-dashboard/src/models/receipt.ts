@@ -13,3 +13,5 @@ export type Entry = BaseModel & {
   payment_type: string;
   receipt_id: number;
 };
+
+export type TableEntry = Entry & { location_id: number; day_id: number };
