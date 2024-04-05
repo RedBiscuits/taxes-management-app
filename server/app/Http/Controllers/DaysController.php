@@ -32,7 +32,7 @@ class DaysController extends Controller
                     $query->where('status', request('status')) :
                     $query->whereNull('status')->orWhere('status', 1);
             })
-            ->paginate();
+            ->get();
 
         return $this->respondOk($days);
     }

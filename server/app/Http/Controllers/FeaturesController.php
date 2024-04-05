@@ -12,12 +12,19 @@ class FeaturesController extends Controller
     {
         $featureName = $request->input('feature_name');
 
-        $currentStatus = Cache::get("features.$featureName", true); // Default to true if not found
+        $currentStatus = Cache::get("features.$featureName", true); 
         Cache::put("features.$featureName", !$currentStatus);
 
         return $this->respondOk([
             'message' => "Feature flag '$featureName' toggled",
             'value' => Cache::get("features.$featureName")
+        ]);
+    }
+
+    public function get(Request $request)
+    {
+        return $this->respondOk([
+            'features' => Cache::get('features', [])
         ]);
     }
 }

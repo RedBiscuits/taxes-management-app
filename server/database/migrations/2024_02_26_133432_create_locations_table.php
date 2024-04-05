@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->double('yearly_target');
-            $table->foreignId('user_id')->nullable()->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -30,6 +30,8 @@ class UpdateUserRequest extends FormRequest
             'job' => ['string'],
             'location_id' => ['integer', 'min:1', 'exists:locations,id'],
             'role' => ['string', 'in:admin,employee'],
+            'location_id' => [ 'integer', 'min:1', 'exists:locations,id'],
+
         ];
     }
 }

@@ -26,7 +26,7 @@ class LocationsController extends Controller
             })->with(
                 ['targets', 'receipts', 'days']
             )
-            ->paginate();
+            ->get();
 
         return $this->respondOk($locations);
     }

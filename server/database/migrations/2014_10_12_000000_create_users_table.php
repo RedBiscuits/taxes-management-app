@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('job');
             $table->string('password');
             $table->string('device_id')->nullable();
+            $table->foreignId('location_id')->nullable()->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });
