@@ -16,12 +16,6 @@ class TargetController extends Controller
     public function index(ViewTargetRequest $request)
     {
         return $this->respondOk(Target::query()
-            ->when(request()->has('month'), function ($query, $search) {
-                $query->where('month', 'like', "$search%");
-            })
-            ->when(request()->has('percentage'), function ($query, $search) {
-                $query->where('percentage', 'like', "$search%");
-            })
             ->when(request()->has('location_id'), function ($query, $search) {
                 $query->where('location_id', 'like', $search);
             })
@@ -44,7 +38,7 @@ class TargetController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ViewTargetRequest $request,Target $target)
+    public function show(ViewTargetRequest $request, Target $target)
     {
         return $this->respondOk(
             $target->load(['location'])

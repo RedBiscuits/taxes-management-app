@@ -11,8 +11,19 @@ class Target extends Model
 
     protected $fillable = [
         'location_id',
-        'percentage',
-        'month'
+        'january',
+        'february',
+        'march',
+        'april',
+        'may',
+        'june',
+        'july',
+        'august',
+        'september',
+        'october',
+        'november',
+        'december',
+        'total',
     ];
 
     public function location()

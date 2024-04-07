@@ -14,9 +14,7 @@ class LogController extends Controller
      */
     public function index()
     {
-        return $this->respondOk(Log::query()
-            ->latest()
-            ->all());
+        return $this->respondOk(Log::query()->latest()->get());
     }
 
     /**

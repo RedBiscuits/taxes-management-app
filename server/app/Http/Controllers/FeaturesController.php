@@ -12,7 +12,7 @@ class FeaturesController extends Controller
     {
         $featureName = $request->input('feature_name');
 
-        $currentStatus = Cache::get("features.$featureName", true); 
+        $currentStatus = Cache::get("features.$featureName", true);
         Cache::put("features.$featureName", !$currentStatus);
 
         return $this->respondOk([
@@ -24,7 +24,9 @@ class FeaturesController extends Controller
     public function get(Request $request)
     {
         return $this->respondOk([
-            'features' => Cache::get('features', [])
+            'receipts_active' => Cache::get("features.receipts_active", false),
+            'payments_active' => Cache::get("features.payments_active", false),
+            'targets_active' => Cache::get("features.targets_active", false),
         ]);
     }
 }
