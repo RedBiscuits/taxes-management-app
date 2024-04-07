@@ -27,7 +27,7 @@ function getHeader(pathname: string) {
       return "التوريدات";
     case "receipts":
       return "التحصيلات";
-    case "target":
+    case "targets":
       return "المستهدف";
     default:
       return "التحصيلات";

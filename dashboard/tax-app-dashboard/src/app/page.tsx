@@ -1,11 +1,9 @@
 import { getToken } from "@/shared/cookies";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export default function Page() {
-  // const router = useRouter();
   const token = getToken();
-  if (token) redirect("/dashboard");
+  if (token) redirect("/receipts");
   else redirect("/login");
-
   return <></>;
 }

@@ -74,14 +74,13 @@ export function DeleteUserButton({
           e.stopPropagation();
           try {
             setIsLoading(true);
-            // TODO: delete user
-            // const { ok } = await deleteUser(getValue().id);
+            const ok = await deleteUser(getValue().id);
 
-            // if (ok) {
-            //   toast.success("تم حذف المستخدم بنجاح");
-            // } else {
-            //   toast.error("حدث خطأ ما");
-            // }
+            if (ok) {
+              toast.success("تم حذف المستخدم بنجاح");
+            } else {
+              toast.error("حدث خطأ ما");
+            }
           } catch {
             toast.error("حدث خطأ ما");
           } finally {

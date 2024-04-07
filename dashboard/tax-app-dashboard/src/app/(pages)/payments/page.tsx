@@ -35,7 +35,7 @@ export default async function page({
       <div className="flex justify-between items-center">
         <div className="flex items-center flex-1 gap-2">
           <SearchForm className="w-1/3" placeholder="ابحث برقم الهاتف" />
-          <FiltersModal locations={locations.data.data} />
+          <FiltersModal locations={locations.data} />
         </div>
         <Link href="payments/new">
           <Button size="lg" className="mx-2 mt-1">

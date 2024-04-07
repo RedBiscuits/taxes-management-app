@@ -9,24 +9,24 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { CellContext } from "@tanstack/react-table";
-import { Payment } from "@/models";
+import { TableEntry } from "@/models";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { arabic } from "@/shared/fonts";
 import { toast } from "sonner";
 import { Loading } from "@/components/lib/loading";
-import { deletePayment } from "@/shared/actions/payments";
+import { deleteEntry } from "@/shared/actions/entries";
 
-export const PaymentActions = (props: CellContext<Payment, Payment>) => {
+export const ReceiptActions = (props: CellContext<TableEntry, TableEntry>) => {
   return (
     <div className="flex items-center justify-evenly bg-slate-200 p-1 rounded-full">
-      <EditPayment {...props} />
-      <DeletePayment {...props} />
+      <Edit {...props} />
+      <Delete {...props} />
     </div>
   );
 };
 
-const DeletePayment = (props: CellContext<Payment, Payment>) => {
+const Delete = (props: CellContext<TableEntry, TableEntry>) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -42,22 +42,22 @@ const DeletePayment = (props: CellContext<Payment, Payment>) => {
       <DialogContent className={cn(arabic.className)}>
         <DialogHeader>
           <DialogTitle>هل انت متأكد</DialogTitle>
-          <DialogDescription>سوف يتم حذف التوريد نهائيا</DialogDescription>
+          <DialogDescription>سوف يتم حذف التحصيل نهائيا</DialogDescription>
         </DialogHeader>
 
         <div className="mt-2 flex items-center justify-center gap-2">
           <Button onClick={() => setIsOpen(false)}>الغاء</Button>
-          <DeletePaymentButton setIsOpen={setIsOpen} {...props} />
+          <DeleteButton setIsOpen={setIsOpen} {...props} />
         </div>
       </DialogContent>
     </Dialog>
   );
 };
 
-export function DeletePaymentButton({
+export function DeleteButton({
   getValue,
   setIsOpen,
-}: CellContext<Payment, Payment> & {
+}: CellContext<TableEntry, TableEntry> & {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -70,7 +70,7 @@ export function DeletePaymentButton({
           e.stopPropagation();
           try {
             setIsLoading(true);
-            const ok = await deletePayment(getValue().id);
+            const ok = await deleteEntry(getValue().id);
             if (ok) {
               toast.success("تم حذف التوريد بنجاح");
             } else {
@@ -91,9 +91,9 @@ export function DeletePaymentButton({
   );
 }
 
-const EditPayment = (props: CellContext<Payment, Payment>) => {
+const Edit = (props: CellContext<TableEntry, TableEntry>) => {
   return (
-    <Link href={`payments/${props.getValue().id}/edit`}>
+    <Link href={`receipts/entries/${props.getValue().id}/edit`}>
       <Button className="flex justify-center rounded-full">تعديل</Button>
     </Link>
   );

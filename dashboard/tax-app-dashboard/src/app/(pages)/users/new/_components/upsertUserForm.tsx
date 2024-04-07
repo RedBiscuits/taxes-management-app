@@ -165,12 +165,11 @@ export default function UpsertUserForm({
                 <FormLabel>المأمورية</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  defaultValue={String(field.value)}
                 >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue
-                        aria-label={field.value}
                         className="text-lg text-green-500"
                         placeholder="المأمورية"
                       >
@@ -185,7 +184,7 @@ export default function UpsertUserForm({
                       <SelectItem
                         className="text-end"
                         key={location.id}
-                        value={location.id}
+                        value={String(location.id)}
                       >
                         {location.name}
                       </SelectItem>

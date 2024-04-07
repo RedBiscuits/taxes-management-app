@@ -11,7 +11,7 @@ export default async function page() {
   return (
     <>
       <Layout>
-        <p className={cn("text-lg", arabic.className)}>{log.content}</p>
+        <p className={cn("text-lg", arabic.className)}>{log?.content || ""}</p>
       </Layout>
       <Link href={`/logs/edit`}>
         <Button className="mx-2 mt-2" size={"lg"}>

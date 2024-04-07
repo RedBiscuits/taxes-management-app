@@ -1,6 +1,6 @@
 import React from "react";
-import UpsertPaymentForm from "./_components/upsertPaymentForm";
+import NewReceiptEntries from "./_components/newReceiptsEntries";
 
 export default function page() {
-  return <UpsertPaymentForm />;
+  return <NewReceiptEntries />;
 }

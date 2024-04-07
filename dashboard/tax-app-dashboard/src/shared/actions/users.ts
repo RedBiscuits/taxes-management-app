@@ -2,7 +2,7 @@
 
 import { PaginatedResponse, User } from "@/models";
 import * as http from "../fetch";
-import { UserData } from "@/app/(pages)/users/new/_components/createUserForm";
+import { UserData } from "@/app/(pages)/users/new/_components/upsertUserForm";
 import { revalidatePath } from "next/cache";
 
 const endpoint = "users";
@@ -27,9 +27,9 @@ export async function updateUser(user: UserData, id: number) {
 }
 
 export async function deleteUser(id: number) {
-  const res = await http.deleteRequest(`${endpoint}${id}`);
+  const res = await http.deleteRequest(`${endpoint}/${id}`);
   if (res.ok) {
     revalidatePath("/users");
   }
-  return res;
+  return res.ok;
 }

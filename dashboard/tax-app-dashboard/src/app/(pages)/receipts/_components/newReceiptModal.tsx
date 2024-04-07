@@ -26,34 +26,31 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Location } from "@/models";
+import { Location, Day } from "@/models";
 import { usePathname, useRouter } from "next/navigation";
-import { paymentTypes, taxTypes } from "@/shared/constants/types";
 import { useState } from "react";
+import { cookies } from "next/headers";
 
-export function FiltersModal({ locations }: { locations: Location[] }) {
-  const form = useForm<ReceiptFilters>({
-    resolver: zodResolver(receiptFiltersSchema),
+export function NewReceiptModal({
+  locations,
+  days,
+}: {
+  locations: Location[];
+  days: Day[];
+}) {
+  const form = useForm<NewReceiptData>({
+    resolver: zodResolver(newReceiptSchema),
   });
 
-  const pathname = usePathname();
   const router = useRouter();
 
   const onSubmit = form.handleSubmit((data) => {
     const params = new URLSearchParams();
-
     Object.entries(data).forEach(([key, value]) => {
-      console.log("key => ", key, "\nvalue => ", value);
-      if (!value || value === "الكل") {
-        params.delete(key);
-      } else {
-        params.set(key, String(value) || "");
-      }
+      params.set(key, String(value));
     });
 
-    const url = `${pathname}?${params.toString()}`;
-    console.log("url => ", url);
-    router.push(url);
+    router.push(`receipts/new?${params.toString()}`);
   });
 
   const [isOpen, setIsOpen] = useState(false);
@@ -61,22 +58,22 @@ export function FiltersModal({ locations }: { locations: Location[] }) {
   return (
     <Dialog open={isOpen}>
       <DialogTrigger asChild>
-        <Button onClick={() => setIsOpen(true)} variant="outline">
-          خيارات البحث
+        <Button className="mx-2" onClick={() => setIsOpen(true)}>
+          انشاء
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>خيارات البحث</DialogTitle>
+          <DialogTitle>تحصيل جديد</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={onSubmit} className="space-y-6 mb-6">
             <FormField
               control={form.control}
-              name="tax_type"
+              name="day_id"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>نوع الضريبة</FormLabel>
+                  <FormLabel>اليوم</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={String(field.value)}
@@ -86,57 +83,21 @@ export function FiltersModal({ locations }: { locations: Location[] }) {
                         <SelectValue
                           className="text-lg"
                           placeholder="نوع الضريبة"
-                        />
+                        >
+                          {days.find(
+                            (d) => Number(d.id) === Number(field.value)
+                          )?.time || "اليوم"}
+                        </SelectValue>
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem className="text-end" value={"الكل"}>
-                        {"الكل"}
-                      </SelectItem>
-                      {taxTypes.map((t) => (
+                      {days.map((d) => (
                         <SelectItem
                           className="text-end"
-                          key={t}
-                          value={String(t)}
+                          key={d.id}
+                          value={String(d.id)}
                         >
-                          {t}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="payment_type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>نوع الدفع</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={String(field.value)}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          className="text-lg"
-                          placeholder="نوع الدفع"
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem className="text-end" value={"الكل"}>
-                        {"الكل"}
-                      </SelectItem>
-                      {paymentTypes.map((p) => (
-                        <SelectItem
-                          className="text-end"
-                          key={p}
-                          value={String(p)}
-                        >
-                          {p}
+                          {d.time}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -163,14 +124,11 @@ export function FiltersModal({ locations }: { locations: Location[] }) {
                         >
                           {locations.find(
                             (l) => Number(l.id) === Number(field.value)
-                          )?.name || "الكل"}
+                          )?.name || "المأمورية"}
                         </SelectValue>
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem className="text-end" value={"0"}>
-                        {"الكل"}
-                      </SelectItem>
                       {locations.map((location) => (
                         <SelectItem
                           className="text-end"
@@ -193,7 +151,6 @@ export function FiltersModal({ locations }: { locations: Location[] }) {
                 variant={"outline"}
                 onClick={() => {
                   form.reset();
-                  router.push("/receipts");
                   setIsOpen(false);
                 }}
               >
@@ -206,11 +163,15 @@ export function FiltersModal({ locations }: { locations: Location[] }) {
     </Dialog>
   );
 }
-export const receiptFiltersSchema = z.object({
-  // TODO:add day
-  tax_type: z.string().optional(),
-  payment_type: z.string().optional(),
-  location_id: z.coerce.number().optional(),
+export const newReceiptSchema = z.object({
+  location_id: z.coerce.number({
+    invalid_type_error: "المأمورية مطلوبة",
+    required_error: "المأمورية مطلوبة",
+  }),
+  day_id: z.coerce.number({
+    invalid_type_error: "اليوم مطلوب",
+    required_error: "اليوم مطلوب",
+  }),
 });
 
-export type ReceiptFilters = z.infer<typeof receiptFiltersSchema>;
+export type NewReceiptData = z.infer<typeof newReceiptSchema>;

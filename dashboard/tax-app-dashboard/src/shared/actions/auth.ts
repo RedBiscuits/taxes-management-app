@@ -3,7 +3,7 @@
 import { BaseResponse } from "@/models";
 import { setToken } from "../cookies";
 import * as http from "../fetch";
-import { UserData } from "@/app/(pages)/users/new/_components/createUserForm";
+import { UserData } from "@/app/(pages)/users/new/_components/upsertUserForm";
 import { revalidatePath } from "next/cache";
 
 type LoginData = {
