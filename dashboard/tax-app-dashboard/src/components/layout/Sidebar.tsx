@@ -34,7 +34,7 @@ export function SideBar() {
                 التوريدات
               </Link>
               <Link
-                href="/targets"
+                href="/targets?location_id=1"
                 className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary"
               >
                 <FaRegMoneyBillAlt className="size-6" />

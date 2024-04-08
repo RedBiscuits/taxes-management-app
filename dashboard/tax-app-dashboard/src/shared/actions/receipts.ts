@@ -13,6 +13,12 @@ export async function getReceipts(page: number = 1, filters?: string) {
   return await http.getRequest<PaginatedResponse<Receipt>>(fullUrl, page);
 }
 
+export async function getReceiptsNoPagination(location_id: number) {
+  return await http.getRequest<Receipt[]>(
+    `${endpoint}all?location_id=${location_id}`
+  );
+}
+
 export async function getSingleReceipt(id: number) {
   return await http.getRequest<Receipt>(`${endpoint}${id}`);
 }

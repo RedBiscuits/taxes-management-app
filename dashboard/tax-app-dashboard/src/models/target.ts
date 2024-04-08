@@ -26,3 +26,12 @@ export type Target = BaseModel & {
 export type TargetMonths = {
   [K in keyof Target]: K extends Months ? K : never;
 };
+
+export type TargetData = {
+  name: string;
+  index: number;
+  target_percentage: number;
+  target_amount: number;
+  actual_percentage: number;
+  actual_amount: number;
+};
