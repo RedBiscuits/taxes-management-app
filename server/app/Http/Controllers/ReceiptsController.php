@@ -6,7 +6,6 @@ use App\Http\Requests\Receipt\CreateReceiptRequest;
 use App\Http\Requests\Receipt\UpdateReceiptRequest;
 use App\Http\Services\Receipt\ReceiptService;
 use App\Models\Receipt;
-use Illuminate\Http\Request;
 
 class ReceiptsController extends Controller
 {
@@ -30,13 +29,15 @@ class ReceiptsController extends Controller
             ->when(request('day_id'), function ($query, $search) {
                 $query->where('day_id', 'like', $search);
             })
-            ->with(["entries" => function ($query) {
-                $query->when(request('tax_type'), function ($query, $search) {
-                    $query->where('tax_type', 'like', $search . '%');
-                })->when(request('payment_type'), function ($query, $search) {
-                    $query->where('payment_type', 'like', $search . '%');
-                });
-            }])
+            ->with([
+                "entries" => function ($query) {
+                    $query->when(request('tax_type'), function ($query, $search) {
+                        $query->where('tax_type', 'like', $search . '%');
+                    })->when(request('payment_type'), function ($query, $search) {
+                        $query->where('payment_type', 'like', $search . '%');
+                    });
+                }
+            ])
             ->paginate();
 
         return $this->respondOk($Receipts);
@@ -62,5 +63,15 @@ class ReceiptsController extends Controller
     {
         $Receipt->delete();
         return $this->respondNoContent();
+    }
+
+    public function getAll()
+    {
+
+        $Receipts = Receipt::query()
+            ->when(request('location_id'), function ($query, $search) {
+                $query->where('location_id', 'like', $search);
+            })->with(["entries", "day"])->get();
+        return $this->respondOk($Receipts);
     }
 }

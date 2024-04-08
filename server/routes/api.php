@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('targets', TargetController::class);
 
+    Route::get("/receipts/all", [ReceiptsController::class, 'getAll'])->middleware('receipts_enabled'); 
     Route::apiResource('receipts', ReceiptsController::class)->middleware('receipts_enabled');
 
     Route::apiResource('entries', EntriesController::class);

@@ -15,12 +15,14 @@ class TargetController extends Controller
      */
     public function index(ViewTargetRequest $request)
     {
-        return $this->respondOk(Target::query()
-            ->when(request()->has('location_id'), function ($query, $search) {
-                $query->where('location_id', 'like', $search);
-            })
-            ->with(['location'])
-            ->paginate());
+        // return $this->respondOk(Target::query()
+        //     ->when(request()->has('location_id'), function ($query, $search) {
+        //         $query->where('location_id', '=', $search);
+        //     })
+        //     ->with(['location'])
+        //     ->first());
+
+        return $this->respondOk(Target::where('location_id', request('location_id'))->with("location")->first());
     }
 
     /**
