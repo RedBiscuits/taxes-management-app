@@ -148,10 +148,27 @@ export default function UpsertUserForm({
               <FormItem>
                 <FormLabel>الوظيفة</FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
-                    className={cn("text-lg", arabic.className)}
-                  />
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          className="text-lg text-green-500"
+                          placeholder="الوظيفة"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem className="text-end" value={"employee"}>
+                        موظف
+                      </SelectItem>
+                      <SelectItem className="text-end" value={"manager"}>
+                        مدير
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -249,11 +266,10 @@ const updateUserSchema = z
       })
       .min(8, { message: "كلمة المرور يجب تكون على الاقل 8 حروف" })
       .optional(),
-    job: z
-      .string({
-        required_error: "هذا الحقل مطلوب",
-      })
-      .min(1, { message: "هذا الحقل مطلوب" }),
+    job: z.enum(["manager", "employee"], {
+      required_error: "هذا الحقل مطلوب",
+      invalid_type_error: "هذا الحقل مطلوب",
+    }),
     location_id: z.coerce.number({
       invalid_type_error: "هذا الحقل مطلوب",
       required_error: "هذا الحقل مطلوب",
@@ -296,11 +312,10 @@ const userSchema = z
         required_error: "هذا الحقل مطلوب",
       })
       .min(8, { message: "كلمة المرور يجب تكون على الاقل 8 حروف" }),
-    job: z
-      .string({
-        required_error: "هذا الحقل مطلوب",
-      })
-      .min(1, { message: "هذا الحقل مطلوب" }),
+    job: z.enum(["manager", "employee"], {
+      required_error: "هذا الحقل مطلوب",
+      invalid_type_error: "هذا الحقل مطلوب",
+    }),
     location_id: z.coerce.number({
       invalid_type_error: "هذا الحقل مطلوب",
       required_error: "هذا الحقل مطلوب",

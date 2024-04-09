@@ -14,10 +14,10 @@ export async function getSingleUser(id: number) {
   return await http.getRequest<User>(`${endpoint}/${id}`);
 }
 export async function updateUser(user: UserData, id: number) {
-  const res = await http.patchRequest<UserData, { success: boolean }>(
-    `${endpoint}/${id}`,
-    user
-  );
+  const res = await http.patchRequest<
+    UserData & { role?: "manager" | "employee" },
+    { success: boolean }
+  >(`${endpoint}/${id}`, { ...user, role: user.job });
 
   if (res.success) {
     revalidatePath("/users");

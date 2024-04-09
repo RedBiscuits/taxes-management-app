@@ -25,6 +25,7 @@ export default function RootLayout({
           }}
           dir="rtl"
           theme="light"
+          closeButton
         />
       </body>
     </html>

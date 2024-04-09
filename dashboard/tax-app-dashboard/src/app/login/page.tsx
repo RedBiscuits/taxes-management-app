@@ -86,7 +86,7 @@ export default function LoginForm() {
                   <FormItem>
                     <FormLabel>رقم الهاتف</FormLabel>
                     <FormControl>
-                      <Input {...field} type="tel" />
+                      <Input className="text-end" {...field} type="tel" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

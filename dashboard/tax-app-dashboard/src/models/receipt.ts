@@ -1,5 +1,6 @@
 import { BaseModel } from "./BaseModel";
 import { Day } from "./Day";
+import { Location } from "./user";
 
 export type Receipt = BaseModel & {
   location_id: number;
@@ -7,6 +8,7 @@ export type Receipt = BaseModel & {
   total: number;
   entries: Entry[];
   day?: Day;
+  location?: Location;
 };
 
 export type Entry = BaseModel & {
@@ -16,4 +18,7 @@ export type Entry = BaseModel & {
   receipt_id: number;
 };
 
-export type TableEntry = Entry & { location_id: number; day_id: number };
+export type TableEntry = Entry & {
+  time: string;
+  location_name: string;
+};

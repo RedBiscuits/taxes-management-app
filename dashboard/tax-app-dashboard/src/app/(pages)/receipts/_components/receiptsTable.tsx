@@ -10,12 +10,15 @@ export const ReceiptsTable = ({
 }) => {
   const entries = receipts.data
     .flatMap((x) => x.entries)
-    .map((x) => ({
-      ...x,
-      day_id: receipts.data.find((r) => r.id === x.receipt_id)!.day_id,
-      location_id: receipts.data.find((r) => r.id === x.receipt_id)!
-        .location_id,
-    }));
+    .map((x) => {
+      const currentReceipt = receipts.data.find((r) => r.id === x.receipt_id)!;
+
+      return {
+        ...x,
+        time: currentReceipt.day!.time,
+        location_name: currentReceipt.location!.name,
+      };
+    });
 
   const data: PaginatedResponse<TableEntry> = {
     ...receipts,
