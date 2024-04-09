@@ -13,10 +13,12 @@ class AuthController extends Controller
     public function login(UserLoginRequest $request)
     {
 
-        if (Auth::attempt([
-            'phone' => $request->validated()['phone'],
-            'password' => $request->validated()['password'],
-        ])) {
+        if (
+            Auth::attempt([
+                'phone' => $request->validated()['phone'],
+                'password' => $request->validated()['password'],
+            ])
+        ) {
 
             $user = Auth::user();
 
@@ -26,7 +28,7 @@ class AuthController extends Controller
                 } else {
                     $user->update([
                         'device_id' => $request->validated()['device_id'],
-                        'password' => $request->validated()['new_password']?? $user->password,
+                        'password' => $request->validated()['new_password'] ?? $user->password,
                     ]);
                 }
             }
@@ -46,7 +48,12 @@ class AuthController extends Controller
     public function register(CreateUserRequest $request)
     {
         $user = User::create($request->validated());
-        $user->assignRole('employee');
+
+        if ($request->validated()["job"] === "manager") {
+            $user->assignRole('manager');
+        } else {
+            $user->assignRole('employee');
+        }
         return $this->respondOk($user, 'User created successfully');
     }
 

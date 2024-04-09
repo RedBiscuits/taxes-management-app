@@ -37,6 +37,9 @@ class ReceiptsController extends Controller
                         $query->where('payment_type', 'like', $search . '%');
                     });
                 }
+                ,
+                "day",
+                "location"
             ])
             ->paginate();
 

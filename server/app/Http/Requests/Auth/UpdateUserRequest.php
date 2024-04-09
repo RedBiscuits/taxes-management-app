@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -27,10 +28,9 @@ class UpdateUserRequest extends FormRequest
             'name' => ['string', 'max:255'],
             'password' => ['string', 'min:8'],
             'password_confirmation' => ['string', 'same:password'],
-            'job' => ['string'],
+            'job' => [Rule::in(['employee', 'manager'])],
             'location_id' => ['integer', 'min:1', 'exists:locations,id'],
-            'role' => ['string', 'in:admin,employee'],
-            'location_id' => [ 'integer', 'min:1', 'exists:locations,id'],
+            'role' => ['string', 'in:employee,manager'],
 
         ];
     }

@@ -40,7 +40,7 @@ class UsersController extends Controller
     {
 
         $user->update($request->validated());
-        $user->syncRoles(array_merge([$user->roles()->first()], [$request->role] ?? []));
+        $user->syncRoles([$request->role] ?? [$user->roles()->first()]);
         return $this->respondOk($user);
     }
 

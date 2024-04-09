@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CreateUserRequest extends FormRequest
 {
@@ -26,11 +27,8 @@ class CreateUserRequest extends FormRequest
             'phone' => ['required', 'string', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
             'password_confirmation' => ['required', 'string', 'same:password'],
-            'job' => ['required', 'string'],
-            'location_id' => ['required','integer', 'min:1', 'exists:locations,id'],
-            // 'device_id' => ['required', 'string'],
+            'job' => ['required', Rule::in(['employee', 'manager'])],
             'location_id' => ['required', 'integer', 'min:1', 'exists:locations,id'],
-
         ];
     }
 }
