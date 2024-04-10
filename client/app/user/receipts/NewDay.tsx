@@ -67,7 +67,7 @@ export default function NewDayScreen() {
                 onPress={async () =>
                   mutate({
                     day_id: openDay.id,
-                    location_id: (await getUser())!.location_id,
+                    location_id: (await getUser())?.location_id || 0,
                   })
                 }
               />

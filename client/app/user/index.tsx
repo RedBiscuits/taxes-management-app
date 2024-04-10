@@ -19,7 +19,7 @@ export default function MainUserScreen() {
   const { data } = useGet<Log[]>("logs", ["log"]);
 
   if (logModal === "DEFAULT") {
-    if (data) {
+    if (data?.length) {
       if (!currentLog) {
         log.set(data[0]);
         setLogModal("SHOW_MODAL");
@@ -27,6 +27,8 @@ export default function MainUserScreen() {
         log.set(data[0]);
         setLogModal("SHOW_MODAL");
       }
+    } else if (!data?.length) {
+      setLogModal("HIDE_MODAL");
     }
   }
 

@@ -25,7 +25,7 @@ export function OptionsModal() {
 
   const { data } = useGet<PaginatedResponse<Day>>(baseUrl, [
     "days",
-    user!.location_id.toString(),
+    String(user?.location_id),
     "manager",
   ]);
 

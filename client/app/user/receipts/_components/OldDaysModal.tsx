@@ -29,7 +29,7 @@ export function OldDaysModal({
 
   const { data, isPending } = useGet<Day[]>(baseUrl, [
     "days",
-    user?.location_id.toString() || "",
+    String(user?.location_id),
     "user",
     "old",
   ]);

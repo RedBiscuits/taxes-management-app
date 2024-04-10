@@ -13,8 +13,6 @@ export function LogsModal({
   toggleModal: () => void;
   log: Log | null | undefined;
 }) {
-  console.log(" =======> log from modal", log);
-
   return (
     <Modal visible={open} animationType="fade" transparent>
       <View className="flex-1 bg-black/50">

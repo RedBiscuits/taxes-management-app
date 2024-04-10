@@ -73,7 +73,7 @@ export function DatePickerModal({
                     end_date: dayjs(date).format("YYYY/MM/DD HH:mm:ss"),
                     name: "day",
                     status: true,
-                    location_id: (await getUser())!.location_id,
+                    location_id: (await getUser())?.location_id || 0,
                   })
                 }
                 text="تأكيد"

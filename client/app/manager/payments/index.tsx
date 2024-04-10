@@ -21,7 +21,7 @@ export default function MainManagerPaymentsScreen() {
 
   const handleSearch = useDebouncedCallback((term) => setQuery(term), 300);
 
-  const url = useUrl(query, filters);
+  const url = constructUrl(query, filters);
 
   const { data, isPending, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useInfiniteGet<Payment>(url, ["payments", url.split("?")[1] ?? ""]);
@@ -96,7 +96,7 @@ export default function MainManagerPaymentsScreen() {
   );
 }
 
-const constructUrl = async (query: string, searchOptions: PaymentFilters) => {
+const constructUrl = (query: string, searchOptions: PaymentFilters) => {
   const params = new URLSearchParams();
   Object.entries(searchOptions).forEach(([key, value]) => {
     if (key === "created_at") {
@@ -119,9 +119,6 @@ const constructUrl = async (query: string, searchOptions: PaymentFilters) => {
 
   if (query) params.append("phone", query);
 
-  const user = await getUser();
-  if (user) params.append("location_id", user.location_id.toString());
-
   const paramString = params.toString();
   if (paramString) {
     return `payments?${paramString}`;
@@ -129,23 +126,3 @@ const constructUrl = async (query: string, searchOptions: PaymentFilters) => {
     return "payments";
   }
 };
-
-function useUrl(query: string, filters: PaymentFilters) {
-  const [url, setUrl] = useState("payments");
-  useEffect(() => {
-    (async () => {
-      const tempUrl = await constructUrl(query, filters);
-      console.log(
-        "--------------------------------------------------------------"
-      );
-      console.log(`------------ payment url ------------`);
-      console.log(`------------${tempUrl}------------`);
-      console.log(
-        "--------------------------------------------------------------"
-      );
-      setUrl(tempUrl);
-    })();
-  }, [query, filters]);
-
-  return url;
-}
