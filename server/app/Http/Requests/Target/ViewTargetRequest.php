@@ -11,7 +11,7 @@ class ViewTargetRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth('sanctum')->user()->hasAnyRole(['admin', 'manager']);
+        return auth('sanctum')->user()->hasAnyRole(['admin', 'manager', "employee"]);
     }
 
     /**

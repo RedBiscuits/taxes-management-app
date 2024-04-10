@@ -48,17 +48,15 @@ class DatabaseSeeder extends Seeder
         $empd1 = \App\Models\User::create([
             'name' => 'employee1',
             'phone' => '01111111111',
-            'job' => 'doggo',
+            'job' => 'employee',
             'password' => bcrypt('doggo123'),
-            // 'device_id' => '123456789',
             'location_id' => $location1->id
         ]);
         $empd2 = \App\Models\User::create([
             'name' => 'employee2',
             'phone' => '02222222222',
-            'job' => 'doggo',
+            'job' => 'employee',
             'password' => bcrypt('doggo123'),
-            // 'device_id' => '987654321',
             'location_id' => $location2->id
         ]);
 
@@ -79,10 +77,9 @@ class DatabaseSeeder extends Seeder
         $man = \App\Models\User::create([
             'name' => 'manager1',
             'phone' => '01550935411',
-            'job' => 'wifo',
+            'job' => 'manager',
             'password' => bcrypt('wiffo123'),
-            // 'device_id' => '987654321',
-            // 'location_id' => $location2->id
+            'location_id' => $location1->id
         ]);
 
         $man->assignRole($managerRole);

@@ -32,7 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('targets', TargetController::class);
 
-    Route::get("/receipts/all", [ReceiptsController::class, 'getAll'])->middleware('receipts_enabled'); 
+    Route::get("/receipts/all", [ReceiptsController::class, 'getAll'])->middleware('receipts_enabled');
     Route::apiResource('receipts', ReceiptsController::class)->middleware('receipts_enabled');
 
     Route::apiResource('entries', EntriesController::class);
@@ -67,4 +67,5 @@ Route::controller(AuthController::class)
         Route::post('/login', 'login')->name('login');
         Route::post('/logout', 'logout')->name('logout');
         Route::post('/register', 'register')->name('register');
+        Route::post('/change-password', 'initialChangePassword')->name('initialChangePassword');
     });

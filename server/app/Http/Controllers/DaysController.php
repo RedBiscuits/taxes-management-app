@@ -30,7 +30,7 @@ class DaysController extends Controller
             ->where(function ($query) {
                 request()->filled('status') ?
                     $query->where('status', request('status')) :
-                    $query->whereNull('status')->orWhere('status', 1);
+                    $query->whereNull('status')->orWhere('status', 1)->orWhere('status', 0);
             })
             ->get();
 
@@ -61,7 +61,7 @@ class DaysController extends Controller
 
     public function open(Day $day)
     {
-        if($day->status == 0) {
+        if ($day->status == 0) {
             return $this->respondError('day is already open');
         }
 
