@@ -5,3 +5,5 @@ export * from "./payment";
 export * from "./user";
 export * from "./paginatedResponse";
 export * from "./Day";
+export * from "./target";
+export * from "./Log";

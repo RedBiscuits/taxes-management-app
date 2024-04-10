@@ -5,7 +5,7 @@ export const loginSchema = z.object({
     .string({
       required_error: "الهاتف مطلوب",
     })
-    .min(11, "الهاتف غير صالح"),
+    .length(11, "الهاتف غير صالح"),
   password: z
     .string({
       required_error: "كلمة المرور مطلوبة",

@@ -6,6 +6,8 @@ import Icon from "react-native-vector-icons/AntDesign";
 import { useToast } from "@/lib/components/toastModal/toastModal.zustand";
 import { usePost } from "@/lib/shared/query";
 import { router } from "expo-router";
+import { useOpenDay } from "../logic/openDay/openDay.hooks";
+import { useCurrentReceipt } from "../logic/receipts/receipt.hooks";
 
 export function CloseDayCofirmModal({
   isOpen,
@@ -18,10 +20,15 @@ export function CloseDayCofirmModal({
 }) {
   const { toast } = useToast();
 
+  const { day } = useOpenDay();
+  const { currentReceipt } = useCurrentReceipt();
+
   const { mutate, isPending } = usePost(`days/${day_id}/close`, [["days"]], {
     onSuccess: () => {
       toast.success("تم اغلاق اليومية لنجاح");
       router.replace("/user/receipts/");
+      day.set(null);
+      currentReceipt.set(null);
     },
     onError: (error) => {
       console.log(error);

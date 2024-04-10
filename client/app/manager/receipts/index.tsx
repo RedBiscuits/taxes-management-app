@@ -18,7 +18,7 @@ export default function ManagerReciptsScreen() {
   const url = useUrl(filters);
 
   const { data, isPending, hasNextPage, fetchNextPage, isFetchingNextPage } =
-    useInfiniteGet<Receipt>(url, [url]);
+    useInfiniteGet<Receipt>(url, ["receipts", url.split("?")[1] ?? ""]);
 
   return (
     <>
@@ -98,7 +98,7 @@ const constructUrl = async (searchOptions: ReceiptFilters) => {
   });
 
   const user = await getUser();
-  if (user) params.append("location_id", user.location.id.toString());
+  if (user) params.append("location_id", user.location_id.toString());
 
   const paramString = params.toString();
   if (paramString) {
@@ -114,13 +114,13 @@ function useUrl(filters: ReceiptFilters) {
   useEffect(() => {
     (async () => {
       const tempUrl = await constructUrl(filters);
-      console.log(
-        "--------------------------------------------------------------"
-      );
-      console.log(`------------  ${tempUrl}  ------------`);
-      console.log(
-        "--------------------------------------------------------------"
-      );
+      // console.log(
+      //   "--------------------------------------------------------------"
+      // );
+      // console.log(`------------  ${tempUrl}  ------------`);
+      // console.log(
+      //   "--------------------------------------------------------------"
+      // );
       setUrl(tempUrl);
     })();
   }, [JSON.stringify(filters)]);

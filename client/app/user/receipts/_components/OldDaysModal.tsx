@@ -1,5 +1,5 @@
 import { OldDay } from "@/lib/components";
-import { Day, PaginatedResponse } from "@/lib/models";
+import { Day } from "@/lib/models";
 import { useGet } from "@/lib/shared/query";
 import { colors, fonts } from "@/lib/styles";
 import { Dispatch, SetStateAction } from "react";
@@ -25,10 +25,12 @@ export function OldDaysModal({
 }) {
   const user = useUser();
 
-  const baseUrl = "days?location_id=" + user?.location.id;
+  const baseUrl = "days?status=0&location_id=" + user?.location_id;
 
-  const { data, isPending } = useGet<PaginatedResponse<Day>>(baseUrl, [
-    baseUrl,
+  const { data, isPending } = useGet<Day[]>(baseUrl, [
+    "days",
+    user?.location_id.toString() || "",
+    "user",
     "old",
   ]);
 
@@ -60,7 +62,7 @@ export function OldDaysModal({
               else if (data)
                 return (
                   <FlatList
-                    data={data.data}
+                    data={data}
                     renderItem={({ item }) => (
                       <Pressable
                         onPress={() => {

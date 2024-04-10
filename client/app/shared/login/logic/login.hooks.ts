@@ -5,12 +5,12 @@ import { router } from "expo-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@/lib/models";
-import * as Application from "expo-application";
 
 type LoginResponse = { user: User; token: string };
 export function useLogin() {
   const { control, handleSubmit, formState, setError } = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
+    mode: "all",
   });
 
   const { mutate, isPending } = usePost<
@@ -50,7 +50,6 @@ export function useLogin() {
     login: handleSubmit(async (data: LoginData) =>
       mutate({
         ...data,
-        // device_id: Application.getAndroidId()
         device_id: "123456789",
       })
     ),

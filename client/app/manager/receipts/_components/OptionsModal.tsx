@@ -21,17 +21,13 @@ export function OptionsModal() {
 
   const user = useUser();
 
-  console.log("user", user?.location.id);
+  const baseUrl = "days?location_id=" + user?.location_id;
 
-  const baseUrl = "days?location_id=" + user?.location.id;
-
-  const { data, status, error } = useGet<PaginatedResponse<Day>>(baseUrl, [
-    baseUrl,
+  const { data } = useGet<PaginatedResponse<Day>>(baseUrl, [
+    "days",
+    user!.location_id.toString(),
     "manager",
   ]);
-
-  console.log("status", status);
-  console.log("error", error);
 
   let daysData: { label: string; value: number }[] = [];
   if (data) {
@@ -128,9 +124,8 @@ export function OptionsModal() {
 
               <Button
                 onPress={() => {
-                  // console.log("filters on press", watch());
                   setFilters();
-                  // toggleModal();
+                  toggleModal();
                 }}
                 text="تأكيد"
                 className="mt-8 w-full mx-auto"

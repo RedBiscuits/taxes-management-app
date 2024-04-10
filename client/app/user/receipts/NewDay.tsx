@@ -27,10 +27,7 @@ export default function NewDayScreen() {
     [["receipts"]],
     {
       onSuccess: (data) => {
-        console.log("before set");
         currentReceipt.set(data.data);
-        console.log("after set");
-        toast.success("تمت العملية بنجاح");
       },
       onError: (error) => {
         toast.error("حدث خطأ ما");
@@ -70,7 +67,7 @@ export default function NewDayScreen() {
                 onPress={async () =>
                   mutate({
                     day_id: openDay.id,
-                    location_id: (await getUser())!.location.id,
+                    location_id: (await getUser())!.location_id,
                   })
                 }
               />

@@ -39,7 +39,7 @@ export default function PayPaymentScreen() {
       !!query
         ? `payments?user_id=${user?.id}&close_date_operator==&phone=${query}`
         : `payments?user_id=${user?.id}&close_date_operator==`,
-      ["payments", query],
+      ["payments", query, "old"],
       { enabled: !!user }
     );
 
@@ -130,7 +130,6 @@ function ConfirmPaymentModal({
   const [date, setDate] = useState(new Date());
   const { toast } = useToast();
 
-  console.log("payment", JSON.stringify(payment, null, 2));
 
   const { mutate, isPending } = usePatch<Payment>(
     `payments/${payment?.id}`,

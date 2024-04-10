@@ -88,7 +88,6 @@ export function usePatch<TData, TResponse = Response>(
       await http.patchRequest<TData, TResponse>(url, data),
     onSuccess: (...args) => {
       invalidate.forEach((key) => qc.invalidateQueries({ queryKey: key }));
-      console.log("hello from inner on success");
       onSuccess?.(...args);
     },
     ...rest,

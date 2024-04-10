@@ -24,7 +24,7 @@ export default function MainManagerPaymentsScreen() {
   const url = useUrl(query, filters);
 
   const { data, isPending, hasNextPage, fetchNextPage, isFetchingNextPage } =
-    useInfiniteGet<Payment>(url, [url]);
+    useInfiniteGet<Payment>(url, ["payments", url.split("?")[1] ?? ""]);
 
   return (
     <>
@@ -120,7 +120,7 @@ const constructUrl = async (query: string, searchOptions: PaymentFilters) => {
   if (query) params.append("phone", query);
 
   const user = await getUser();
-  if (user) params.append("location_id", user.location.id.toString());
+  if (user) params.append("location_id", user.location_id.toString());
 
   const paramString = params.toString();
   if (paramString) {

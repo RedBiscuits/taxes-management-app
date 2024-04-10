@@ -15,11 +15,13 @@ export default function OldDayReceipts() {
 
   const user = useUser();
 
-  const baseUrl = "receipts?location_id=" + user?.location.id;
+  const baseUrl = "receipts?location_id=" + user?.location_id;
   const { data, isPending, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useInfiniteGet<Receipt>(`${baseUrl}&day_id=${day?.id}`, [
-      baseUrl,
+      "receipts",
+      String(user?.location_id),
       String(day?.id),
+      "user",
     ]);
 
   return (
