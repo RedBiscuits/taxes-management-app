@@ -21,7 +21,6 @@ export function useCurrentReceipt() {
     mutationFn: async (entry: Entry) => {
       const currentReceipt = await AsyncStorage.getItem("current_receipt");
       if (!currentReceipt) return null;
-      console.log("current receipt", currentReceipt);
 
       const receipt = JSON.parse(currentReceipt) as Receipt;
       if (!receipt.entries) receipt.entries = [];

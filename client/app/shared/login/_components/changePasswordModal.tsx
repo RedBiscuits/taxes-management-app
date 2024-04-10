@@ -11,7 +11,7 @@ export function ChangePasswordModal({
   toggleModal: () => void;
 }) {
   return (
-    <Modal visible={open} animationType="fade" transparent>
+    <>
       <View className="flex-1 bg-black/50">
         <View className="  flex w-full justify-center absolute top-1/4">
           <View className="mx-4 bg-white p-6  rounded-lg">
@@ -28,6 +28,6 @@ export function ChangePasswordModal({
           </View>
         </View>
       </View>
-    </Modal>
+    </>
   );
 }

@@ -25,6 +25,11 @@ export default function App() {
       const token = await getToken();
       if (token) {
         const user = await getUser();
+
+        if (!user?.device_id) {
+          return router.push("/shared/login/changePassword");
+        }
+
         switch (user?.roles[0].name) {
           case "manager":
             router.push("/manager/");

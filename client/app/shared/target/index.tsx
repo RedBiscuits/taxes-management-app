@@ -11,8 +11,6 @@ import { colors, fonts } from "@/lib/styles";
 export default function MainTargetPage() {
   const user = useUser();
 
-  console.log(" ===> user location", user?.location_id);
-
   const receipts = useGet<Receipt[]>(
     `receipts/all?location_id=${user?.location_id}`,
     ["receipts", "all"]

@@ -5,7 +5,7 @@ export type User = BaseModel & {
   name: string;
   phone: string;
   job: "employee" | "manager";
-  device_id: string;
+  device_id: string | null;
   created_at: Date;
   updated_at: Date;
   location_id: number;
