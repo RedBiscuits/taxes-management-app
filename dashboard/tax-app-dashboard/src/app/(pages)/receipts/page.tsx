@@ -17,8 +17,8 @@ type Filters = {
   created_at_2?: string;
   created_at_operator_2?: string;
 };
-type ReceiptPageParams = Filters & {
-  searchParams: {
+type ReceiptPageParams = {
+  searchParams: Filters & {
     page: number;
     q?: string;
   };

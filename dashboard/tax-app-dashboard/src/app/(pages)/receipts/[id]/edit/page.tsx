@@ -1,6 +1,6 @@
 import React from "react";
-import UpsertPaymentForm from "../../new/_components/newReceiptsEntries";
 import { getSinglePayment } from "@/shared/actions/payments";
+import UpsertPaymentForm from "@/app/(pages)/payments/new/_components/upsertPaymentForm";
 
 export default async function page({
   params: { id },

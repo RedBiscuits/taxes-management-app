@@ -24,7 +24,7 @@ import { toast } from "sonner";
 import { DatePicker } from "@/components/lib/datePicker";
 import { createPayment, updatePayment } from "@/shared/actions/payments";
 
-export default function UpsertUserForm({ payment }: { payment?: Payment }) {
+export default function UpsertPaymentForm({ payment }: { payment?: Payment }) {
   const form = useForm<PaymentData>({
     resolver: zodResolver(paymentSchema),
     defaultValues: payment

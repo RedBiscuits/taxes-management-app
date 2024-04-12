@@ -16,8 +16,10 @@ type Filters = {
   created_at_2?: string;
   created_at_operator_2?: string;
 };
-type PaymentPageParams = Filters & {
-  searchParams: {
+
+// some duplication here to solve a nextjs build error
+type PaymentPageParams = {
+  searchParams: Filters & {
     page: number;
     q?: string;
   };
@@ -50,11 +52,11 @@ export default async function page({
   );
 }
 
-function formatFilters(q: string, filters: Filters = {}) {
+function formatFilters(q: string, filters: Filters) {
   let filter = [];
   if (q) filter.push(`phone=${q}`);
 
-  Object.entries(filters).forEach(([key, value]) => {
+  Object.entries(filters || {}).forEach(([key, value]) => {
     if (value) {
       filter.push(`${key}=${value}`);
     }
