@@ -1,7 +1,7 @@
 import { getToken } from "./cookies";
 import { BaseResponse } from "../models";
 
-const API_URL = "http://127.0.0.1:8000/api/";
+const API_URL = "https://briefly-easy-bluejay.ngrok-free.app/api/";
 const revalidate_interval = 60;
 
 async function getRequest<T>(url: string, page?: number) {
